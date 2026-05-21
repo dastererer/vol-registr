@@ -33,7 +33,7 @@ def faq(request):
 from .constants import MAX_TOURNAMENT_SLOTS, PAYMENT_ACCOUNTS
 from .forms import TeamRegistrationForm
 from .logo_utils import save_team_logo
-from .models import GalleryPhoto, GalleryVideo, Match, Team, TeamFanVote
+from .models import Team, TeamFanVote
 from .services import get_available_slots, register_team
 
 logger = logging.getLogger(__name__)
@@ -465,24 +465,10 @@ def index(request):
     return render(request, "tournament/index.html", context)
 
 
-def tournament_hub(request):
-    """Match Centre placeholder page until event start."""
-    context = {
-        "page_title": "Match Centre | Pocket Aces Court cup 2",
-        "page_description": "Match Centre opens on June 6, 2026 at 09:00 for Pocket Aces Court cup 2.",
-        "unlock_iso": "2026-06-06T09:00:00+02:00",
-    }
-    return render(request, "tournament/match_coming_soon.html", context)
 
 
-def tournament_teams(request):
-    """Legacy teams page now redirects to the registration-first landing page."""
-    return redirect("index")
 
 
-def tournament_match(request, match_id):
-    """Legacy match page now redirects to Match Centre placeholder."""
-    return redirect("tournament_hub")
 
 
 def tournament_team(request, team_id):
@@ -491,92 +477,6 @@ def tournament_team(request, team_id):
     return render(request, "tournament/team_detail.html", {"team": team})
 
 
-def tournament_player(request, player_id):
-    """Legacy player stats page now redirects to the registration-first landing page."""
-    return redirect("index")
-
-
-def tournament_gallery(request):
-    """Public gallery page — photos grid + video cards, with optional filters."""
-    team_filter = request.GET.get("team", "")
-    match_filter = request.GET.get("match", "")
-
-    photos = GalleryPhoto.objects.order_by("order", "-uploaded_at")
-    videos = GalleryVideo.objects.order_by("order", "-uploaded_at")
-
-    if team_filter:
-        photos = photos.filter(team_id=team_filter)
-        videos = videos.filter(team_id=team_filter)
-    if match_filter:
-        photos = photos.filter(match_id=match_filter)
-        videos = videos.filter(match_id=match_filter)
-
-    # Group by tournament
-    # Current tournament media (empty tag or '2026-cup')
-    # Previous tournament media ('prev-tour')
-    current_photos = photos.exclude(tournament_tag='prev-tour')
-    current_videos = videos.exclude(tournament_tag='prev-tour')
-    
-    prev_photos = list(photos.filter(tournament_tag='prev-tour'))
-    prev_videos = list(videos.filter(tournament_tag='prev-tour'))
-
-    if not team_filter and not match_filter:
-        fallback_prev_photos, fallback_prev_videos = _build_prev_tour_static_media(
-            {photo.drive_file_id for photo in prev_photos},
-            {video.drive_file_id for video in prev_videos},
-        )
-        prev_photos.extend(fallback_prev_photos)
-        prev_videos.extend(fallback_prev_videos)
-
-    # Build filter options
-    teams_with_media = (
-        Team.objects.filter(
-            db_models.Q(gallery_photos__isnull=False) | db_models.Q(gallery_videos__isnull=False)
-        ).distinct().order_by("name")
-    )
-    matches_with_media = (
-        Match.objects.filter(
-            db_models.Q(gallery_photos__isnull=False) | db_models.Q(gallery_videos__isnull=False)
-        ).distinct().select_related("team_a", "team_b").order_by("match_number")
-    )
-
-    return render(request, "tournament/gallery.html", {
-        "active": "gallery",
-        "photos": current_photos,
-        "videos": current_videos,
-        "prev_photos": prev_photos,
-        "prev_videos": prev_videos,
-        "teams_with_media": teams_with_media,
-        "matches_with_media": matches_with_media,
-        "team_filter": team_filter,
-        "match_filter": match_filter,
-        "page_title": "Gallery | Pocket Aces Court cup 2",
-        "page_description": "Photos and video highlights from Pocket Aces Court cup 2.",
-    })
-
-
-def api_live_scores(request):
-    """JSON endpoint — returns all matches with current scores for auto-refresh."""
-    matches = (
-        Match.objects
-        .select_related("team_a", "team_b")
-        .order_by("start_time", "court")
-    )
-    data = []
-    for m in matches:
-        data.append({
-            "id": m.pk,
-            "match_number": m.match_number,
-            "team_a": m.display_name_a,
-            "team_b": m.display_name_b,
-            "score_a": m.score_a,
-            "score_b": m.score_b,
-            "status": m.status,
-            "status_display": m.get_status_display(),
-        })
-    return JsonResponse({"matches": data})
-
-@ensure_csrf_cookie
 def register(request):
     """Registration form page (renders the empty form + CSRF cookie)."""
     from .constants import REGISTRATION_CLOSED

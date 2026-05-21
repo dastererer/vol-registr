@@ -21,7 +21,7 @@ from ..constants import (
     TEAM_STATUS_PAID,
     TEAM_STATUS_REGISTERED,
 )
-from ..models import AUDIT_CATEGORY_TEAM, AuditEntry, Match, Team
+from ..models import AUDIT_CATEGORY_TEAM, AuditEntry, Team
 from .audit import log_audit
 
 # Allowed status transitions: current → list of valid next statuses
@@ -113,11 +113,6 @@ def teams_list_view(request):
 @staff_member_required(login_url="/panel/login/")
 def team_detail_view(request, pk):
     team = get_object_or_404(Team.objects.prefetch_related("players"), pk=pk)
-    team_matches = (
-        Match.objects.filter(Q(team_a=team) | Q(team_b=team))
-        .select_related("team_a", "team_b")
-        .order_by("-start_time")
-    )
     next_statuses = _STATUS_TRANSITIONS.get(team.status, [])
     audit_log = AuditEntry.objects.filter(
         entity_type="Team", entity_id=team.pk,
@@ -127,7 +122,6 @@ def team_detail_view(request, pk):
         "nav_section": "teams",
         "team": team,
         "players": team.players.all(),
-        "matches": team_matches,
         "status_choices": TEAM_STATUS_CHOICES,
         "next_statuses": next_statuses,
         "audit_log": audit_log,
@@ -311,16 +305,11 @@ def team_batch_action(request):
 def team_drawer_view(request, pk):
     """Return drawer HTML partial for a specific team."""
     team = get_object_or_404(Team.objects.prefetch_related("players"), pk=pk)
-    recent_matches = (
-        Match.objects.filter(Q(team_a=team) | Q(team_b=team))
-        .select_related("team_a", "team_b")
-        .order_by("-start_time")[:3]
-    )
+
     next_statuses = _STATUS_TRANSITIONS.get(team.status, [])
     ctx = {
         "team": team,
         "players": team.players.all(),
-        "recent_matches": recent_matches,
         "next_statuses": next_statuses,
         "status_choices": TEAM_STATUS_CHOICES,
     }

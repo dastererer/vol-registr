@@ -3284,3 +3284,361 @@ span {
 .road-item--active .road-item__date {
   color: #ffffff;
 }
+
+/* Vote Modal Styles */
+.vote-modal-content {
+    max-width: 400px;
+    text-align: center;
+    background: #0c1c2c;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.vote-modal-close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.vote-modal-title {
+    margin-bottom: 0.5rem;
+    font-family: var(--font-display);
+    color: #e41561;
+}
+
+.vote-modal-subtitle {
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.vote-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.vote-modal-input {
+    width: 100%;
+    text-align: center;
+    border-radius: 8px;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.vote-modal-btn {
+    width: 100%;
+    border-radius: 8px;
+    padding: 0.8rem;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+}
+
+.vote-modal-status {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    display: none;
+}
+
+.vote-modal-icon-success {
+    color: #4CAF50;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.vote-modal-icon-error {
+    color: #f44336;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Vote Result Pages */
+.vote-result-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.vote-result-icon-error {
+    font-size: 4rem;
+    color: #f44336;
+    margin-bottom: 1.5rem;
+}
+
+.vote-result-icon-success {
+    font-size: 4rem;
+    color: #4CAF50;
+    margin-bottom: 1.5rem;
+}
+
+.vote-result-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
+    color: #fff;
+}
+
+.vote-result-text {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2rem;
+}
+
+.vote-result-btn {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+}
+
+/* SoundCloud Modal Styles */
+.sc-modal-content {
+    max-width: 650px;
+    width: 95%;
+}
+
+.sc-modal-title {
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
+}
+
+.sc-search-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.sc-search-input {
+    flex: 1;
+}
+
+.sc-search-btn {
+    width: auto;
+    padding: 0 1.5rem;
+}
+
+.sc-status-text {
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+    color: #c8d0da;
+}
+
+.sc-results-container {
+    max-height: 220px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.sc-error-msg {
+    color: #ff5555;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.sc-loading {
+    text-align: center;
+    padding: 2rem;
+}
+
+.sc-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.sc-track-info-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    overflow: hidden;
+}
+
+.sc-icon {
+    color: #ff5500;
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.sc-track-info-col {
+    min-width: 0;
+}
+
+.sc-track-link {
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sc-artist-link {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sc-waveform-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.sc-waveform-container {
+    position: relative;
+    flex: 1;
+    height: 80px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 4px;
+    overflow: hidden;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    padding: 0 2px;
+}
+
+.sc-pseudo-waveform {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2px;
+    box-sizing: border-box;
+}
+
+.sc-cropper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border: 2px solid #ff5500;
+    background: rgba(255, 85, 0, 0.25);
+    cursor: grab;
+    box-sizing: border-box;
+    transition: background 0.2s;
+}
+
+.sc-progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    background: linear-gradient(90deg, rgba(255,85,0,0.28), rgba(255,145,77,0.52));
+    pointer-events: none;
+}
+
+.sc-progress-head {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(255,255,255,0.8);
+    pointer-events: none;
+}
+
+.sc-cropper-time-left {
+    position: absolute;
+    top: -25px;
+    left: 0;
+    color: #ff5500;
+    font-size: 0.8rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.sc-cropper-time-right {
+    position: absolute;
+    top: -25px;
+    right: 0;
+    color: #ff5500;
+    font-size: 0.8rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.sc-play-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 0;
+    background: transparent;
+    border: 2px solid #ff5500;
+    color: #ff5500;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.sc-play-icon {
+    margin-left: 3px;
+}
+
+.sc-preview-label {
+    font-size: 0.8rem;
+    color: #c8d0da;
+    margin-top: 0.65rem;
+}
+
+.sc-help-text {
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.sc-confirm-btn {
+    width: 100%;
+    background: #ff5500;
+}
+
+/* Index Voting Section */
+.index-voting-header {
+    text-align: left;
+    border-left: 4px solid #e41561;
+    padding-left: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.index-voting-title {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+.index-voting-subtitle {
+    color: #e41561;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
