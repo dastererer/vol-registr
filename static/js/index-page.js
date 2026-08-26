@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isMobileView) {
             initCardsFlyIn(CFG.cards);
             initLocationScrollAnim(CFG.scroll);
+            initEditorialSectionAnim(CFG.scroll);
             initTimelineScrollAnim(CFG.scroll);
         }
     }
@@ -48,28 +49,51 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function initHeroIntro(cfg) {
     const tl = gsap.timeline();
+    const introStage = document.querySelector('.hero-title__stage--intro');
+    const finalStage = document.querySelector('.hero-title__stage--final');
+    const introLines = document.querySelectorAll('.hero-title__stage--intro .hero-title__line');
+    const finalLines = document.querySelectorAll('.hero-title__stage--final .hero-title__line');
 
-    // Logo
-    tl.to('.hero-logo', {
-        y: 0, opacity: 1,
-        duration: cfg.logo.duration,
-        ease: cfg.logo.ease,
-    });
+    window.setTimeout(() => {
+        if (introStage) {
+            introStage.style.opacity = '0';
+            introStage.style.transform = 'translateX(-12%)';
+            introStage.style.animation = 'none';
+        }
 
-    // Title lines (staggered)
-    tl.to('.hero-title > *', {
-        y: 0, opacity: 1,
-        duration: cfg.title.duration,
-        stagger: cfg.title.stagger,
-        ease: cfg.title.ease,
-    }, '-=0.5');
+        introLines.forEach((line) => {
+            line.style.animation = 'none';
+        });
+
+        if (finalStage) {
+            finalStage.style.opacity = '1';
+            finalStage.style.transform = 'translateX(0)';
+            finalStage.style.animation = 'none';
+        }
+
+        finalLines.forEach((line) => {
+            line.style.opacity = '1';
+            line.style.transform = 'translateX(0)';
+            line.style.animation = 'none';
+        });
+    }, 3400);
+
+    // Logo (legacy templates may still provide one)
+    const heroLogo = document.querySelector('.hero-logo');
+    if (heroLogo) {
+        tl.to(heroLogo, {
+            y: 0, opacity: 1,
+            duration: cfg.logo.duration,
+            ease: cfg.logo.ease,
+        });
+    }
 
     // Date / location label
     tl.to('.hero-label', {
         y: 0, opacity: 1,
         duration: cfg.label.duration,
         ease: cfg.label.ease,
-    }, '-=1');
+    }, '+=0.35');
 
     // Subtitle, price, counter, CTA
     tl.to(['.hero-text', '.hero-price', '.hero-counter', '.hero-btn-container'], {
@@ -214,14 +238,52 @@ function scatterCardsOffScreen(wrappers, cfg) {
 function initLocationScrollAnim(cfg) {
     const loc = cfg.locationSlide;
 
-    gsap.from('.location-content', {
+    gsap.from(['.location__title', '.divider--wide'], {
         scrollTrigger: { trigger: '.location-content', start: loc.start },
-        x: -loc.x, opacity: 0, duration: loc.duration,
+        y: loc.x * 0.35,
+        opacity: 0,
+        duration: loc.duration,
+        stagger: 0.08,
     });
 
-    gsap.from('.location-map', {
-        scrollTrigger: { trigger: '.location-content', start: loc.start },
-        x: loc.x, opacity: 0, duration: loc.duration,
+    gsap.from(['.location-map', '.location__info', '.location__link'], {
+        scrollTrigger: { trigger: '.location-side', start: loc.start },
+        x: loc.x,
+        opacity: 0,
+        duration: loc.duration,
+        stagger: 0.08,
+    });
+}
+
+/**
+ * Reveal editorial support blocks on the landing page.
+ * @param {object} cfg - scroll config from APP_CONFIG.
+ */
+function initEditorialSectionAnim(cfg) {
+    const item = cfg.timelineItem;
+
+    gsap.from('.deal-lead', {
+        scrollTrigger: { trigger: '.perspective-section', start: item.start },
+        y: item.y,
+        opacity: 0,
+        duration: item.duration,
+    });
+
+    gsap.from('.location-feature', {
+        scrollTrigger: { trigger: '.location-features', start: item.start },
+        y: item.y,
+        opacity: 0,
+        duration: item.duration,
+        stagger: 0.08,
+    });
+
+    gsap.from(['.venue-hero', '.venue-card'], {
+        scrollTrigger: { trigger: '.section--arena', start: item.start },
+        y: item.y,
+        opacity: 0,
+        scale: 0.97,
+        duration: item.duration,
+        stagger: 0.1,
     });
 }
 
@@ -232,7 +294,7 @@ function initLocationScrollAnim(cfg) {
 function initTimelineScrollAnim(cfg) {
     const item = cfg.timelineItem;
 
-    gsap.utils.toArray('.timeline-item').forEach(el => {
+    gsap.utils.toArray('.road-item').forEach(el => {
         gsap.from(el, {
             scrollTrigger: { trigger: el, start: item.start },
             y: item.y, opacity: 0, duration: item.duration,

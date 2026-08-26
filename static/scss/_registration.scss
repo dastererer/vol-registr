@@ -18,7 +18,7 @@
 
 .glow-orb {
   position: fixed;
-  border-radius: 50%;
+  border-radius: 0;
   filter: blur(120px);
   z-index: 0;
   pointer-events: none;
@@ -164,11 +164,11 @@
   &__dot {
     width: 2.25rem;
     height: 2.25rem;
-    border-radius: 50%;
+    border-radius: 0;
     border: 2px solid rgba($color-slate-700, 0.6);
     background: $color-bg-body;
     @include flex-center;
-    transition: all 0.35s ease;
+    transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, transform 0.35s ease;
 
     span {
       font-size: 0.8rem;
@@ -230,8 +230,6 @@
   border: 1px solid rgba($color-sky-400, 0.15);
   border-radius: $radius-2xl;
   padding: 2.5rem;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   box-shadow:
     0 0 0 1px rgba($color-slate-700, 0.25),
     0 8px 48px rgba(#020617, 0.6),
@@ -460,7 +458,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
   &__box {
     width: 1.1rem;
     height: 1.1rem;
-    border-radius: 50%;
+    border-radius: 0;
     border: 2px solid rgba($color-slate-600, 0.8);
     flex-shrink: 0;
     position: relative;
@@ -470,7 +468,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
       content: '';
       position: absolute;
       inset: 3px;
-      border-radius: 50%;
+      border-radius: 0;
       background: $color-sky-400;
       opacity: 0;
       transform: scale(0);
@@ -653,7 +651,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
   font-weight: 700;
   letter-spacing: 0.04em;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
   outline: none;
   position: relative;
   overflow: hidden;
@@ -707,7 +705,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
     height: 1rem;
     border: 2px solid rgba($color-bg-body, 0.3);
     border-top-color: $color-bg-body;
-    border-radius: 50%;
+    border-radius: 0;
     animation: spin 0.7s linear infinite;
   }
 
@@ -770,7 +768,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 
   &:hover {
     border-color: $color-sky-400;
@@ -828,7 +826,7 @@ input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; marg
   &__icon {
     width: 5rem;
     height: 5rem;
-    border-radius: 50%;
+    border-radius: 0;
     background: rgba($color-sky-400, 0.12);
     border: 2px solid $color-sky-400;
     @include flex-center;

@@ -1,77 +1,1047 @@
 {% extends 'base.html' %}
 {% load static static_v %}
 
+{% block title %}Register | Pocket Aces Court Cup 2{% endblock %}
+
+{% block extra_head %}
+<style>
+  .reg-layout {
+    align-items: start;
+    display: grid;
+    gap: clamp(2rem, 4vw, 4rem);
+    margin-inline: auto;
+    min-height: calc(100svh - var(--nav-h));
+    padding-block: var(--section-y);
+    position: relative;
+    width: min(calc(100% - (2 * var(--gutter))), var(--container));
+  }
+
+  .reg-brand {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .reg-brand__hero,
+  .reg-brand__panel,
+  .reg-form {
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    clip-path: var(--card-clip);
+  }
+
+  .reg-brand__hero {
+    overflow: hidden;
+    padding: clamp(1.5rem, 3vw, 3rem);
+    position: relative;
+  }
+
+  .reg-brand__hero::after {
+    color: transparent;
+    content: '02';
+    font: italic 800 clamp(8rem, 22vw, 18rem)/0.8 var(--font-display);
+    opacity: 0.55;
+    pointer-events: none;
+    position: absolute;
+    right: -0.05em;
+    top: -0.05em;
+    -webkit-text-stroke: 2px var(--line-strong);
+  }
+
+  .reg-brand__subtitle,
+  .reg-brand__panel-kicker,
+  .reg-fact__label,
+  .reg-label,
+  .reg-panel__hint,
+  .reg-error,
+  .reg-logo-dropzone__hint,
+  .reg-logo-preview__text,
+  .reg-song-card__start,
+  .sc-status-text,
+  .sc-error-msg,
+  .sc-loading,
+  .sc-preview-label,
+  .sc-help-text {
+    font-family: var(--font-mono);
+  }
+
+  .reg-brand__subtitle {
+    color: var(--volt);
+    font-size: var(--fs-mono-sm);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    margin: 0 0 1rem;
+    position: relative;
+    text-transform: uppercase;
+    z-index: 1;
+  }
+
+  .reg-brand__title {
+    color: var(--paper);
+    font: italic 800 var(--fs-display-lg)/0.82 var(--font-display);
+    letter-spacing: 0.01em;
+    margin: 0 0 1.5rem;
+    position: relative;
+    text-transform: uppercase;
+    z-index: 1;
+  }
+
+  .reg-brand__title-line {
+    display: block;
+  }
+
+  .reg-brand__title-line:last-child {
+    color: var(--volt);
+  }
+
+  .reg-brand__desc,
+  .reg-brand__panel-copy,
+  .reg-logo-upload__copy,
+  .reg-panel__note,
+  .reg-success__text {
+    color: var(--muted);
+    font: 400 var(--fs-body)/1.65 var(--font-body);
+  }
+
+  .reg-brand__desc {
+    margin: 0 0 1.5rem;
+    max-width: 48ch;
+    position: relative;
+    z-index: 1;
+  }
+
+  .reg-brand__facts {
+    border: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .reg-fact {
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.875rem;
+  }
+
+  .reg-fact:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+
+  .reg-fact:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .reg-fact__label {
+    color: var(--muted);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .reg-fact__value {
+    color: var(--paper);
+    font: 700 1.3rem/1 var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .reg-fact:first-child .reg-fact__value,
+  .reg-fact:last-child .reg-fact__value {
+    color: var(--volt);
+  }
+
+  .reg-brand__panel {
+    align-items: center;
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 1.25rem;
+  }
+
+  .reg-brand__panel-kicker {
+    color: var(--paper);
+    display: block;
+    font-size: var(--fs-mono-sm);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .reg-brand__panel-copy {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .reg-brand__link {
+    border-bottom: 2px solid var(--volt);
+    color: var(--paper);
+    font: 700 1.05rem/1.2 var(--font-display);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out);
+  }
+
+  .reg-brand__link:hover {
+    color: var(--volt);
+  }
+
+  .reg-form-col {
+    min-width: 0;
+  }
+
+  .reg-stepper {
+    margin-bottom: 1rem;
+  }
+
+  .reg-stepper__track {
+    background: var(--line);
+    height: 4px;
+    overflow: hidden;
+  }
+
+  .reg-stepper__fill {
+    background: var(--volt);
+    height: 100%;
+    transition: width 400ms var(--ease-hard);
+    width: 0;
+  }
+
+  .reg-stepper__steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 0.875rem;
+  }
+
+  .reg-step {
+    align-items: center;
+    color: var(--muted);
+    display: flex;
+    font: 700 var(--fs-mono-sm)/1.2 var(--font-mono);
+    gap: 0.625rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .reg-step:nth-child(2) {
+    justify-content: center;
+  }
+
+  .reg-step:last-child {
+    justify-content: flex-end;
+  }
+
+  .reg-step__dot {
+    background: var(--line);
+    color: var(--muted);
+    display: grid;
+    height: 24px;
+    place-items: center;
+    transition: background-color var(--t-hover) var(--ease-out), color var(--t-hover) var(--ease-out);
+    width: 24px;
+  }
+
+  .reg-step.active,
+  .reg-step.done {
+    color: var(--paper);
+  }
+
+  .reg-step.active .reg-step__dot,
+  .reg-step.done .reg-step__dot {
+    background: var(--volt);
+    color: var(--ink);
+  }
+
+  .reg-form {
+    min-height: 34rem;
+    overflow: hidden;
+    padding: clamp(1.5rem, 3vw, 3rem);
+  }
+
+  .reg-panel--hidden,
+  .reg-logo-hidden {
+    display: none !important;
+  }
+
+  .reg-panel__title,
+  .reg-success__title,
+  .sc-modal-title {
+    color: var(--paper);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .reg-panel__title {
+    font-size: var(--fs-display-md);
+    font-style: italic;
+    font-weight: 800;
+    line-height: 1;
+    margin: 0 0 1.75rem;
+  }
+
+  .reg-panel__title--minor {
+    font-size: var(--fs-display-sm);
+    font-style: normal;
+    margin-bottom: 0.5rem;
+  }
+
+  .reg-panel__hint {
+    color: var(--volt);
+    font-size: var(--fs-mono-sm);
+    letter-spacing: 0.1em;
+    margin: -1rem 0 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .reg-panel__note {
+    border-left: 2px solid var(--signal);
+    font-size: 0.9rem;
+    margin: 0 0 1.5rem;
+    padding-left: 1rem;
+  }
+
+  .reg-field {
+    margin-bottom: 1.125rem;
+  }
+
+  .reg-label {
+    color: var(--muted);
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.375rem;
+    text-transform: uppercase;
+  }
+
+  .req,
+  .reg-error {
+    color: var(--danger);
+  }
+
+  .reg-input {
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    color: var(--paper);
+    font: 400 0.95rem/1.3 var(--font-body);
+    height: 48px;
+    padding: 0 0.875rem;
+    transition: border-color var(--t-hover) var(--ease-out), outline-color var(--t-hover) var(--ease-out), background-color var(--t-hover) var(--ease-out);
+    width: 100%;
+  }
+
+  .reg-input::placeholder {
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  .reg-input:focus {
+    border-color: var(--volt);
+    outline: 2px solid var(--volt);
+    outline-offset: 0;
+  }
+
+  .reg-input.error {
+    border-color: var(--danger);
+    outline-color: var(--danger);
+  }
+
+  .reg-error {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    margin-top: 0.375rem;
+    min-height: 1em;
+    text-transform: uppercase;
+  }
+
+  .reg-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+  }
+
+  .reg-btn {
+    align-items: center;
+    background: var(--volt);
+    border: 2px solid var(--volt);
+    border-radius: 0;
+    clip-path: var(--btn-clip);
+    color: var(--ink);
+    cursor: pointer;
+    display: inline-flex;
+    font: 700 1.2rem/1 var(--font-display);
+    gap: 0.625rem;
+    height: 52px;
+    justify-content: center;
+    letter-spacing: 0.06em;
+    padding: 0 1.625rem;
+    text-transform: uppercase;
+    transition: transform var(--t-hover) var(--ease-out), background-color var(--t-hover) var(--ease-out), color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out), filter var(--t-hover) var(--ease-out), opacity var(--t-hover) var(--ease-out);
+  }
+
+  .reg-btn:hover {
+    filter: drop-shadow(6px 6px 0 var(--paper));
+    transform: translate(-3px, -3px);
+  }
+
+  .reg-btn:active {
+    filter: none;
+    transform: translate(0, 0);
+  }
+
+  .reg-btn--back,
+  .reg-btn--add,
+  .reg-btn--remove,
+  .reg-btn--soundcloud {
+    background: transparent;
+    border-color: var(--line-strong);
+    color: var(--paper);
+  }
+
+  .reg-btn--back:hover,
+  .reg-btn--add:hover,
+  .reg-btn--remove:hover,
+  .reg-btn--soundcloud:hover {
+    background: var(--volt);
+    border-color: var(--volt);
+    color: var(--ink);
+  }
+
+  .reg-btn--soundcloud {
+    border-style: dashed;
+    width: 100%;
+  }
+
+  .reg-btn:disabled,
+  .reg-btn.loading {
+    cursor: wait;
+    opacity: 0.55;
+  }
+
+  .reg-btn__spinner {
+    border: 2px solid var(--ink);
+    border-right-color: transparent;
+    display: none;
+    height: 16px;
+    width: 16px;
+  }
+
+  .reg-btn.loading .reg-btn__spinner {
+    display: block;
+  }
+
+  .reg-logo-upload {
+    background: var(--ink-3);
+    border: 1px solid var(--line);
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+
+  .reg-logo-upload__copy {
+    font-size: 0.9rem;
+    margin: 0 0 1rem;
+  }
+
+  .reg-logo-dropzone {
+    align-items: center;
+    border: 1px dashed var(--line-strong);
+    cursor: pointer;
+    display: grid;
+    gap: 0.5rem;
+    justify-items: center;
+    min-height: 190px;
+    padding: 1.25rem;
+    text-align: center;
+    transition: border-color var(--t-hover) var(--ease-out), background-color var(--t-hover) var(--ease-out);
+  }
+
+  .reg-logo-dropzone:hover,
+  .reg-logo-dropzone.is-dragover {
+    background: var(--ink-2);
+    border-color: var(--volt);
+  }
+
+  .reg-logo-dropzone__preview {
+    align-items: center;
+    background: var(--ink);
+    border: 1px solid var(--line);
+    display: flex;
+    height: 68px;
+    justify-content: center;
+    overflow: hidden;
+    width: 68px;
+  }
+
+  .reg-logo-dropzone__preview i {
+    color: var(--volt);
+    font-size: 1.5rem;
+  }
+
+  .reg-logo-dropzone__preview img {
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
+  }
+
+  .reg-logo-dropzone__title,
+  .reg-logo-preview__name,
+  .reg-song-card__title {
+    color: var(--paper);
+    font: 700 1.05rem/1.2 var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .reg-logo-dropzone__hint,
+  .reg-logo-preview__text {
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .reg-logo-dropzone__badge {
+    background: var(--volt);
+    color: var(--ink);
+    font: 700 0.9rem/1 var(--font-display);
+    padding: 0.625rem 0.875rem;
+    text-transform: uppercase;
+  }
+
+  .reg-logo-preview {
+    align-items: center;
+    border: 1px solid var(--line);
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .reg-logo-preview__meta {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .reg-logo-preview__remove {
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--paper);
+    cursor: pointer;
+    font: 700 0.9rem/1 var(--font-display);
+    min-height: 44px;
+    padding-inline: 0.875rem;
+    text-transform: uppercase;
+  }
+
+  .reg-song-card {
+    display: none;
+  }
+
+  .reg-song-card__inner {
+    align-items: center;
+    background: var(--ink);
+    border: 1px solid var(--line);
+    display: grid;
+    gap: 0.875rem;
+    grid-template-columns: 60px minmax(0, 1fr) auto;
+    padding: 0.75rem;
+  }
+
+  .reg-song-card__art {
+    border: 1px solid var(--line-strong);
+    height: 60px;
+    object-fit: cover;
+    width: 60px;
+  }
+
+  .reg-song-card__meta {
+    min-width: 0;
+  }
+
+  .reg-song-card__title,
+  .reg-song-card__artist {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .reg-song-card__artist {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .reg-song-card__start {
+    color: var(--volt);
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+  }
+
+  .roster-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .roster-row {
+    align-items: center;
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: 36px minmax(0, 1fr);
+    padding-top: 0.75rem;
+  }
+
+  .roster-row__num {
+    background: var(--volt);
+    color: var(--ink);
+    display: grid;
+    font: 700 var(--fs-mono-sm)/1 var(--font-mono);
+    height: 36px;
+    place-items: center;
+    width: 36px;
+  }
+
+  .roster-row__fields {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .reg-checks {
+    border-top: 1px solid var(--line);
+    display: grid;
+    gap: 0;
+    margin-top: 1.5rem;
+  }
+
+  .reg-check {
+    align-items: start;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    cursor: pointer;
+    display: grid;
+    font: 400 0.9rem/1.5 var(--font-body);
+    gap: 0.75rem;
+    grid-template-columns: 20px 1fr;
+    padding-block: 0.875rem;
+  }
+
+  .reg-check input {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    height: 20px;
+    margin: 0.1rem 0 0;
+    width: 20px;
+  }
+
+  .reg-check input:checked {
+    background-color: var(--volt);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%230A0C0E' stroke-width='3' d='m4 10 4 4 8-9'/%3E%3C/svg%3E");
+  }
+
+  .reg-check input:focus-visible {
+    outline: 2px solid var(--volt);
+    outline-offset: 2px;
+  }
+
+  .reg-check__box {
+    display: none;
+  }
+
+  .reg-check a {
+    color: var(--paper);
+    text-decoration-color: var(--volt);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  .reg-success {
+    padding-block: clamp(2rem, 6vw, 5rem);
+  }
+
+  .reg-success__icon {
+    color: var(--volt);
+    font: italic 800 clamp(4rem, 12vw, 8rem)/0.8 var(--font-display);
+    margin-bottom: 1rem;
+  }
+
+  .reg-success__title {
+    color: var(--volt);
+    font: italic 800 var(--fs-display-lg)/0.85 var(--font-display);
+    margin: 0 0 1.25rem;
+  }
+
+  .reg-success__text {
+    max-width: 48ch;
+  }
+
+  .reg-modal {
+    align-items: center;
+    background: rgba(10, 12, 14, 0.82);
+    inset: 0;
+    justify-content: center;
+    padding: 1rem;
+    position: fixed;
+    z-index: var(--z-modal);
+  }
+
+  .reg-modal__content {
+    background: var(--ink-2);
+    border: 2px solid var(--paper);
+    clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
+    max-height: 85svh;
+    max-width: 640px;
+    overflow: auto;
+    padding: clamp(1.25rem, 4vw, 2rem);
+    position: relative;
+    width: min(100%, 640px);
+  }
+
+  .reg-modal__close {
+    align-items: center;
+    background: var(--ink);
+    border: 1px solid var(--line-strong);
+    color: var(--paper);
+    cursor: pointer;
+    display: flex;
+    font: 400 1.5rem/1 var(--font-mono);
+    height: 44px;
+    justify-content: center;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    width: 44px;
+  }
+
+  .reg-modal__close:hover {
+    border-color: var(--volt);
+    color: var(--volt);
+  }
+
+  .sc-modal-title {
+    font-size: var(--fs-display-sm);
+    font-style: italic;
+    margin: 0 3rem 1.25rem 0;
+  }
+
+  .sc-search-row,
+  .sc-waveform-row,
+  .sc-track-info-row {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .sc-search-row .reg-input {
+    flex: 1;
+  }
+
+  .sc-results-container {
+    border: 1px solid var(--line);
+    margin-top: 0.75rem;
+    max-height: 15rem;
+    overflow: auto;
+  }
+
+  .song-result {
+    align-items: center;
+    border-top: 1px solid var(--line);
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .song-result:first-child {
+    border-top: 0;
+  }
+
+  .song-result img {
+    border: 1px solid var(--line-strong);
+    height: 50px;
+    object-fit: cover;
+    width: 50px;
+  }
+
+  .song-result-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .song-result-title {
+    color: var(--paper);
+    font-weight: 700;
+  }
+
+  .song-result-artist {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .song-btn-use {
+    background: var(--volt);
+    border: 1px solid var(--volt);
+    color: var(--ink);
+    cursor: pointer;
+    font: 700 0.9rem/1 var(--font-display);
+    min-height: 44px;
+    padding-inline: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .sc-status-text,
+  .sc-error-msg,
+  .sc-loading,
+  .sc-preview-label,
+  .sc-help-text {
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    margin-top: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .sc-error-msg {
+    color: var(--danger);
+  }
+
+  .sc-editor-header {
+    border-bottom: 1px solid var(--line);
+    margin-block: 1rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .sc-icon {
+    color: var(--signal);
+    font-size: 1.5rem;
+  }
+
+  .sc-track-info-col {
+    display: grid;
+    min-width: 0;
+  }
+
+  .sc-track-link,
+  .sc-artist-link {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sc-track-link {
+    color: var(--paper);
+    font-weight: 700;
+  }
+
+  .sc-artist-link {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .sc-waveform-container {
+    background: var(--ink);
+    border: 1px solid var(--line-strong);
+    flex: 1;
+    height: 110px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .sc-pseudo-waveform {
+    align-items: center;
+    display: flex;
+    gap: 2px;
+    height: 100%;
+    opacity: 0.55;
+    overflow: hidden;
+    padding-inline: 0.5rem;
+  }
+
+  .sc-cropper {
+    border: 2px solid var(--volt);
+    bottom: 0;
+    cursor: grab;
+    position: absolute;
+    top: 0;
+    width: 120px;
+  }
+
+  .sc-progress-fill {
+    background: var(--volt);
+    bottom: 0;
+    left: 0;
+    opacity: 0.2;
+    position: absolute;
+    top: 0;
+    width: 0;
+  }
+
+  .sc-progress-head {
+    background: var(--paper);
+    bottom: 0;
+    position: absolute;
+    top: 0;
+    width: 2px;
+  }
+
+  .sc-cropper-time-left,
+  .sc-cropper-time-right {
+    background: var(--volt);
+    bottom: 0;
+    color: var(--ink);
+    font: 700 0.65rem/1 var(--font-mono);
+    padding: 0.25rem;
+    position: absolute;
+  }
+
+  .sc-cropper-time-left { left: 0; }
+  .sc-cropper-time-right { right: 0; }
+
+  .sc-play-btn {
+    min-width: 52px;
+    padding: 0;
+  }
+
+  .reg-widget-hidden {
+    height: 1px;
+    left: -10000px;
+    overflow: hidden;
+    position: fixed;
+    top: auto;
+    width: 1px;
+  }
+
+  @media (min-width: 1024px) {
+    .reg-layout {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+
+    .reg-brand {
+      position: sticky;
+      top: calc(var(--nav-h) + 1.5rem);
+    }
+  }
+
+  @media (max-width: 680px) {
+    .reg-layout {
+      width: min(calc(100% - 2rem), var(--container));
+    }
+
+    .reg-brand__panel {
+      grid-template-columns: 1fr;
+    }
+
+    .reg-step__label {
+      display: none;
+    }
+
+    .reg-step:nth-child(2) {
+      justify-content: center;
+    }
+
+    .reg-step:last-child {
+      justify-content: flex-end;
+    }
+
+    .reg-actions,
+    .sc-search-row,
+    .sc-waveform-row {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .reg-btn {
+      width: 100%;
+    }
+
+    .roster-row__fields {
+      grid-template-columns: 1fr;
+    }
+
+    .reg-song-card__inner {
+      grid-template-columns: 52px minmax(0, 1fr);
+    }
+
+    .reg-song-card__inner .reg-btn {
+      grid-column: 1 / -1;
+    }
+
+    .sc-play-btn {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- Background decorations -->
-<div class="sports-bg-wrapper">
-  <div class="sports-bg-image"></div>
-  <div class="sports-bg-grid"></div>
-  <div class="sports-bg-stripes"></div>
-  <div class="sports-bg-glow"></div>
-  <div class="sports-bg-overlay"></div>
-</div>
-
-<div class="reg-layout" style="position: relative; z-index: 10;">
-  <!-- Left Column: Branding -->
-  <div class="reg-brand">
+<main class="reg-layout">
+  <aside class="reg-brand">
     <div class="reg-brand__hero gsap-hero-text">
-      <h2 class="reg-brand__subtitle" data-i18n="reg_title">Official Registration</h2>
-      <h1 class="reg-brand__title" data-i18n="reg_subtitle">
-        Pocket<br>Aces<br><span class="gradient-text">Invitational</span>
+      <p class="reg-brand__subtitle" data-i18n="reg_title">Active Registration</p>
+      <h1 class="reg-brand__title">
+        <span class="reg-brand__title-line">Join the</span>
+        <span class="reg-brand__title-line">Court</span>
       </h1>
+      <!-- [CONFIRM] registration deadline -->
       <p class="reg-brand__desc" data-i18n="reg_desc">
-        Secure your team's spot in the most prestigious volleyball tournament of 2026.
-        Only 12 slots available.
+        Registration is open for Pocket Aces Court Cup 2. Outdoor volleyball, 8 teams, first serve at 09:00 on Saturday, September 26, 2026. Secure your spot before 20.09.2026.
       </p>
+      <ul class="reg-brand__facts">
+        <li class="reg-fact">
+          <span class="reg-fact__label">Date / first serve</span>
+          <strong class="reg-fact__value">26.09 · 09:00</strong>
+        </li>
+        <li class="reg-fact">
+          <span class="reg-fact__label">Entry</span>
+          <strong class="reg-fact__value">150 zł</strong>
+        </li>
+        <li class="reg-fact">
+          <span class="reg-fact__label">Slots</span>
+          <strong class="reg-fact__value" data-i18n="reg_fact1_title">8 Teams</strong>
+        </li>
+        <li class="reg-fact">
+          <!-- [CONFIRM] registration deadline -->
+          <span class="reg-fact__label">Registration lock</span>
+          <strong class="reg-fact__value" data-i18n="reg_fact2_title">20.09.2026</strong>
+        </li>
+      </ul>
+      <span class="reg-logo-hidden" data-i18n="reg_fact3_title">Captain Flow</span>
     </div>
 
-    <!-- Promo Flip Card -->
-    <div class="reg-promo-card flip-card-wrapper">
-      <div class="flip-card" id="regFlipCard">
-        <div class="flip-card-back">
-          <div class="card-back__corner card-back__corner--tl">&#9824;</div>
-          <div class="card-back__corner card-back__corner--tr">&#9824;</div>
-          <div class="card-back__corner card-back__corner--bl">&#9824;</div>
-          <div class="card-back__corner card-back__corner--br">&#9824;</div>
-          <div class="card-back__logo">
-            <img src="{% static 'assets/logo.png' %}" alt="Logo">
-          </div>
-        </div>
-        <div class="flip-card-front reg-promo-card__face">
-          <div class="card-corner card-top-left">
-            <span class="card-rank">A</span>
-            <span class="card-suit">&#9824;</span>
-          </div>
-          <div class="card-corner card-bottom-right">
-            <span class="card-rank">A</span>
-            <span class="card-suit">&#9824;</span>
-          </div>
-          <img class="reg-promo-card__photo" id="regPromoPhoto"
-               src="{% static 'assets/cart-reg/1.png' %}" alt="Team Photo">
-        </div>
+    <div class="reg-brand__panel reg-layout__access">
+      <div>
+        <span class="reg-brand__panel-kicker" data-i18n="reg_access_title">Need changes later?</span>
+        <!-- [CONFIRM] registration deadline -->
+        <p class="reg-brand__panel-copy" data-i18n="reg_access_copy">After confirmation, captains can still update the team badge and roster from the profile page until registration closes on 20.09.2026.</p>
       </div>
+      <a class="reg-brand__link" href="/roster/" data-i18n="reg_access_cta">Open captain profile</a>
     </div>
+  </aside>
 
-  </div>
-
-  <!-- Right Column: Form -->
   <div class="reg-form-col">
-    <!-- Step Progress -->
-    <div class="reg-stepper gsap-stepper">
+    <div class="reg-stepper gsap-stepper" aria-label="Registration progress">
       <div class="reg-stepper__track">
         <div class="reg-stepper__fill" id="stepperFill"></div>
       </div>
       <div class="reg-stepper__steps">
         <div class="reg-step active" data-step="1">
-          <div class="reg-step__dot"><span>1</span></div>
-          <div class="reg-step__label" data-i18n="reg_step1">Team</div>
+          <div class="reg-step__dot"><span>01</span></div>
+          <div class="reg-step__label" data-i18n="reg_step1">Details</div>
         </div>
         <div class="reg-step" data-step="2">
-          <div class="reg-step__dot"><span>2</span></div>
-          <div class="reg-step__label" data-i18n="reg_step2">Captain</div>
+          <div class="reg-step__dot"><span>02</span></div>
+          <div class="reg-step__label" data-i18n="reg_step2">Media</div>
         </div>
         <div class="reg-step" data-step="3">
-          <div class="reg-step__dot"><span>3</span></div>
+          <div class="reg-step__dot"><span>03</span></div>
           <div class="reg-step__label" data-i18n="reg_step3">Roster</div>
         </div>
       </div>
@@ -80,121 +1050,129 @@
     <form class="reg-form gsap-form" id="registrationForm" novalidate>
       {% csrf_token %}
 
-      <!-- ─── STEP 1: Team Identity ─────────────────── -->
       <div class="reg-panel" id="step1">
-        <h3 class="reg-panel__title" data-i18n="reg_identity">Team Identity</h3>
+        <h2 class="reg-panel__title" data-i18n="reg_identity">Team Details</h2>
 
         <div class="reg-field">
           <label class="reg-label" for="teamName" data-i18n="reg_team_name">Team Name <span class="req">*</span></label>
-             <input class="reg-input" type="text" id="teamName" name="teamName"
-               placeholder="e.g. Warsaw Eagles" maxlength="100" required data-i18n-ph="reg_team_ph">
-          <span class="reg-error" id="err-teamName"></span>
+          <input class="reg-input" type="text" id="teamName" name="teamName" placeholder="e.g. Warsaw Eagles" maxlength="100" required data-i18n-ph="reg_team_ph">
+          <span class="reg-error" id="err-teamName" aria-live="polite"></span>
         </div>
-
-        <div class="reg-field">
-          <label class="reg-label" data-i18n="reg_league">League Level <span class="req">*</span></label>
-          <div class="reg-radio-group" id="leagueLevelGroup">
-            <label class="reg-radio">
-              <input type="radio" name="leagueLevel" value="1st">
-              <span class="reg-radio__box"></span>
-              <span class="reg-radio__label" data-i18n="reg_1st">1st Liga</span>
-            </label>
-            <label class="reg-radio">
-              <input type="radio" name="leagueLevel" value="2nd">
-              <span class="reg-radio__box"></span>
-              <span class="reg-radio__label" data-i18n="reg_2nd">2nd Liga</span>
-            </label>
-            <label class="reg-radio">
-              <input type="radio" name="leagueLevel" value="3rd">
-              <span class="reg-radio__box"></span>
-              <span class="reg-radio__label" data-i18n="reg_3rd">3rd Liga</span>
-            </label>
-            <label class="reg-radio">
-              <input type="radio" name="leagueLevel" value="independent">
-              <span class="reg-radio__box"></span>
-              <span class="reg-radio__label" data-i18n="reg_indep">Independent Team</span>
-            </label>
-          </div>
-          <span class="reg-error" id="err-leagueLevel"></span>
-        </div>
-
-        <div class="reg-actions">
-          <button type="button" class="reg-btn reg-btn--next" data-next="2" data-i18n="reg_next1">
-            Next: Captain <span class="reg-btn__arrow">→</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- ─── STEP 2: Captain Details ───────────────── -->
-      <div class="reg-panel reg-panel--hidden" id="step2">
-        <h3 class="reg-panel__title" data-i18n="reg_captain">Captain Details</h3>
 
         <div class="reg-field">
           <label class="reg-label" for="capName" data-i18n="reg_fullname">Full Name <span class="req">*</span></label>
-             <input class="reg-input" type="text" id="capName" name="capName"
-               placeholder="e.g. Jan Kowalski" maxlength="100" required data-i18n-ph="reg_fullname_ph">
-          <span class="reg-error" id="err-capName"></span>
+          <input class="reg-input" type="text" id="capName" name="capName" placeholder="e.g. Jan Kowalski" maxlength="100" required data-i18n-ph="reg_fullname_ph">
+          <span class="reg-error" id="err-capName" aria-live="polite"></span>
         </div>
 
         <div class="reg-field">
           <label class="reg-label" for="phone" data-i18n="reg_phone">Phone Number <span class="req">*</span></label>
-             <input class="reg-input" type="tel" id="phone" name="phone"
-               placeholder="+48 123 456 789" maxlength="20" required data-i18n-ph="reg_phone_ph">
-          <span class="reg-error" id="err-phone"></span>
+          <input class="reg-input" type="tel" id="phone" name="phone" placeholder="+48 123 456 789" maxlength="20" required data-i18n-ph="reg_phone_ph">
+          <span class="reg-error" id="err-phone" aria-live="polite"></span>
         </div>
 
         <div class="reg-field">
           <label class="reg-label" for="email" data-i18n="reg_email">Email Address <span class="req">*</span></label>
-             <input class="reg-input" type="email" id="email" name="email"
-               placeholder="captain@yourteam.com" maxlength="100" required data-i18n-ph="reg_email_ph">
-          <span class="reg-error" id="err-email"></span>
+          <input class="reg-input" type="email" id="email" name="email" placeholder="captain@yourteam.com" maxlength="100" required data-i18n-ph="reg_email_ph">
+          <span class="reg-error" id="err-email" aria-live="polite"></span>
         </div>
 
         <div class="reg-actions">
-          <button type="button" class="reg-btn reg-btn--back" data-prev="1" data-i18n="reg_back">
-            <span class="reg-btn__arrow">←</span> Back
-          </button>
-          <button type="button" class="reg-btn reg-btn--next" data-next="3" data-i18n="reg_next2">
-            Next: Roster <span class="reg-btn__arrow">→</span>
-          </button>
+          <button type="button" class="reg-btn reg-btn--next" data-next="2" data-i18n="reg_next1">Next: Media <span class="reg-btn__arrow">→</span></button>
         </div>
       </div>
 
-      <!-- ─── STEP 3: Roster ────────────────────────── -->
-      <div class="reg-panel reg-panel--hidden" id="step3">
-        <h3 class="reg-panel__title" data-i18n="reg_roster">Team Roster</h3>
-        <p class="reg-panel__hint" data-i18n="reg_hint">Minimum 6 players required</p>
-        <p class="reg-panel__note" data-i18n="reg_note">Captain must be listed as one of the players below Jersey numbers are optional, but if <strong>any</strong> player is missing a number, the <strong>entire team will not receive match statistics</p>
+      <div class="reg-panel reg-panel--hidden" id="step2">
+        <h2 class="reg-panel__title" data-i18n="reg_media">Badge & Entrance Song</h2>
 
-        <!-- <div class="reg-jersey-warning" id="jerseyWarning">
-          <span class="reg-jersey-warning__icon">ℹ</span>
-          <span>Jersey numbers are optional, but if <strong>any</strong> player is missing a number, the <strong>entire team will not receive match statistics</strong>.</span>
-        </div> -->
+        <div class="reg-logo-upload">
+          <div>
+            <h3 class="reg-panel__title reg-panel__title--minor" data-i18n="reg_logo_title">Team Badge (optional)</h3>
+            <p class="reg-logo-upload__copy" data-i18n="reg_logo_copy">Add a square logo now or skip it and upload later from the captain profile.</p>
+          </div>
+
+          <label class="reg-logo-dropzone" id="logoDropzone" for="teamLogo">
+            <div class="reg-logo-dropzone__preview">
+              <i class="fas fa-image" id="logoPreviewIcon" aria-hidden="true"></i>
+              <img src="" alt="Team badge preview" id="logoPreviewImage" class="reg-logo-hidden" width="68" height="68">
+            </div>
+            <div class="reg-logo-dropzone__title" data-i18n="reg_logo_drop">Drop a PNG, JPG, or WebP badge here</div>
+            <div class="reg-logo-dropzone__hint" data-i18n="reg_logo_hint">Up to 5 MB. Square badges look best.</div>
+            <span class="reg-logo-dropzone__badge"><i class="fas fa-upload" aria-hidden="true"></i> <span data-i18n="reg_choose_file">Choose File</span></span>
+            <input type="file" id="teamLogo" accept="image/png,image/jpeg,image/webp" class="reg-logo-hidden">
+          </label>
+
+          <div class="reg-logo-preview reg-logo-hidden" id="logoPreview">
+            <div class="reg-logo-preview__meta">
+              <span class="reg-logo-preview__name" id="logoFileName"></span>
+              <span class="reg-logo-preview__text" data-i18n="reg_logo_skip">Optional. You can also add this later.</span>
+            </div>
+            <button type="button" class="reg-logo-preview__remove" id="removeLogoBtn" data-i18n="reg_logo_remove">Remove badge</button>
+          </div>
+          <span class="reg-error" id="err-logo" aria-live="polite"></span>
+        </div>
+
+        <div class="reg-logo-upload">
+          <div>
+            <h3 class="reg-panel__title reg-panel__title--minor" data-i18n="reg_song_title">Entrance Song (optional)</h3>
+            <p class="reg-logo-upload__copy" data-i18n="reg_song_copy">Choose a SoundCloud track to play a 15-second clip when your team walks onto the court.</p>
+          </div>
+
+          <div id="entranceSongChooseBlock" class="reg-field">
+            <button type="button" class="reg-btn reg-btn--soundcloud" id="openScModalBtn"><i class="fab fa-soundcloud" aria-hidden="true"></i> Choose Song from SoundCloud</button>
+          </div>
+
+          <div id="entranceSongSelectedBlock" class="reg-song-card">
+            <div class="reg-song-card__inner">
+              <img id="finalSongArtwork" src="" alt="Artwork" class="reg-song-card__art" width="60" height="60">
+              <div class="reg-song-card__meta">
+                <a href="#" id="finalSongTitle" target="_blank" rel="noopener" class="reg-song-card__title"></a>
+                <div id="finalSongArtist" class="reg-song-card__artist"></div>
+                <div id="finalSongStart" class="reg-song-card__start">Starts at 0:00</div>
+              </div>
+              <button type="button" class="reg-btn reg-btn--remove" id="removeScSongBtn">Remove</button>
+            </div>
+          </div>
+
+          <input type="hidden" id="entranceUrl" name="entranceUrl">
+          <input type="hidden" id="entranceTitle" name="entranceTitle">
+          <input type="hidden" id="entranceArtist" name="entranceArtist">
+          <input type="hidden" id="entranceArtworkUrl" name="entranceArtworkUrl">
+          <input type="hidden" id="entranceSource" name="entranceSource" value="soundcloud">
+          <input type="hidden" id="entranceStartSeconds" name="entranceStartSeconds" value="0">
+        </div>
+
+        <div class="reg-actions">
+          <button type="button" class="reg-btn reg-btn--back" data-prev="1" data-i18n="reg_back"><span class="reg-btn__arrow">←</span> Back</button>
+          <button type="button" class="reg-btn reg-btn--next" data-next="3" data-i18n="reg_next2">Next: Roster <span class="reg-btn__arrow">→</span></button>
+        </div>
+      </div>
+
+      <div class="reg-panel reg-panel--hidden" id="step3">
+        <h2 class="reg-panel__title" data-i18n="reg_roster">Team Roster</h2>
+        <p class="reg-panel__hint" data-i18n="reg_hint">Minimum 6 players required</p>
+        <!-- [CONFIRM] registration deadline -->
+        <p class="reg-panel__note" data-i18n="reg_note">Captain must be listed as one of the players below. Finish roster edits before 20.09.2026. This event is played outdoors, so in case of bad weather the tournament may be postponed and captains will be notified directly.</p>
 
         <div class="roster-list" id="rosterList">
-          <!-- Players 1–6 (required) -->
           {% for i in "123456" %}
           <div class="roster-row" data-index="{{ forloop.counter }}">
             <div class="roster-row__num">{{ forloop.counter }}</div>
             <div class="roster-row__fields">
               <input class="reg-input roster-first" type="text" placeholder="First Name" maxlength="50" data-i18n-ph="reg_first">
               <input class="reg-input roster-last" type="text" placeholder="Last Name" maxlength="50" data-i18n-ph="reg_last">
-              <input class="reg-input roster-jersey" type="number" placeholder="#" min="0" max="99" data-i18n-ph="reg_jersey">
             </div>
           </div>
           {% endfor %}
         </div>
 
-        <button type="button" class="reg-btn reg-btn--add" id="addPlayerBtn" data-i18n="reg_add">
-          + Add Player
-        </button>
+        <button type="button" class="reg-btn reg-btn--add" id="addPlayerBtn" data-i18n="reg_add">+ Add Player</button>
 
-        <!-- Checkboxes -->
         <div class="reg-checks">
           <label class="reg-check">
             <input type="checkbox" id="chkTerms" required>
             <span class="reg-check__box"></span>
-            <span data-i18n="reg_terms">I have read and accept the tournament regulations</span>
+            <span data-i18n="reg_terms">I have read and accept the <a href="/static/assets/documents/Regulations_english_czerwec.pdf" target="_blank">tournament regulations</a></span>
           </label>
           <label class="reg-check">
             <input type="checkbox" id="chkPhoto">
@@ -204,45 +1182,79 @@
           <label class="reg-check">
             <input type="checkbox" id="chkPayment" required>
             <span class="reg-check__box"></span>
-            <span data-i18n="reg_payment">I understand the entry fee is <strong>400 PLN</strong> and payment details will be sent by email</span>
+            <span data-i18n="reg_payment">I understand the entry fee is <strong>150 zł</strong> and payment details plus the payment deadline will be sent by email</span>
           </label>
         </div>
-        <span class="reg-error" id="err-checks"></span>
+        <span class="reg-error" id="err-checks" aria-live="polite"></span>
 
         <div class="reg-actions">
-          <button type="button" class="reg-btn reg-btn--back" data-prev="2" data-i18n="reg_back">
-            <span class="reg-btn__arrow">←</span> Back
-          </button>
+          <button type="button" class="reg-btn reg-btn--back" data-prev="2" data-i18n="reg_back"><span class="reg-btn__arrow">←</span> Back</button>
           <button type="submit" class="reg-btn reg-btn--submit" id="submitBtn">
-            <span class="reg-btn__text" data-i18n="reg_submit">Register Team</span>
+            <span class="reg-btn__text" data-i18n="reg_submit">Join Tournament</span>
             <span class="reg-btn__spinner" aria-hidden="true"></span>
           </button>
         </div>
       </div>
 
-      <!-- ─── SUCCESS ───────────────────────────────── -->
       <div class="reg-panel reg-panel--hidden reg-success" id="stepSuccess">
-        <div class="reg-success__icon">✓</div>
-        <h3 class="reg-success__title" data-i18n="reg_success">Registration Submitted!</h3>
-        <p class="reg-success__text" data-i18n="reg_success_txt">
-          Your team has been registered. Payment instructions will be sent to your email address shortly.
-        </p>
+        <div class="reg-success__icon" aria-hidden="true">YOU'RE IN.</div>
+        <h2 class="reg-success__title" data-i18n="reg_success">Registration Sent!</h2>
+        <p class="reg-success__text" data-i18n="reg_success_txt">Your team has been submitted for Pocket Aces Court Cup 2. Payment details and the deadline will be sent to your email address shortly.</p>
+      </div>
+    </form>
+  </div>
+</main>
+
+<div id="scCropModal" class="reg-modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="scModalTitle">
+  <div class="reg-modal__content sc-modal-content">
+    <button type="button" class="reg-modal__close" id="closeScModalBtn" aria-label="Close">&times;</button>
+    <h2 class="sc-modal-title" id="scModalTitle">Select 15-second Clip</h2>
+
+    <div class="sc-search-row">
+      <input type="text" id="scSearchInput" class="reg-input sc-search-input" placeholder="Search track or artist on SoundCloud...">
+      <button type="button" id="scSearchBtn" class="reg-btn reg-btn--add sc-search-btn">Search</button>
+    </div>
+    <div id="scSearchStatus" class="sc-status-text" style="display: none;" aria-live="polite"></div>
+    <div id="scSearchResults" class="sc-results-container" style="display: none;"></div>
+    <div id="scErrorMsg" class="sc-error-msg" style="display: none;" aria-live="assertive"></div>
+    <div id="scLoading" class="sc-loading" style="display: none;">Loading track data...</div>
+
+    <div id="scEditorArea" style="display: none;">
+      <div class="sc-editor-header">
+        <div class="sc-track-info-row">
+          <i class="fab fa-soundcloud sc-icon" aria-hidden="true"></i>
+          <div class="sc-track-info-col">
+            <a href="#" id="scTrackLink" target="_blank" rel="noopener" class="sc-track-link">Track Title</a>
+            <a href="#" id="scArtistLink" target="_blank" rel="noopener" class="sc-artist-link">Artist Name</a>
+          </div>
+        </div>
       </div>
 
-    </form>
+      <div class="sc-waveform-row">
+        <div id="scWaveformContainer" class="sc-waveform-container">
+          <div id="scPseudoWaveform" class="sc-pseudo-waveform"></div>
+          <div id="scCropper" class="sc-cropper">
+            <div id="scProgressFill" class="sc-progress-fill"></div>
+            <div id="scProgressHead" class="sc-progress-head"></div>
+            <div id="scCropperTime" class="sc-cropper-time-left">0:00</div>
+            <div class="sc-cropper-time-right">15s</div>
+          </div>
+        </div>
+        <button type="button" id="scPlayPreviewBtn" class="reg-btn sc-play-btn" aria-label="Play preview"><i class="fas fa-play sc-play-icon" aria-hidden="true"></i></button>
+      </div>
+
+      <div id="scPreviewProgressLabel" class="sc-preview-label">Preview progress: 0:00 / 0:15</div>
+      <p class="sc-help-text">Drag the highlighted box to select the 15-second clip.</p>
+      <button type="button" id="scConfirmBtn" class="reg-btn reg-btn--next sc-confirm-btn">Confirm Selection</button>
+    </div>
+
+    <div class="reg-widget-hidden" aria-hidden="true">
+      <iframe id="scHiddenWidget" title="SoundCloud preview player" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293&auto_play=false" scrolling="no" frameborder="0" allow="autoplay"></iframe>
+    </div>
   </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-  window.REG_CARD_PHOTOS = [
-    "{% static 'assets/cart-reg/1.png' %}",
-    "{% static 'assets/cart-reg/2.png' %}",
-    "{% static 'assets/cart-reg/3.png' %}",
-    "{% static 'assets/cart-reg/4.png' %}",
-    "{% static 'assets/cart-reg/5.png' %}"
-  ];
-</script>
 <script src="{% static_v 'js/register-page.js' %}"></script>
 {% endblock %}

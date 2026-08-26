@@ -1,12 +1,7 @@
 """Team CRUD, status workflow, batch actions, roster codes, drawer, pipeline."""
 
-import os
 import random
-import uuid
-import urllib.request
-import urllib.error
 
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, Q
@@ -16,52 +11,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
 from ..admin_forms import AdminTeamForm, PlayerInlineFormSet
-
-_ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"}
-
-
-def _save_team_logo(team, upload_file=None, logo_url=None):
-    """Save a team logo from file upload or URL. Returns the relative media path."""
-    dest_dir = os.path.join(settings.MEDIA_ROOT, "team_logos")
-    os.makedirs(dest_dir, exist_ok=True)
-
-    if upload_file:
-        ext = os.path.splitext(upload_file.name)[1].lower()
-        if ext not in _ALLOWED_EXTENSIONS:
-            raise ValueError(f"Unsupported file type: {ext}")
-        filename = f"{uuid.uuid4().hex[:12]}{ext}"
-        filepath = os.path.join(dest_dir, filename)
-        with open(filepath, "wb") as f:
-            for chunk in upload_file.chunks():
-                f.write(chunk)
-        team.logo_path = f"team_logos/{filename}"
-        team.save(update_fields=["logo_path"])
-        return
-
-    if logo_url:
-        req = urllib.request.Request(logo_url, headers={"User-Agent": "Mozilla/5.0"})
-        resp = urllib.request.urlopen(req, timeout=10)  # noqa: S310
-        content_type = resp.headers.get("Content-Type", "")
-        ext_map = {
-            "image/jpeg": ".jpg", "image/png": ".png",
-            "image/gif": ".gif", "image/webp": ".webp",
-            "image/svg+xml": ".svg",
-        }
-        ext = ext_map.get(content_type.split(";")[0].strip(), "")
-        if not ext:
-            url_ext = os.path.splitext(logo_url.split("?")[0])[1].lower()
-            ext = url_ext if url_ext in _ALLOWED_EXTENSIONS else ".png"
-        filename = f"{uuid.uuid4().hex[:12]}{ext}"
-        filepath = os.path.join(dest_dir, filename)
-        with open(filepath, "wb") as f:
-            while True:
-                chunk = resp.read(8192)
-                if not chunk:
-                    break
-                f.write(chunk)
-        team.logo_path = f"team_logos/{filename}"
-        team.save(update_fields=["logo_path"])
-        return
+from ..logo_utils import save_team_logo
 from ..constants import (
     PAYMENT_STATUS_CHOICES,
     ROSTER_CODE_LENGTH,
@@ -71,7 +21,7 @@ from ..constants import (
     TEAM_STATUS_PAID,
     TEAM_STATUS_REGISTERED,
 )
-from ..models import AUDIT_CATEGORY_TEAM, AuditEntry, Match, Team
+from ..models import AUDIT_CATEGORY_TEAM, AuditEntry, Team
 from .audit import log_audit
 
 # Allowed status transitions: current → list of valid next statuses
@@ -131,7 +81,7 @@ def teams_list_view(request):
     # ── Post-query readiness filter (property-based) ──
     teams = list(qs)
     if readiness == "incomplete":
-        teams = [t for t in teams if t.readiness_score < 5]
+        teams = [t for t in teams if t.readiness_score < t.readiness_target]
 
     groups = (
         Team.objects.exclude(group_name__isnull=True)
@@ -163,11 +113,6 @@ def teams_list_view(request):
 @staff_member_required(login_url="/panel/login/")
 def team_detail_view(request, pk):
     team = get_object_or_404(Team.objects.prefetch_related("players"), pk=pk)
-    team_matches = (
-        Match.objects.filter(Q(team_a=team) | Q(team_b=team))
-        .select_related("team_a", "team_b")
-        .order_by("-start_time")
-    )
     next_statuses = _STATUS_TRANSITIONS.get(team.status, [])
     audit_log = AuditEntry.objects.filter(
         entity_type="Team", entity_id=team.pk,
@@ -177,7 +122,6 @@ def team_detail_view(request, pk):
         "nav_section": "teams",
         "team": team,
         "players": team.players.all(),
-        "matches": team_matches,
         "status_choices": TEAM_STATUS_CHOICES,
         "next_statuses": next_statuses,
         "audit_log": audit_log,
@@ -196,7 +140,7 @@ def team_create_view(request):
             formset.save()
             # Handle logo upload / URL
             try:
-                _save_team_logo(
+                save_team_logo(
                     team,
                     upload_file=form.cleaned_data.get("logo_upload"),
                     logo_url=form.cleaned_data.get("logo_url"),
@@ -230,7 +174,7 @@ def team_edit_view(request, pk):
             formset.save()
             # Handle logo upload / URL
             try:
-                _save_team_logo(
+                save_team_logo(
                     team,
                     upload_file=form.cleaned_data.get("logo_upload"),
                     logo_url=form.cleaned_data.get("logo_url"),
@@ -361,16 +305,11 @@ def team_batch_action(request):
 def team_drawer_view(request, pk):
     """Return drawer HTML partial for a specific team."""
     team = get_object_or_404(Team.objects.prefetch_related("players"), pk=pk)
-    recent_matches = (
-        Match.objects.filter(Q(team_a=team) | Q(team_b=team))
-        .select_related("team_a", "team_b")
-        .order_by("-start_time")[:3]
-    )
+
     next_statuses = _STATUS_TRANSITIONS.get(team.status, [])
     ctx = {
         "team": team,
         "players": team.players.all(),
-        "recent_matches": recent_matches,
         "next_statuses": next_statuses,
         "status_choices": TEAM_STATUS_CHOICES,
     }

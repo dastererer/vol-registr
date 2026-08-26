@@ -1,93 +1,316 @@
 {% extends 'base.html' %}
 {% load static static_v %}
 
-{% block title %}FAQ | Pocket Aces Invitational{% endblock %}
+{% block title %}FAQ | Pocket Aces Court Cup 2{% endblock %}
+
+{% block extra_head %}
+<style>
+  .faq-section {
+    min-height: calc(100svh - var(--nav-h));
+    padding-block: var(--section-y);
+    position: relative;
+  }
+
+  .faq-board {
+    display: grid;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  .faq-rail {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .faq-rail__panel,
+  .faq-form__card {
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    clip-path: var(--card-clip);
+    padding: clamp(1.5rem, 3vw, 3rem);
+  }
+
+  .faq-kicker {
+    color: var(--volt);
+    font: 700 var(--fs-mono-sm)/1.2 var(--font-mono);
+    letter-spacing: 0.14em;
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .faq-title {
+    color: var(--paper);
+    font: italic 800 var(--fs-display-lg)/0.9 var(--font-display);
+    margin: 0;
+    overflow-wrap: anywhere;
+    text-transform: uppercase;
+  }
+
+  .faq-form__header {
+    color: var(--paper);
+    font: italic 800 var(--fs-display-sm)/1 var(--font-display);
+    letter-spacing: 0.04em;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+  }
+
+  .faq-form__body {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .faq-form__input,
+  .faq-form__textarea {
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    color: var(--paper);
+    font: 400 0.95rem/1.5 var(--font-body);
+    padding: 0.875rem;
+    width: 100%;
+  }
+
+  .faq-form__input {
+    height: 48px;
+  }
+
+  .faq-form__textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  .faq-form__input::placeholder,
+  .faq-form__textarea::placeholder {
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  .faq-form__input:focus,
+  .faq-form__textarea:focus {
+    border-color: var(--volt);
+    outline: 2px solid var(--volt);
+    outline-offset: 0;
+  }
+
+  .faq-form__btn {
+    align-items: center;
+    background: var(--volt);
+    border: 2px solid var(--volt);
+    border-radius: 0;
+    clip-path: var(--btn-clip);
+    color: var(--ink);
+    cursor: pointer;
+    display: inline-flex;
+    font: 700 1.25rem/1 var(--font-display);
+    height: 52px;
+    justify-content: center;
+    letter-spacing: 0.06em;
+    padding-inline: 1.625rem;
+    text-transform: uppercase;
+    transition: transform var(--t-hover) var(--ease-out), filter var(--t-hover) var(--ease-out), background-color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out), color var(--t-hover) var(--ease-out);
+  }
+
+  .faq-form__btn:hover {
+    filter: drop-shadow(6px 6px 0 var(--paper));
+    transform: translate(-3px, -3px);
+  }
+
+  .faq-form__btn:active {
+    filter: none;
+    transform: translate(0, 0);
+  }
+
+  .faq-questions {
+    counter-reset: faq-step;
+  }
+
+  .faq-item {
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    counter-increment: faq-step;
+    margin-bottom: -1px;
+  }
+
+  .faq-item.open {
+    border-left: 2px solid var(--volt);
+  }
+
+  .faq-question {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: var(--paper);
+    cursor: pointer;
+    display: grid;
+    font: 600 1.25rem/1.15 var(--font-display);
+    gap: 0.875rem;
+    grid-template-columns: 2.5rem 1fr 1.25rem;
+    padding: 1.125rem 1.25rem;
+    position: relative;
+    text-align: left;
+    text-transform: uppercase;
+    width: 100%;
+  }
+
+  .faq-question::before {
+    align-items: center;
+    align-self: center;
+    background: var(--volt);
+    color: var(--ink);
+    content: counter(faq-step, decimal-leading-zero);
+    display: inline-flex;
+    font: 700 var(--fs-mono-sm)/1 var(--font-mono);
+    justify-content: center;
+    letter-spacing: 0.04em;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .faq-question::after {
+    color: var(--paper);
+    content: '+';
+    font: 400 1.5rem/1 var(--font-mono);
+    justify-self: end;
+    transform: rotate(0deg);
+    transition: transform 200ms var(--ease-out), color 200ms var(--ease-out);
+  }
+
+  .faq-item.open .faq-question::after {
+    color: var(--volt);
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 300ms var(--ease-out);
+  }
+
+  .faq-answer p {
+    border-left: 2px solid var(--volt);
+    color: var(--muted);
+    font: 400 0.95rem/1.7 var(--font-body);
+    margin: 0 1.25rem 1.25rem 4.5rem;
+    padding: 0 0 0 1.25rem;
+  }
+
+  .faq-answer a {
+    color: var(--paper);
+    text-decoration-color: var(--volt);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  .faq-item.open .faq-answer {
+    max-height: 24rem;
+  }
+
+  .faq-ask__success {
+    color: var(--ok) !important;
+    font: 700 var(--fs-mono-sm)/1.4 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 1024px) {
+    .faq-board {
+      grid-template-columns: minmax(18rem, 4fr) minmax(0, 8fr);
+    }
+
+    .faq-rail {
+      position: sticky;
+      top: calc(var(--nav-h) + 1.5rem);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .faq-question {
+      font-size: 1.05rem;
+      grid-template-columns: 2.25rem 1fr 1rem;
+      padding-inline: 1rem;
+    }
+
+    .faq-answer p {
+      margin-left: 3.25rem;
+      padding-left: 0.875rem;
+    }
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<style>
-</style>
-
-<!-- Background decorations -->
-<div class="sports-bg-wrapper">
-  <div class="sports-bg-image"></div>
-  <div class="sports-bg-grid"></div>
-  <div class="sports-bg-stripes"></div>
-  <div class="sports-bg-glow"></div>
-  <div class="sports-bg-overlay"></div>
-  <div class="sports-bg-watermark">POCKET<br>ACES</div>
-</div>
-
 <section class="faq-section section">
   <div class="container">
-    <h1 class="faq-title" data-i18n="faq.title">FAQ</h1>
-    
-    <div class="faq-layout">
-      <!-- Left Column: Questions -->
-      <div class="faq-questions">
+    <div class="faq-board">
+      <aside class="faq-rail" data-reveal>
+        <div class="faq-rail__panel">
+          <p class="faq-kicker">// Court notes</p>
+          <h1 class="faq-title" data-i18n="faq.title">FAQ</h1>
+        </div>
+
+        <div class="faq-sidebar">
+          <form class="faq-form">
+            <div class="faq-form__card">
+              <div class="faq-form__header" data-i18n="faq.ask_title">Ask a question</div>
+              <div class="faq-form__body">
+                <input type="email" class="faq-form__input" name="email" placeholder="Your email" aria-label="Your email" required data-i18n-ph="faq.ask_email_ph">
+                <textarea class="faq-form__textarea" name="question" placeholder="Your question" aria-label="Your question" required data-i18n-ph="faq.ask_question_ph"></textarea>
+                <button type="submit" class="faq-form__btn" data-i18n="faq.ask_btn">Send</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </aside>
+
+      <div class="faq-questions faq-list" data-reveal>
         <div class="faq-item">
           <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q1">What if a player is under 18?</button>
           <div class="faq-answer">
-            <p data-i18n="faq.a1">If a participant is under 18, a <a href="/static/assets/documents/ZGODA_RODZICA_Pocket_Aces_12_04_2026_1.pdf" target="_blank" data-i18n="faq.a1.link">parental consent form</a> must be filled out and provided at registration.</p>
+            <p data-i18n="faq.a1">If a participant is under 18, a <a href="/static/assets/documents/ZGODA_RODZICA.pdf" target="_blank" data-i18n="faq.a1.link">parental consent form</a> must be sent before the event and brought in paper form on tournament day.</p>
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q2">What if our team doesn't have uniforms?</button>
           <div class="faq-answer">
-            <p data-i18n="faq.a2">You must make your numbers clearly visible by any means. If not, your team will not receive detailed statistics.</p>
+            <p data-i18n="faq.a2">Uniform numbers are not required. Matching shirts are welcome, but the key point is that your team stays easy to identify on court.</p>
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q3">Can we get a refund?</button>
           <div class="faq-answer">
-            <p data-i18n="faq.a3">Yes, you can get a refund until the end of registration. Just contact support.</p>
+            <p data-i18n="faq.a3">If the tournament is canceled because the minimum number of teams is not reached, all payments are refunded within 7 days.</p>
           </div>
         </div>
         <div class="faq-item">
-          <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q4">Can we bring spectators?</button>
+          <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q4">What happens if the weather is bad?</button>
           <div class="faq-answer">
-            <p data-i18n="faq.a4">Absolutely! There are seats for spectators in the hall.</p>
+            <p data-i18n="faq.a4">Because this is an open-air event, the tournament may be postponed in case of bad weather. Registered captains will be informed directly.</p>
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q5">How many players can be on a team?</button>
           <div class="faq-answer">
-            <p data-i18n="faq.a5">A team can have 6 to 12 players, including substitutes.</p>
+            <p data-i18n="faq.a5">You need 6 players on court to start a match, and you can register an unlimited number of substitutes.</p>
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q6">Can we change a player after registration?</button>
           <div class="faq-answer">
-            <p data-i18n="faq.a6">Yes, you can replace a player before the tournament starts by notifying the organizers.</p>
+            <!-- [CONFIRM] registration deadline -->
+            <p data-i18n="faq.a6">Roster changes are accepted only until registration closes on 20.09.2026. Once the tournament starts, roster changes are not allowed.</p>
           </div>
         </div>
         <div class="faq-item">
           <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q7">Where can we find the match schedule?</button>
           <div class="faq-answer">
-            <p data-i18n="faq.a7">The match schedule will be published on the website and sent to team captains by email a few days before the tournament.</p>
+            <p data-i18n="faq.a7">The final format depends on the number of registered teams. Captains receive updates directly, and key schedule information will also appear on the website.</p>
           </div>
         </div>
       </div>
-
-      <!-- Right Column: Ask Form -->
-      <div class="faq-sidebar">
-        <form class="faq-form">
-          <div class="faq-form__card">
-            <div class="faq-form__header" data-i18n="faq.ask_title">Ask a question</div>
-            <div class="faq-form__body">
-              <input type="email" class="faq-form__input" name="email" placeholder="Your email" required data-i18n-ph="faq.ask_email_ph">
-              <textarea class="faq-form__textarea" name="question" placeholder="Your question" required data-i18n-ph="faq.ask_question_ph"></textarea>
-              <button type="submit" class="faq-form__btn" data-i18n="faq.ask_btn">Send</button>
-            </div>
-          </div>
-        </form>
-      </div>
     </div>
-
   </div>
 </section>
 {% endblock %}
-
-
 
 {% block scripts %}
   <script src="{% static_v 'js/faq.js' %}"></script>

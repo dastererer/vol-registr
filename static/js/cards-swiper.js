@@ -8,6 +8,25 @@
   const MOBILE_BP = 768;
   let swiperInstance = null;
 
+  function shouldUseSwiper() {
+    return window.innerWidth < MOBILE_BP;
+  }
+
+  function syncSlideVisibility(swiper) {
+    if (!swiper || !swiper.slides) return;
+    swiper.slides.forEach(function (slide, index) {
+      if (index === swiper.activeIndex) {
+        slide.style.opacity = '1';
+        slide.style.visibility = 'visible';
+        slide.style.pointerEvents = 'auto';
+      } else {
+        slide.style.opacity = '0';
+        slide.style.visibility = 'hidden';
+        slide.style.pointerEvents = 'none';
+      }
+    });
+  }
+
   function initSwiper() {
     if (swiperInstance) return;
     swiperInstance = new Swiper('.cards-swiper', {
@@ -23,6 +42,11 @@
       pagination: {
         el: '.cards-pagination',
         clickable: true,
+      },
+      on: {
+        init: syncSlideVisibility,
+        slideChange: syncSlideVisibility,
+        resize: syncSlideVisibility,
       },
     });
   }
@@ -40,7 +64,7 @@
   }
 
   function handleResize() {
-    if (window.innerWidth < MOBILE_BP) {
+    if (shouldUseSwiper()) {
       initSwiper();
     } else {
       destroySwiper();
@@ -49,6 +73,7 @@
 
   // Init on load
   document.addEventListener('DOMContentLoaded', handleResize);
+  window.addEventListener('pageshow', handleResize);
 
   // Re-check on resize (debounced)
   let resizeTimer;

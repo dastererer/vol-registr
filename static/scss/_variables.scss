@@ -1,82 +1,130 @@
 // ═══════════════════════════════════════════════════════
-//  Design Tokens (Variables)
+//  Sports Brutalism Design Tokens
+//  Mirrors static/css/brutal.css (served CSS is authoritative)
 // ═══════════════════════════════════════════════════════
 
-// ── Colors ──────────────────────────────────────────
-$color-bg-body:       #020617;   // slate-950
-$color-bg-hero:       #070711;   // custom dark
-$color-bg-card:       #0b1220;
-$color-bg-card-back:  #0b1324;
+// ── Color ───────────────────────────────────────────
+$ink:         #0a0c0e;
+$ink-2:       #0f1317;
+$ink-3:       #151b21;
+$line:        #222b33;
+$line-strong: #3a4650;
+$paper:       #f4f4ef;
+$muted:       #9aa5ae;
+$volt:        #0391d3;
+$signal:      #ff4d00;
+$danger:      #ff3b30;
+$ok:          #35d07f;
 
-$color-sky-300:  #7dd3fc;
-$color-sky-400:  #38bdf8;
-$color-sky-500:  #0ea5e9;
-$color-sky-600:  #0284c7;
+// ── Type ────────────────────────────────────────────
+$font-display: 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif;
+$font-body: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+$font-mono: 'Space Mono', 'Courier New', monospace;
 
-$color-indigo-500: #6366f1;
-$color-indigo-600: #4f46e5;
-
-$color-slate-300: #cbd5e1;
-$color-slate-400: #94a3b8;
-$color-slate-500: #64748b;
-$color-slate-600: #475569;
-$color-slate-700: #334155;
-$color-slate-800: #1e293b;
-$color-slate-900: #0f172a;
-$color-white:     #ffffff;
-$color-slate-500: #64748b;
-$color-slate-600: #475569;
-$color-slate-700: #334155;
-$color-slate-800: #1e293b;
-$color-slate-900: #0f172a;
-
-$color-red:   #dc2626;
-$color-gold:  #ffd700;
-$color-white: #ffffff;
-
-// ── Gradients ───────────────────────────────────────
-$gradient-brand: linear-gradient(45deg, $color-indigo-500, $color-sky-400);
-$gradient-btn:       linear-gradient(to right, $color-sky-500, $color-indigo-600);
-$gradient-btn-hover: linear-gradient(to right, $color-sky-400, $color-indigo-500);
-
-// ── Breakpoints ─────────────────────────────────────
-$bp-sm:  480px;
-$bp-md:  768px;
-$bp-lg:  1024px;
-$bp-xl:  1280px;
-$bp-2xl: 1440px;
-
-// ── Border Radius ───────────────────────────────────
-$radius-sm:   0.25rem;
-$radius-md:   0.5rem;
-$radius-lg:   0.75rem;
-$radius-xl:   1rem;
-$radius-2xl:  1.25rem;
-$radius-full: 9999px;
-
-// ── Transitions ─────────────────────────────────────
-$transition-fast: 0.2s ease;
-$transition-base: 0.3s ease;
-$transition-slow: 0.5s ease;
-
-// ── Fonts ───────────────────────────────────────────
-$font-primary: 'Montserrat', sans-serif;
-$font-sans:    'Montserrat', sans-serif;
-$font-body:   'Montserrat', sans-serif;
-
-// ── Typography ──────────────────────────────────────
-$font-body: 'Montserrat', sans-serif;
+$fs-display-xl: clamp(4.5rem, 13vw, 11rem);
+$fs-display-lg: clamp(3rem, 7vw, 6rem);
+$fs-display-md: clamp(1.9rem, 3.4vw, 2.9rem);
+$fs-display-sm: clamp(1.35rem, 2vw, 1.75rem);
+$fs-body: clamp(0.95rem, 0.55vw + 0.72rem, 1.075rem);
+$fs-small: 0.85rem;
+$fs-mono-lg: 0.95rem;
+$fs-mono-md: 0.8rem;
+$fs-mono-sm: 0.7rem;
 
 // ── Layout ──────────────────────────────────────────
-$container-width: 1200px;
-$gutter: 1.5rem;
-$breakpoint-md: 768px;
-$breakpoint-lg: 1024px;
+$container: 1440px;
+$gutter: clamp(1.25rem, 4vw, 4rem);
+$section-y: clamp(4.5rem, 9vw, 8.5rem);
+$seam: clamp(16px, 3vw, 48px);
+$nav-h: 68px;
 
-// ── Borders & Shadows ───────────────────────────────
-$border-radius: 0.5rem;
-$shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
-$shadow-md: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-$shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-$shadow-xl: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.1);
-$shadow-2xl: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+// ── Shape ───────────────────────────────────────────
+$cut-btn: 14px;
+$cut-card: 20px;
+$btn-clip: polygon(0 0, calc(100% - #{$cut-btn}) 0, 100% $cut-btn, 100% 100%, 0 100%);
+$card-clip: polygon(
+  0 0,
+  calc(100% - #{$cut-card}) 0,
+  100% $cut-card,
+  100% 100%,
+  $cut-card 100%,
+  0 calc(100% - #{$cut-card})
+);
+
+// ── Motion ──────────────────────────────────────────
+$ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-hard: cubic-bezier(0.83, 0, 0.17, 1);
+$ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+$t-hover: 140ms;
+$t-reveal: 600ms;
+
+// ── Z-index ─────────────────────────────────────────
+$z-bg: 0;
+$z-content: 1;
+$z-overlap: 5;
+$z-nav: 50;
+$z-menu: 60;
+$z-modal: 100;
+$z-toast: 110;
+
+// ── Breakpoints ─────────────────────────────────────
+$bp-sm: 480px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+$bp-2xl: 1440px;
+
+// ── Legacy aliases for the dormant SCSS partials ───
+// These keep the historical source tree compilable without changing the
+// sports-brutalism palette or reintroducing gradients, pills, or soft shadows.
+$color-bg-body: $ink;
+$color-bg-hero: $ink;
+$color-bg-card: $ink-3;
+$color-bg-card-back: $volt;
+
+$color-sky-300: $volt;
+$color-sky-400: $volt;
+$color-sky-500: $volt;
+$color-sky-600: $paper;
+$color-indigo-500: $signal;
+$color-indigo-600: $signal;
+
+$color-slate-300: $paper;
+$color-slate-400: $muted;
+$color-slate-500: $muted;
+$color-slate-600: $line-strong;
+$color-slate-700: $line-strong;
+$color-slate-800: $ink-3;
+$color-slate-900: $ink-2;
+$color-white: $paper;
+$color-red: $danger;
+$color-gold: $signal;
+
+$gradient-brand: $volt;
+$gradient-btn: $volt;
+$gradient-btn-hover: $paper;
+
+$radius-sm: 0;
+$radius-md: 0;
+$radius-lg: 0;
+$radius-xl: 0;
+$radius-2xl: 0;
+$radius-full: 0;
+
+$transition-fast: $t-hover $ease-out;
+$transition-base: $t-hover $ease-out;
+$transition-slow: $t-reveal $ease-out;
+
+$font-primary: $font-body;
+$font-sans: $font-body;
+
+$container-width: $container;
+$breakpoint-md: $bp-md;
+$breakpoint-lg: $bp-lg;
+
+$border-radius: 0;
+$shadow-sm: none;
+$shadow-md: none;
+$shadow-lg: none;
+$shadow-xl: none;
+$shadow-2xl: none;

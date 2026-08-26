@@ -1,258 +1,367 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load static_v %}
 
 {% block content %}
-{% load static %}
-
 <!-- Hero Section -->
 <section class="hero" id="hero">
-    <div class="hero-logo-watermark" aria-hidden="true">
-        <img src="{% static 'assets/logo.png' %}" alt="">
-    </div>
-
-    <div class="hero-content">
+    <div class="hero-content container">
         <div class="hero__left">
-
             <div class="hero__label-wrap">
                 <span class="hero-label" data-i18n="hero.label">
-                    April 11, 2026 • Rzgów, Szkolna 5
+                    SAT 26.09.2026 • 09:00 • OUTDOOR COURT BY DORMITORY NO. 8
                 </span>
             </div>
 
             <h1 class="hero-title">
-                <div class="hero-title__main" data-i18n="hero.title.main">POCKET ACES</div><br>
-                <span class="hero-title__sub" data-i18n="hero.title.sub">SPRING TOURNAMENT 2026</span>
+                <span class="hero-title__stage hero-title__stage--final">
+                    <span class="hero-title__line-wrap">
+                        <span class="hero-title__line" data-i18n="hero.title.final_top">COURT</span>
+                    </span>
+                    <span class="hero-title__line-wrap">
+                        <span class="hero-title__line" data-i18n="hero.title.final_bottom">CUP 2</span>
+                    </span>
+                </span>
+                <span class="hero-title__stage hero-title__stage--intro" aria-hidden="true">
+                    <span class="hero-title__line-wrap">
+                        <span class="hero-title__line" data-i18n="hero.title.intro_top">POCKET</span>
+                    </span>
+                    <span class="hero-title__line-wrap">
+                        <span class="hero-title__line" data-i18n="hero.title.intro_bottom">ACES</span>
+                    </span>
+                </span>
             </h1>
 
             <p class="hero-text" data-i18n="hero.text">
-                The first official tournament by Pocket Aces Sports Club, organized by a team of over 20 members. Built around professional organization, a competitive format, and high standards.
+                Registration is open for Pocket Aces Court Cup 2. Outdoor volleyball, 8 teams, first serve at 09:00 on Saturday, September 26, 2026. Lock your spot before registration closes.
             </p>
-            <div class="hero-btn-container">
-                <div class="hero-stats-row">
-                    <div class="hero-price">
-                        <span class="hero-price__value">400 PLN</span>
-                        <span class="hero-price__label" data-i18n="hero.price.label">per team</span>
-                    </div>
 
-                    <div class="hero-stats-divider"></div>
-
-                    <a href="#registeredTeamsModal" class="rt-link-numbers rt-modal-trigger">
-                        <span class="rt-link__numbers">
-                            <span class="rt-link__current">{{ registered_teams }}</span>
-                            <span class="rt-link__total">/ {{ max_slots }}</span>
-                        </span>
-                    </a>
+            <div class="hero-mobile-facts" aria-hidden="true">
+                <div class="hero-mobile-fact">
+                    <span class="hero-mobile-fact__value">26.09</span>
+                    <span class="hero-mobile-fact__label" data-i18n="hero.mobile_fact1">Tournament Day</span>
                 </div>
+                <div class="hero-mobile-fact">
+                    <span class="hero-mobile-fact__value">8</span>
+                    <span class="hero-mobile-fact__label" data-i18n="hero.mobile_fact2">Team Limit</span>
+                </div>
+                <div class="hero-mobile-fact">
+                    <span class="hero-mobile-fact__value">OUTDOOR</span>
+                    <span class="hero-mobile-fact__label" data-i18n="hero.mobile_fact3">Outdoor Court</span>
+                </div>
+                <div class="hero-mobile-fact">
+                    <span class="hero-mobile-fact__value">150 ZŁ</span>
+                    <span class="hero-mobile-fact__label" data-i18n="hero.price.label">Entry</span>
+                </div>
+            </div>
 
-                <a id="registeredTeamsBtn" class="rt-link-text rt-modal-trigger" href="#registeredTeamsModal">
-                    <span class="rt-link__text" data-i18n="registered.cta">See registered teams -></span>
+            <div class="hero-stats-row" data-reveal>
+                <div class="hero-stat hero-stat--date">
+                    <span class="hero-stat__label" data-i18n="hero.stats.date_label">Date</span>
+                    <span class="hero-stat__value" data-i18n="hero.stats.date_value">26.09 SAT</span>
+                </div>
+                <div class="hero-stat hero-stat--serve">
+                    <span class="hero-stat__label" data-i18n="hero.stats.serve_label">First Serve</span>
+                    <span class="hero-stat__value">09:00</span>
+                </div>
+                <div class="hero-stat hero-price">
+                    <span class="hero-stat__label hero-price__label" data-i18n="hero.price.label">Entry</span>
+                    <span class="hero-stat__value hero-price__value">150 ZŁ</span>
+                </div>
+                <a href="#registeredTeamsModal" class="hero-stat hero-counter rt-link-numbers rt-modal-trigger">
+                    <span class="hero-stat__label hero-counter-label" data-i18n="hero.counter.label">Slots</span>
+                    <span class="hero-stat__value rt-link__numbers">
+                        <span class="rt-link__current">{{ registered_teams }}</span>
+                        <span class="rt-link__total">/ {{ max_slots }}</span>
+                    </span>
                 </a>
+            </div>
 
+            <div class="hero-btn-container">
                 {% if registration_closed %}
-                <div class="btn-cta btn-cta--closed">
+                <div class="btn btn-cta btn-cta--closed" aria-disabled="true">
                     <span class="btn-cta__text" data-i18n="hero.closed">Registration Closed</span>
                 </div>
                 {% else %}
-                <a href="{% url 'register' %}" class="btn-cta">
-                    <span class="btn-cta__text" data-i18n="hero.cta">Secure Your Spot</span>
-                    <div class="btn-cta__shimmer"></div>
+                <a href="{% url 'register' %}" class="btn btn-cta">
+                    <span class="btn-cta__text" data-i18n="hero.cta">Join Tournament</span>
                 </a>
                 {% endif %}
+
+                <a id="registeredTeamsBtn" class="btn btn-outline rt-link-text rt-modal-trigger" href="#registeredTeamsModal">
+                    <span class="rt-link__text" data-i18n="registered.cta">See registered teams</span>
+                </a>
             </div>
         </div>
 
-        <div class="hero-player-container" id="heroPlayerContainer">
-            <img src="{% static 'assets/main_player.png' %}" alt="Main Player" class="hero-player">
-        </div>
-    </div>
-
-    <!-- Registered Teams Modal -->
-    <div id="registeredTeamsModal" class="rt-modal__overlay">
-        <div class="rt-modal__content sports-scoreboard">
-            <button id="registeredTeamsModalClose" class="rt-modal__close">&times;</button>
-            <div class="rt-modal__header">
-                <h2 class="rt-modal__title" data-i18n="registered.modal_title">Zarejestrowane Drużyny</h2>
-                <div class="rt-modal__subtitle" data-i18n="registered.modal_subtitle">Pocket Aces Spring Tournament</div>
+        <div class="hero-player-container{% if hero_photo_url %} hero-player-container--photo{% endif %}" id="heroPlayerContainer">
+            <span class="hero__ghost-number" aria-hidden="true">02</span>
+            <span class="hero__volt-block" aria-hidden="true"></span>
+            {% if hero_photo_url %}
+            <div class="hero-photo-frame">
+                <img src="{{ hero_photo_url }}"
+                     alt="Pocket Aces volleyball match"
+                     class="hero-player hero-player--photo"
+                     width="1600"
+                     height="900"
+                     fetchpriority="high">
             </div>
-            
-            <div class="rt-modal__teams-list">
-                <div class="rt-table-header">
-                    <span class="rt-col-rank">#</span>
-                    <span class="rt-col-team" data-i18n="registered.col_team">Drużyna</span>
-                    <span class="rt-col-captain" data-i18n="registered.col_captain">Kapitan</span>
-                    <span class="rt-col-level" data-i18n="registered.col_level">Poziom</span>
-                    <span class="rt-col-action"></span>
-                </div>
-                
-                {% if teams %}
-                    {% for team in teams %}
-                        <div class="rt-team-row {% if forloop.counter <= max_slots %}rt-in-tournament{% else %}rt-reserve{% endif %}" onclick="window.location.href='{% url 'tournament_team' team.id %}'" style="cursor: pointer;">
-                            <span class="rt-col-rank">{{ forloop.counter }}</span>
-                            <span class="rt-col-team">{{ team.name }}</span>
-                            <span class="rt-col-captain">{{ team.cap_name }} {{ team.cap_surname }}</span>
-                            <span class="rt-col-level">{{ team.get_league_level_display }}</span>
-                            <span class="rt-col-action"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></span>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="rt-no-teams" data-i18n="registered.empty">Brak zarejestrowanych drużyn.</div>
-                {% endif %}
-            </div>
+            {% else %}
+            <img src="{% static 'assets/main_player.png' %}"
+                 alt="Volleyball player"
+                 class="hero-player"
+                 width="2000"
+                 height="2999"
+                 fetchpriority="high">
+            {% endif %}
         </div>
     </div>
 
-    <div class="scroll-indicator">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-        </svg>
+    <div class="scroll-indicator" aria-hidden="true">
+        <span class="scroll-indicator__label">SCROLL</span>
+        <span class="scroll-indicator__line"></span>
     </div>
 </section>
 
-<!-- The Stakes Section (Cards Flip) -->
-<section class="perspective-section">
+<!-- Tournament Ticker -->
+<div class="ticker">
+    <div class="ticker__track">
+        <span class="ticker__copy ticker__item" data-i18n="ticker.items">POCKET ACES COURT CUP 2 /// SAT 26.09.2026 /// FIRST SERVE 09:00 /// 8 TEAMS /// 150 ZŁ PER TEAM /// OUTDOOR ///</span>
+        <span class="ticker__copy ticker__item" data-i18n="ticker.items" aria-hidden="true">POCKET ACES COURT CUP 2 /// SAT 26.09.2026 /// FIRST SERVE 09:00 /// 8 TEAMS /// 150 ZŁ PER TEAM /// OUTDOOR ///</span>
+    </div>
+</div>
+
+<!-- Registered Teams Modal -->
+<div id="registeredTeamsModal"
+     class="rt-modal__overlay"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="registeredTeamsModalTitle">
+    <div class="rt-modal__content sports-scoreboard">
+        <button id="registeredTeamsModalClose" class="rt-modal__close" type="button" aria-label="Close">&times;</button>
+        <div class="rt-modal__header">
+            <h2 id="registeredTeamsModalTitle" class="rt-modal__title" data-i18n="registered.modal_title">Registered Teams</h2>
+            <div class="rt-modal__subtitle" data-i18n="registered.modal_subtitle">Pocket Aces Court Cup 2</div>
+        </div>
+
+        <div class="rt-modal__teams-list">
+            <div class="rt-table-header">
+                <span class="rt-col-rank">#</span>
+                <span class="rt-col-team" data-i18n="registered.col_team">Team</span>
+                <span class="rt-col-captain" data-i18n="registered.col_captain">Captain</span>
+                <span class="rt-col-action"></span>
+            </div>
+
+            {% if teams %}
+                {% for team in teams %}
+                    <div class="rt-team-row {% if forloop.counter <= max_slots %}rt-in-tournament{% else %}rt-reserve{% endif %}">
+                        <span class="rt-col-rank">{{ forloop.counter }}</span>
+                        <span class="rt-col-team">{{ team.name }}</span>
+                        <span class="rt-col-captain">{{ team.cap_name }} {{ team.cap_surname }}</span>
+                        <span class="rt-col-action">
+                            <a href="{% url 'tournament_team' team.id %}" class="rt-team-link" aria-label="{{ team.name }}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"/>
+                                </svg>
+                            </a>
+                        </span>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="rt-no-teams" data-i18n="registered.empty">No registered teams.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if voting_enabled %}
+<!-- Fan Voting -->
+<section class="section section--fan-voting" id="fan-voting">
+    <div class="container voting-container">
+        <div class="section-heading-wrap section-header index-voting-header" data-reveal>
+            <span class="section-kicker" data-i18n="voting.kicker">// Fan Award</span>
+            <span class="section-ghost" aria-hidden="true">VOTE</span>
+            <h2 class="section-heading section-title index-voting-title" data-i18n="voting.title">Fan Favorite</h2>
+            <p class="section-subtitle index-voting-subtitle" data-i18n="voting.subtitle">Most Popular Team</p>
+        </div>
+
+        <div class="voting-board">
+            <div class="voting-board__head">
+                <span>#</span>
+                <span data-i18n="registered.col_team">Team</span>
+                <span data-i18n="voting.count">Fans</span>
+                <span aria-hidden="true"></span>
+            </div>
+
+            {% for team in teams %}
+            {% widthratio team.confirmed_votes max_votes|default:1 100 as vote_width %}
+            <div class="voting-board__row{% if forloop.counter <= 3 %} voting-board__row--podium{% endif %}" data-reveal>
+                <div class="voting-board__rank">#{{ forloop.counter }}</div>
+
+                <div class="voting-board__team">
+                    <div class="voting-card__logo-wrap">
+                        {% if team.logo_path %}
+                            <img src="{{ team.logo_path|asset_url }}" alt="{{ team.name }}" class="voting-card__logo" loading="lazy">
+                        {% else %}
+                            <div class="voting-card__logo--empty" aria-hidden="true">
+                                {{ team.name|slice:":1" }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="voting-board__team-meta">
+                        <a href="{% url 'tournament_team' team.id %}" class="voting-board__team-name">{{ team.name }}</a>
+                        <div class="voting-board__meter">
+                            <div class="voting-board__meter-fill" data-vote-width="{{ vote_width }}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="voting-board__score">
+                    <span class="voting-board__score-value">{{ team.confirmed_votes }}</span>
+                    <span class="voting-board__score-label" data-i18n="voting.count">Fans</span>
+                </div>
+
+                <button class="vote-btn-main vote-btn voting-board__vote"
+                        type="button"
+                        data-team-id="{{ team.id }}"
+                        data-team-name="{{ team.name }}">
+                    <i class="fas fa-heart" aria-hidden="true"></i>
+                    <span class="sr-only" data-i18n="voting.cta">Vote</span>
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Why Register -->
+<section class="section perspective-section perspective-section--cards section--alt">
     <div class="container">
-        <h2 class="section-heading" data-i18n="deal.heading">The Deal</h2>
+        <div class="section-heading-wrap" data-reveal>
+            <span class="section-kicker">// 02</span>
+            <span class="section-ghost" aria-hidden="true">ACES</span>
+            <h2 class="section-heading" data-i18n="deal.heading">Why Register</h2>
+            <p class="deal-lead" data-i18n="deal_lead">A compact outdoor event built for teams that want a sharp schedule, clear stakes, and a better matchday atmosphere.</p>
+        </div>
 
         <div class="cards-grid swiper cards-swiper">
             <div class="swiper-wrapper">
-
-            <!-- Card 1: Grand Prize -->
-            <div class="swiper-slide flip-card-wrapper">
-                <div class="flip-card">
-                    <div class="flip-card-back">
-                        <div class="card-back__corner card-back__corner--tl">♠</div>
-                        <div class="card-back__corner card-back__corner--tr">♠</div>
-                        <div class="card-back__corner card-back__corner--bl">♠</div>
-                        <div class="card-back__corner card-back__corner--br">♠</div>
-                        <div class="card-back__logo">
-                            <img src="{% static 'assets/logo.png' %}" alt="Logo">
+                <!-- Card 1: Prizes -->
+                <div class="swiper-slide flip-card-wrapper" data-reveal>
+                    <div class="flip-card">
+                        <div class="flip-card-back">
+                            <span class="card-back__index" aria-hidden="true">01</span>
+                            <div class="card-back__logo">
+                                <img src="{% static 'assets/logo.png' %}" alt="" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="flip-card-front">
+                            <span class="card-front__index" aria-hidden="true">01</span>
+                            <div class="card-front__header">
+                                <span class="card-front__eyebrow">// 01</span>
+                            </div>
+                            <h3 class="card-front__title" id="dealCardTitle1" data-i18n="deal.card1.title">Prizes</h3>
+                            <div class="divider"></div>
+                            <p class="card-front__text" data-i18n="deal.card1.text">
+                                Cups, medals, fan voting, and special prizes put real stakes behind every match.
+                            </p>
+                            <ul class="card-front__list">
+                                <li data-i18n="deal.card1.list1">Cups and medals</li>
+                                <li data-i18n="deal.card1.list2">Fan voting on the site</li>
+                                <li data-i18n="deal.card1.list3">Special prizes for the winners</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="flip-card-front">
-                        <div class="card-corner card-top-left">
-                            <span class="card-rank">A</span>
-                            <span class="card-suit">♠</span>
-                        </div>
-                        <div class="card-corner card-bottom-right">
-                            <span class="card-rank">A</span>
-                            <span class="card-suit">♠</span>
-                        </div>
-                        <h3 class="card-front__title" data-i18n="deal.card1.title">Grand Prize</h3>
-                        <div class="divider"></div>
-                        <p class="card-front__text" data-i18n="deal.card1.text">
-                            Top 3 teams receive official Pocket Aces trophies and medals, with individual MVP awards presented to the best players of the tournament.
-                        </p>
-                        <ul class="card-front__list">
-                            <li data-i18n="deal.card1.list1">Championship Trophy</li>
-                            <li data-i18n="deal.card1.list2">Medals for Top 3 Teams</li>
-                            <li data-i18n="deal.card1.list3">6 MVP Awards</li>
-                        </ul>
-                    </div>
+                    <button class="flip-card__open" type="button" aria-labelledby="dealCardTitle1"></button>
                 </div>
-            </div>
 
-            <!-- Card 2: Format -->
-            <div class="swiper-slide flip-card-wrapper">
-                <div class="flip-card">
-                    <div class="flip-card-back">
-                        <div class="card-back__corner card-back__corner--tl">♠</div>
-                        <div class="card-back__corner card-back__corner--tr">♠</div>
-                        <div class="card-back__corner card-back__corner--bl">♠</div>
-                        <div class="card-back__corner card-back__corner--br">♠</div>
-                        <div class="card-back__logo">
-                            <img src="{% static 'assets/logo.png' %}" alt="Logo">
+                <!-- Card 2: Registration -->
+                <div class="swiper-slide flip-card-wrapper" data-reveal>
+                    <div class="flip-card">
+                        <div class="flip-card-back">
+                            <span class="card-back__index" aria-hidden="true">02</span>
+                            <div class="card-back__logo">
+                                <img src="{% static 'assets/logo.png' %}" alt="" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="flip-card-front">
+                            <span class="card-front__index" aria-hidden="true">02</span>
+                            <div class="card-front__header">
+                                <span class="card-front__eyebrow">// 02</span>
+                            </div>
+                            <h3 class="card-front__title" id="dealCardTitle2" data-i18n="deal.card2.title">Registration</h3>
+                            <div class="divider"></div>
+                            <!-- [CONFIRM] registration deadline -->
+                            <p class="card-front__text" data-i18n="deal.card2.text">
+                                Registration is live now and only 8 teams make the field. Secure your place before 20.09.2026.
+                            </p>
+                            <ul class="card-front__list">
+                                <!-- [CONFIRM] registration deadline -->
+                                <li data-i18n="deal.card2.list1">Deadline: 20.09.2026</li>
+                                <li data-i18n="deal.card2.list2">Entry fee: 150 zł</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="flip-card-front">
-                        <div class="card-corner card-top-left card-red">
-                            <span class="card-rank">A</span>
-                            <span class="card-suit">♥</span>
-                        </div>
-                        <div class="card-corner card-bottom-right card-red">
-                            <span class="card-rank">A</span>
-                            <span class="card-suit">♥</span>
-                        </div>
-                        <h3 class="card-front__title" data-i18n="deal.card2.title">Competitive Format</h3>
-                        <div class="divider"></div>
-                        <p class="card-front__text" data-i18n="deal.card2.text">
-                            Group stage followed by playoffs. Group stage matches are played to two winning sets, while playoff matches are played to three winning sets. Rally scoring.
-                        </p>
-                        <ul class="card-front__list">
-                            <li data-i18n="deal.card2.list1">Group Stage + Playoffs</li>
-                            <li data-i18n="deal.card2.list2">Minimum 2 Games Guaranteed</li>
-                        </ul>
-                    </div>
+                    <button class="flip-card__open" type="button" aria-labelledby="dealCardTitle2"></button>
                 </div>
-            </div>
 
-            <!-- Card 3: Pro Level -->
-            <div class="swiper-slide flip-card-wrapper">
-                <div class="flip-card">
-                    <div class="flip-card-back">
-                        <div class="card-back__corner card-back__corner--tl">♠</div>
-                        <div class="card-back__corner card-back__corner--tr">♠</div>
-                        <div class="card-back__corner card-back__corner--bl">♠</div>
-                        <div class="card-back__corner card-back__corner--br">♠</div>
-                        <div class="card-back__logo">
-                            <img src="{% static 'assets/logo.png' %}" alt="Logo">
+                <!-- Card 3: Matchday -->
+                <div class="swiper-slide flip-card-wrapper" data-reveal>
+                    <div class="flip-card">
+                        <div class="flip-card-back">
+                            <span class="card-back__index" aria-hidden="true">03</span>
+                            <div class="card-back__logo">
+                                <img src="{% static 'assets/logo.png' %}" alt="" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="flip-card-front">
+                            <span class="card-front__index" aria-hidden="true">03</span>
+                            <div class="card-front__header">
+                                <span class="card-front__eyebrow">// 03</span>
+                            </div>
+                            <h3 class="card-front__title" id="dealCardTitle3" data-i18n="deal.card3.title">Outdoor Matchday</h3>
+                            <div class="divider"></div>
+                            <p class="card-front__text" data-i18n="deal.card3.text">
+                                We meet at the outdoor court by Dormitory No. 8 on Saturday 26.09.2026 at 09:00.
+                            </p>
+                            <ul class="card-front__list">
+                                <li data-i18n="deal.card3.list1">Court by Dormitory No. 8</li>
+                                <li data-i18n="deal.card3.list2">Arrive 30-60 min early</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="flip-card-front">
-                        <div class="card-corner card-top-left">
-                            <span class="card-rank">A</span>
-                            <span class="card-suit">♣</span>
-                        </div>
-                        <div class="card-corner card-bottom-right">
-                            <span class="card-rank">A</span>
-                            <span class="card-suit">♣</span>
-                        </div>
-                        <h3 class="card-front__title" data-i18n="deal.card3.title">High Level Organization</h3>
-                        <div class="divider"></div>
-                        <p class="card-front__text" data-i18n="deal.card3.text">
-                            A team of up to 20 organizers ensures smooth operation across every aspect of the event — from logistics and scheduling to live scoring and on-court officiating.
-                        </p>
-                        <ul class="card-front__list">
-                            <li data-i18n="deal.card3.list1">Fixed Match Schedule</li>
-                            <li data-i18n="deal.card3.list2">Live Score Tracking</li>
-                        </ul>
-                    </div>
+                    <button class="flip-card__open" type="button" aria-labelledby="dealCardTitle3"></button>
                 </div>
-            </div>
 
-            <!-- Card 4: Four Aces -->
-            <div class="swiper-slide flip-card-wrapper">
-                <div class="flip-card">
-                    <div class="flip-card-back">
-                        <div class="card-back__corner card-back__corner--tl">♠</div>
-                        <div class="card-back__corner card-back__corner--tr">♠</div>
-                        <div class="card-back__corner card-back__corner--bl">♠</div>
-                        <div class="card-back__corner card-back__corner--br">♠</div>
-                        <div class="card-back__logo">
-                            <img src="{% static 'assets/logo.png' %}" alt="Logo">
+                <!-- Card 4: Weather -->
+                <div class="swiper-slide flip-card-wrapper" data-reveal>
+                    <div class="flip-card">
+                        <div class="flip-card-back">
+                            <span class="card-back__index" aria-hidden="true">04</span>
+                            <div class="card-back__logo">
+                                <img src="{% static 'assets/logo.png' %}" alt="" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="flip-card-front">
+                            <span class="card-front__index" aria-hidden="true">04</span>
+                            <div class="card-front__header">
+                                <span class="card-front__eyebrow">// 04</span>
+                            </div>
+                            <h3 class="card-front__title" id="dealCardTitle4" data-i18n="deal.card4.title">Weather Policy</h3>
+                            <div class="divider"></div>
+                            <p class="card-front__text" data-i18n="deal.card4.text">
+                                This is an outdoor event. If the weather turns bad, captains will receive updates directly.
+                            </p>
+                            <ul class="card-front__list">
+                                <li data-i18n="deal.card4.list1">Outdoor format</li>
+                                <li data-i18n="deal.card4.list2">Updates sent to captains</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="flip-card-front">
-                        <div class="card-corner card-top-left card-red">
-                            <span class="card-rank">A</span>
-                            <span class="card-suit">♦</span>
-                        </div>
-                        <div class="card-corner card-bottom-right card-red">
-                            <span class="card-rank">A</span>
-                            <span class="card-suit">♦</span>
-                        </div>
-                        <h3 class="card-front__title" data-i18n="deal.card4.title">Full Day Experience</h3>
-                        <div class="divider"></div>
-                        <p class="card-front__text" data-i18n="deal.card4.text">
-                            A full day of competitive volleyball, team camaraderie, and real tournament atmosphere.
-                        </p>
-                        <ul class="card-front__list">
-                            <li data-i18n="deal.card4.list1">Professional Venue & Equipment</li>
-                            <li data-i18n="deal.card4.list2">Post-Tournament Highlights</li>
-                        </ul>
-                    </div>
+                    <button class="flip-card__open" type="button" aria-labelledby="dealCardTitle4"></button>
                 </div>
-            </div>
-
             </div>
             <div class="swiper-pagination cards-pagination"></div>
         </div>
@@ -266,106 +375,196 @@
 
 <!-- Location Section -->
 <section class="section section--location">
-    <div class="location-grid">
-        <div class="location-content">
-            <h2 class="location__title" data-i18n="location.title">The Arena</h2>
+    <div class="location-grid container">
+        <div class="location-content section-heading-wrap" data-reveal>
+            <span class="section-kicker location__eyebrow" data-i18n="location.kicker">Venue Details</span>
+            <span class="section-ghost" aria-hidden="true">COURT</span>
+            <h2 class="section-heading location__title" data-i18n="location.title">The Venue</h2>
             <div class="divider divider--wide"></div>
-            <p class="location__text" data-i18n="location.text">
-                Join us in Rzgów, Poland for an unforgettable experience. The venue features professional-grade courts, changing rooms, and a spectator area.
-            </p>
-
-            <div class="location__info">
-                <div class="location__info-item">
-                    <div class="location__info-icon">📍</div>
-                    <div>
-                        <h4 class="location__info-label" data-i18n="location.info.label">Location</h4>
-                        <p class="location__info-value" data-i18n="location.info.value">Rzgów, Szkolna 5</p>
-                    </div>
-                </div>
-                <div class="location__info-item">
-                    <div class="location__info-icon">📅</div>
-                    <div>
-                        <h4 class="location__info-label" data-i18n="location.date.label">Date</h4>
-                        <p class="location__info-value" data-i18n="location.date.value">April 11, 2026</p>
-                    </div>
-                </div>
-            </div>
-
-            <a href="https://maps.app.goo.gl/VKvC4xZpQ3mr9CHq7" target="_blank" class="location__link" data-i18n="location.link">
-                View on Google Maps <span>→</span>
-            </a>
         </div>
 
-        <div class="location-map">
-            <iframe src="https://www.google.com/maps?q=51.659816690792844,19.496919908035625&z=16&output=embed"
-                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            <div class="location-map__overlay"></div>
+        <div class="location-features">
+            <article class="location-feature" data-reveal>
+                <strong class="location-feature__title" data-i18n="location_pill1_title">Open-Air Setup</strong>
+                <p class="location-feature__copy" data-i18n="location_pill1_copy">Fresh air, one focused court, and a tournament rhythm that stays tight from morning to final whistle.</p>
+            </article>
+            <article class="location-feature" data-reveal>
+                <strong class="location-feature__title" data-i18n="location_pill2_title">Easy Logistics</strong>
+                <p class="location-feature__copy" data-i18n="location_pill2_copy">Quick arrival, simple captain communication, and a venue layout that keeps the day moving.</p>
+            </article>
+            <article class="location-feature" data-reveal>
+                <strong class="location-feature__title" data-i18n="location_pill3_title">Compact Match Flow</strong>
+                <p class="location-feature__copy" data-i18n="location_pill3_copy">Short resets, clear sideline spacing, and enough room to keep every round feeling sharp.</p>
+            </article>
+        </div>
+
+        <div class="location-side" data-reveal>
+            <div class="location-map">
+                <iframe src="https://www.google.com/maps?q=51.780313,19.4953258&z=18&output=embed"
+                        title="Outdoor Court by Dormitory No. 8"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div class="location-map__overlay" aria-hidden="true"></div>
+                <span class="location-map__accent" aria-hidden="true"></span>
+            </div>
+
+            <div class="location-meta">
+                <div class="location__info">
+                    <div class="location__info-item">
+                        <div class="location__info-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <path d="M12 22s7-6.2 7-13a7 7 0 1 0-14 0c0 6.8 7 13 7 13Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="location__info-label" data-i18n="location.info.label">Location</h3>
+                            <p class="location__info-value" data-i18n="location.info.value">Strajku Łódzkich Studentów 1981 r. 2, 91-404 Łódź</p>
+                        </div>
+                    </div>
+                    <div class="location__info-item">
+                        <div class="location__info-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <path d="M4 5h16v15H4zM8 2v6M16 2v6M4 10h16" fill="none" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="location__info-label" data-i18n="location.date.label">Date</h3>
+                            <p class="location__info-value" data-i18n="location.date.value">Saturday 26.09.2026, 09:00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="https://maps.app.goo.gl/LuQsWgQ3EbVViJ2e7"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="location__link"
+                   data-i18n="location.link">
+                    View on Google Maps
+                </a>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- Arena Gallery -->
-<section class="section section--arena">
+<section class="section section--arena section--alt">
     <div class="container">
-        <h2 class="section-heading" data-i18n="arena.heading">The Venue</h2>
-        <div class="arena-gallery">
-            <div class="arena-gallery__item arena-gallery__item--main">
-                <img src="{% static 'assets/arena/1.jpg' %}" alt="Arena main court" loading="lazy">
-            </div>
-            <div class="arena-gallery__item">
-                <img src="{% static 'assets/arena/2.jpg' %}" alt="Arena interior" loading="lazy">
-            </div>
-            <div class="arena-gallery__item">
-                <img src="{% static 'assets/arena/3.jpg' %}" alt="Arena facilities" loading="lazy">
+        <div class="venue-block">
+            <article class="venue-hero" data-reveal>
+                <span class="venue-hero__accent" aria-hidden="true"></span>
+                <img src="{% static 'assets/arena/1.jpg' %}"
+                     alt="Outdoor volleyball court"
+                     width="1280"
+                     height="687"
+                     loading="lazy">
+                <div class="venue-hero__content section-heading-wrap">
+                    <span class="section-kicker">// 04</span>
+                    <span class="section-ghost" aria-hidden="true">VENUE</span>
+                    <h2 class="section-heading" data-i18n="arena.heading">The Venue</h2>
+                    <div class="divider divider--wide"></div>
+                    <p class="arena-note" data-i18n="arena_note">A cleaner outdoor setting, compact surroundings, and enough atmosphere to make the whole day feel like a proper event.</p>
+                </div>
+                <span class="venue-hero__index" aria-hidden="true">01</span>
+            </article>
+
+            <div class="venue-grid">
+                <article class="venue-card" data-reveal>
+                    <span class="venue-card__accent" aria-hidden="true"></span>
+                    <img src="{% static 'assets/arena/2.jpg' %}"
+                         alt="Outdoor court arrival area"
+                         width="1280"
+                         height="906"
+                         loading="lazy">
+                    <div class="venue-card__overlay">
+                        <span class="venue-card__index" aria-hidden="true">02</span>
+                    </div>
+                </article>
+                <article class="venue-card" data-reveal>
+                    <span class="venue-card__accent" aria-hidden="true"></span>
+                    <img src="{% static 'assets/arena/3.jpg' %}"
+                         alt="Outdoor court facilities"
+                         width="1280"
+                         height="931"
+                         loading="lazy">
+                    <div class="venue-card__overlay">
+                        <span class="venue-card__index" aria-hidden="true">03</span>
+                    </div>
+                </article>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Road to Victory -->
+<!-- Registration Timeline -->
 <section class="section section--road">
     <div class="container">
-        <h2 class="section-heading" data-i18n="road.heading">Road to Victory</h2>
+        <div class="section-heading-wrap" data-reveal>
+            <span class="section-kicker">// 05</span>
+            <span class="section-ghost" aria-hidden="true">ROAD</span>
+            <h2 class="section-heading" data-i18n="road.heading">Registration Timeline</h2>
+            <p class="road-lead" data-i18n="road.lead">From sign-up to first serve, these are the four moments that shape the event week.</p>
+        </div>
+
         <div class="road-timeline">
-            <div class="road-item road-item--active">
+            <div class="road-item road-item--active" data-reveal>
+                <span class="road-item__index" aria-hidden="true">01</span>
                 <div class="road-item__meta">
-                    <div class="road-item__date" data-i18n="road.step1.date">March 1</div>
-                    <h3 class="road-item__title" data-i18n="road.step1.title">Registration Opens</h3>
+                    <!-- [CONFIRM] registration opening status -->
+                    <div class="road-item__date" data-i18n="road.step1.date">Now</div>
+                    <h3 class="road-item__title" data-i18n="road.step1.title">Registration Open</h3>
                 </div>
-                <div class="road-item__marker"></div>
-                <div class="road-item__desc" data-i18n="road.step1.desc">Team registration begins. Secure your spot early as places are limited.</div>
+                <div class="road-item__marker" aria-hidden="true"></div>
+                <div class="road-item__desc" data-i18n="road.step1.desc">Team registration is open. Join now before all 8 spots are taken.</div>
             </div>
-            <div class="road-item">
+
+            <div class="road-item" data-reveal>
+                <span class="road-item__index" aria-hidden="true">02</span>
                 <div class="road-item__meta">
-                    <div class="road-item__date" data-i18n="road.step2.date">April 5</div>
-                    <h3 class="road-item__title" data-i18n="road.step2.title">Registration Closes</h3>
+                    <!-- [CONFIRM] registration deadline -->
+                    <div class="road-item__date" data-i18n="road.step2.date">20.09.2026</div>
+                    <h3 class="road-item__title" data-i18n="road.step2.title">Roster Lock</h3>
                 </div>
-                <div class="road-item__marker"></div>
-                <div class="road-item__desc" data-i18n="road.step2.desc">Last day to register your team and submit the roster.</div>
+                <div class="road-item__marker" aria-hidden="true"></div>
+                <div class="road-item__desc" data-i18n="road.step2.desc">Final deadline to lock your team and roster into the event.</div>
             </div>
-            <div class="road-item">
+
+            <div class="road-item" data-reveal>
+                <span class="road-item__index" aria-hidden="true">03</span>
                 <div class="road-item__meta">
-                    <div class="road-item__date" data-i18n="road.step3.date">April 8</div>
-                    <h3 class="road-item__title" data-i18n="road.step3.title">Schedule Release</h3>
+                    <!-- [CONFIRM] schedule publication date -->
+                    <div class="road-item__date" data-i18n="road.step3.date">22.09.2026</div>
+                    <h3 class="road-item__title" data-i18n="road.step3.title">Schedule Published</h3>
                 </div>
-                <div class="road-item__marker"></div>
-                <div class="road-item__desc" data-i18n="road.step3.desc">Match schedule and groups will be published and sent to captains.</div>
+                <div class="road-item__marker" aria-hidden="true"></div>
+                <div class="road-item__desc" data-i18n="road.step3.desc">Captains receive the match schedule and final event details.</div>
             </div>
-            <div class="road-item">
+
+            <div class="road-item" data-reveal>
+                <span class="road-item__index" aria-hidden="true">04</span>
                 <div class="road-item__meta">
-                    <div class="road-item__date" data-i18n="road.step4.date">April 11</div>
-                    <h3 class="road-item__title" data-i18n="road.step4.title">Tournament Day</h3>
+                    <!-- [CONFIRM] game day from redesign brief -->
+                    <div class="road-item__date" data-i18n="road.step4.date">SAT 26.09.2026</div>
+                    <h3 class="road-item__title" data-i18n="road.step4.title">Game Day</h3>
                 </div>
-                <div class="road-item__marker"></div>
-                <div class="road-item__desc" data-i18n="road.step4.desc">The big day! Group stage matches start at 9:00 AM.</div>
+                <div class="road-item__marker" aria-hidden="true"></div>
+                <div class="road-item__desc" data-i18n="road.step4.desc">Pocket Aces Court Cup 2 starts at 09:00 at the outdoor court by Dormitory No. 8.</div>
             </div>
         </div>
     </div>
 </section>
-
 {% endblock %}
 
 {% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.voting-board__meter-fill[data-vote-width]').forEach((meter) => {
+        const width = Number(meter.dataset.voteWidth || 0);
+        meter.style.width = `${Math.max(0, Math.min(width, 100))}%`;
+    });
+});
+</script>
 <script src="{% static_v 'js/cards-swiper.js' %}"></script>
 <script src="{% static_v 'js/index-page.js' %}"></script>
 {% endblock %}

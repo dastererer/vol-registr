@@ -3,8 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Pocket Aces Invitational{% endblock %}</title>
+    <title>{% block title %}Pocket Aces Court Cup 2 — 26.09.2026{% endblock %}</title>
     {% load static static_v %}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700;1,800&family=Archivo:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700&display=swap"
+    />
     <link rel="stylesheet" href="{% static_v 'css/styles.css' %}" />
     <link rel="stylesheet" href="{% static_v 'css/registered-teams.css' %}" />
     <link rel="stylesheet" href="{% static_v 'css/sports-bg.css' %}" />
@@ -19,8 +25,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     {% block extra_head %}{% endblock %}
+    <link rel="stylesheet" href="{% static_v 'css/brutal.css' %}" />
   </head>
   <body>
+    {% url 'tournament_hub' as hub_url %}
+    {% url 'tournament_gallery' as gallery_url %}
+
     <!-- Site Navigation -->
     <nav class="site-nav" id="siteNav">
       <div class="site-nav__inner">
@@ -29,8 +39,13 @@
           class="site-nav__logo"
           aria-label="Pocket Aces"
         >
-          <img src="{% static 'assets/logo.png' %}" alt="Pocket Aces" />
-          <span class="site-nav__logo-text">Pocket Aces</span>
+          <img
+            src="{% static 'assets/logo.png' %}"
+            alt="Pocket Aces"
+            width="34"
+            height="34"
+          />
+          <span class="site-nav__logo-text">POCKET ACES</span>
         </a>
 
         <div class="site-nav__menu" id="navMenu">
@@ -41,19 +56,33 @@
             >Home</a
           >
 
+          {% if hub_url %}
           <a
-            href="{% url 'tournament_hub' %}"
+            href="{{ hub_url }}"
             class="site-nav__link"
             data-i18n="nav_match"
             >Match Centre</a
           >
+          {% endif %}
 
           <a href="{% url 'faq' %}" class="site-nav__link" data-i18n="nav_faq"
             >FAQ</a
           >
 
-          <a href="{% url 'tournament_gallery' %}" class="site-nav__link" data-i18n="nav_gallery"
+          {% if gallery_url %}
+          <a
+            href="{{ gallery_url }}"
+            class="site-nav__link"
+            data-i18n="nav_gallery"
             >Gallery</a
+          >
+          {% endif %}
+
+          <a
+            href="{% url 'roster_update' %}"
+            class="site-nav__link"
+            data-i18n="nav_roster"
+            >Team Profile</a
           >
 
           {% if not registration_closed %}
@@ -61,7 +90,7 @@
             href="{% url 'register' %}"
             class="site-nav__cta"
             data-i18n="nav_register"
-            >Register Team</a
+            >Join Tournament</a
           >
           {% endif %}
         </div>
@@ -70,17 +99,20 @@
           <button
             class="site-nav__lang"
             id="langToggle"
+            type="button"
             aria-label="Switch language"
           >
             <span class="site-nav__lang-opt active" data-lang="en">EN</span>
-            <span class="site-nav__lang-sep">|</span>
+            <span class="site-nav__lang-sep" aria-hidden="true">|</span>
             <span class="site-nav__lang-opt" data-lang="pl">PL</span>
           </button>
           <button
             class="site-nav__burger"
             id="navBurger"
+            type="button"
             aria-label="Menu"
             aria-expanded="false"
+            aria-controls="navMenu"
           >
             <span></span><span></span><span></span>
           </button>
@@ -89,23 +121,42 @@
       <div class="site-nav__overlay" id="navOverlay"></div>
     </nav>
 
-    {% block content %}{% endblock %}
+    <div class="site-main">
+      {% block content %}{% endblock %}
+    </div>
 
     <!-- Site Footer -->
     <footer class="site-footer">
+      <div class="site-footer__wordmark" aria-hidden="true">POCKET ACES</div>
+
       <div class="site-footer__inner">
         <div class="site-footer__col">
           <h3 class="site-footer__heading" data-i18n="footer_nav">
             Navigation
           </h3>
           <ul class="site-footer__links">
-            <li><a href="{% url 'index' %}">Home</a></li>
-            <li><a href="{% url 'tournament_hub' %}">Match Centre</a></li>
-            {% if not registration_closed %}
-            <li><a href="{% url 'register' %}">Register Team</a></li>
+            <li>
+              <a href="{% url 'index' %}" data-i18n="nav_home">Home</a>
+            </li>
+            {% if hub_url %}
+            <li>
+              <a href="{{ hub_url }}" data-i18n="nav_match">Match Centre</a>
+            </li>
             {% endif %}
-            <li><a href="{% url 'faq' %}">FAQ</a></li>
-            <li><a href="{% url 'tournament_gallery' %}">Gallery</a></li>
+            {% if not registration_closed %}
+            <li>
+              <a href="{% url 'register' %}" data-i18n="nav_register">Join Tournament</a>
+            </li>
+            {% endif %}
+            <li><a href="{% url 'faq' %}" data-i18n="nav_faq">FAQ</a></li>
+            {% if gallery_url %}
+            <li>
+              <a href="{{ gallery_url }}" data-i18n="nav_gallery">Gallery</a>
+            </li>
+            {% endif %}
+            <li>
+              <a href="{% url 'roster_update' %}" data-i18n="nav_roster">Team Profile</a>
+            </li>
           </ul>
         </div>
 
@@ -116,9 +167,10 @@
           <ul class="site-footer__links">
             <li>
               <a
-                href="/static/assets/documents/ZGODA_RODZICA_Pocket_Aces_12_04_2026_1.pdf"
+                href="/static/assets/documents/ZGODA_RODZICA.pdf"
                 target="_blank"
                 rel="noopener"
+                data-i18n="footer_parental"
                 >Parental Consent Form</a
               >
             </li>
@@ -127,27 +179,31 @@
                 href="{% url 'privacy_policy_en' %}"
                 target="_blank"
                 rel="noopener"
+                data-i18n="footer_privacy"
                 >Privacy Policy</a
               >
             </li>
             <li>
               <a
-                href="/static/assets/documents/Regulations_english.pdf"
+                href="/static/assets/documents/Regulations_english_czerwec.pdf"
                 target="_blank"
                 rel="noopener"
+                data-i18n="footer_regulations_en"
                 >Regulations (EN)</a
               >
             </li>
             <li>
               <a
-                href="/static/assets/documents/Regulations_polish.pdf"
+                href="/static/assets/documents/Regulations_polish%20czerwec%20.pdf"
                 target="_blank"
                 rel="noopener"
+                data-i18n="footer_regulations_pl"
                 >Regulations (PL)</a
               >
             </li>
           </ul>
         </div>
+
         <div class="site-footer__col">
           <h3 class="site-footer__heading" data-i18n="footer_connect">
             Connect
@@ -193,46 +249,133 @@
           src="{% static 'assets/logo.png' %}"
           alt="Pocket Aces"
           class="site-footer__skylogo"
+          width="28"
+          height="28"
+          loading="lazy"
         />
-        <p class="site-footer__copyright">
-          &copy; 2026 Pocket Aces Sport Club. All rights reserved.
+        <p class="site-footer__copyright" data-i18n="footer_copyright">
+          &copy; 2026 POCKET ACES SPORT CLUB
+        </p>
+        <p class="site-footer__event" data-i18n="footer_event">
+          SAT 26.09.2026 · OUTDOOR
         </p>
       </div>
     </footer>
 
-    <!-- Global config & utils (loaded before page-specific scrip) -->
+    <!-- Vote modal -->
+    <div
+      id="voteModal"
+      class="rt-modal__overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="voteModalTitle"
+    >
+      <div class="rt-modal__content vote-modal-content">
+        <button
+          id="voteModalClose"
+          class="rt-modal__close vote-modal-close"
+          type="button"
+          aria-label="Close vote dialog"
+        >
+          &times;
+        </button>
+        <h2 class="rt-modal__title vote-modal-title" id="voteModalTitle">
+          <i class="fas fa-heart"></i> <span id="voteTeamName"></span>
+        </h2>
+        <p class="rt-modal__subtitle vote-modal-subtitle">
+          Support your favorite team! Enter your email to confirm your vote. One vote per person.
+        </p>
+
+        <form id="voteForm" class="vote-modal-form">
+          <input type="hidden" id="voteTeamId" name="team_id" />
+          <input
+            type="email"
+            id="voteEmail"
+            name="email"
+            class="form-control vote-modal-input"
+            placeholder="your@email.com"
+            required
+          />
+          <button type="submit" class="btn btn-primary vote-modal-btn">
+            Send Confirmation
+          </button>
+        </form>
+        <div id="voteStatus" class="vote-modal-status" style="display: none"></div>
+      </div>
+    </div>
+
+    <!-- Global config & utils (loaded before page-specific scripts) -->
     <script src="{% static_v 'js/config.js' %}"></script>
     <script src="{% static_v 'js/utils.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    {% block scripts %} {% endblock %}
+    {% block scripts %}{% endblock %}
     <script src="{% static_v 'js/navbar.js' %}"></script>
 
-    <!-- Inline FAQ accordion logic for reliability -->
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const faqItems = document.querySelectorAll(".faq-item");
-        faqItems.forEach((item) => {
-          const btn = item.querySelector(".faq-question");
-          if (!btn) return;
-          btn.addEventListener("click", function () {
-            const isOpen = item.classList.contains("open");
-            faqItems.forEach((i) => {
-              i.classList.remove("open");
-              const b = i.querySelector(".faq-question");
-              if (b) b.setAttribute("aria-expanded", "false");
-            });
-            if (!isOpen) {
-              item.classList.add("open");
-              btn.setAttribute("aria-expanded", "true");
-            }
+      document.addEventListener('DOMContentLoaded', () => {
+        const voteModal = document.getElementById('voteModal');
+        const voteForm = document.getElementById('voteForm');
+        const voteStatus = document.getElementById('voteStatus');
+        const voteModalClose = document.getElementById('voteModalClose');
+
+        if (voteModalClose) {
+          voteModalClose.addEventListener('click', () => {
+            voteModal.classList.remove('active');
           });
-          btn.addEventListener("keydown", function (e) {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              btn.click();
-            }
+        }
+
+        document.querySelectorAll('.vote-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const teamId = btn.getAttribute('data-team-id');
+            const teamName = btn.getAttribute('data-team-name') || "this team";
+            document.getElementById('voteTeamId').value = teamId;
+            document.getElementById('voteTeamName').textContent = teamName;
+            voteStatus.style.display = 'none';
+            voteForm.style.display = 'flex';
+            voteModal.classList.add('active');
           });
         });
+
+        if (voteForm) {
+          voteForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = voteForm.querySelector('button');
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+
+            try {
+              const res = await fetch('/api/vote/', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': (document.cookie.match(/csrftoken=([^;]+)/) || [])[1] || ''
+                },
+                body: JSON.stringify({
+                  team_id: document.getElementById('voteTeamId').value,
+                  email: document.getElementById('voteEmail').value
+                })
+              });
+              const data = await res.json();
+
+              voteForm.style.display = 'none';
+              voteStatus.style.display = 'block';
+
+              if (data.success) {
+                voteStatus.innerHTML = '<i class="fas fa-check-circle" class="vote-modal-icon-success"></i><br>Confirmation email sent! Please check your inbox.';
+              } else {
+                voteStatus.innerHTML = `<i class="fas fa-exclamation-circle" class="vote-modal-icon-error"></i><br>${data.error || 'Failed to send confirmation.'}`;
+              }
+            } catch (err) {
+              voteForm.style.display = 'none';
+              voteStatus.style.display = 'block';
+              voteStatus.innerHTML = '<i class="fas fa-exclamation-circle" class="vote-modal-icon-error"></i><br>Network error. Please try again.';
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Send Confirmation';
+          });
+        }
       });
     </script>
   </body>

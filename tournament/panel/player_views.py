@@ -12,8 +12,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from ..constants import POSITION_CHOICES
-from ..models import Player, PlayerMatchStats, Team
+from ..models import Player, Team
 
 _PHOTO_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
 
@@ -64,7 +63,7 @@ def players_list_view(request):
     if q:
         players = players.filter(
             Q(first_name__icontains=q) | Q(last_name__icontains=q) |
-            Q(jersey_number__icontains=q) | Q(team__name__icontains=q)
+            Q(team__name__icontains=q)
         )
     if team_id:
         players = players.filter(team_id=team_id)
@@ -76,39 +75,17 @@ def players_list_view(request):
         "teams": teams,
         "q": q,
         "team_filter": team_id,
-        "positions": dict(POSITION_CHOICES),
     })
 
 
 @staff_member_required(login_url="/panel/login/")
 def player_detail_view(request, pk):
-    """Player detail with match-by-match stats."""
+    """Player detail."""
     player = get_object_or_404(Player.objects.select_related("team"), pk=pk)
-    match_stats = (
-        PlayerMatchStats.objects.filter(player=player)
-        .select_related("match", "match__team_a", "match__team_b")
-        .order_by("match__start_time")
-    )
-    # Aggregate totals
-    from django.db.models import Sum
-    totals = PlayerMatchStats.objects.filter(player=player).aggregate(
-        total_kills=Sum("kills"),
-        total_aces=Sum("aces"),
-        total_blocks=Sum("blocks"),
-        total_assists=Sum("assists"),
-        total_serve_errors=Sum("serve_errors"),
-        total_attack_errors=Sum("attack_errors"),
-        total_sets_played=Sum("sets_played"),
-    )
-    total_points = (totals["total_kills"] or 0) + (totals["total_aces"] or 0) + (totals["total_blocks"] or 0)
     return render(request, "panel/player_detail.html", {
         "page_title": f"{player.first_name} {player.last_name}",
         "nav_section": "players",
         "player": player,
-        "match_stats": match_stats,
-        "totals": totals,
-        "total_points": total_points,
-        "matches_count": match_stats.count(),
     })
 
 
@@ -123,8 +100,6 @@ def player_create_view(request):
             team=team,
             first_name=request.POST.get("first_name", "").strip(),
             last_name=request.POST.get("last_name", "").strip(),
-            jersey_number=request.POST.get("jersey_number", "").strip(),
-            position=request.POST.get("position", ""),
         )
         player.save()
         # Handle photo
@@ -143,7 +118,6 @@ def player_create_view(request):
         "page_title": "Add Player",
         "nav_section": "players",
         "teams": teams,
-        "positions": POSITION_CHOICES,
     })
 
 
@@ -157,8 +131,6 @@ def player_edit_view(request, pk):
         player.team = get_object_or_404(Team, pk=team_id)
         player.first_name = request.POST.get("first_name", "").strip()
         player.last_name = request.POST.get("last_name", "").strip()
-        player.jersey_number = request.POST.get("jersey_number", "").strip()
-        player.position = request.POST.get("position", "")
         player.save()
         # Handle photo
         photo_file = request.FILES.get("photo_file")
@@ -180,7 +152,6 @@ def player_edit_view(request, pk):
         "page_title": "Edit Player",
         "nav_section": "players",
         "teams": teams,
-        "positions": POSITION_CHOICES,
         "player": player,
     })
 

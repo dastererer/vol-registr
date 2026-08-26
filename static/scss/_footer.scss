@@ -99,7 +99,7 @@
     border-radius: $radius-full;
     color: $color-slate-300;
     font-size: 1.1rem;
-    transition: all $transition-base;
+    transition: background-color $transition-base, color $transition-base, border-color $transition-base, transform $transition-base;
     
     &:hover {
       background: $color-sky-500;

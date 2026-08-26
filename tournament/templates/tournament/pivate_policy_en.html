@@ -1,5 +1,149 @@
-<h1>Privacy Policy</h1>
-<p>Last updated: February 28, 2026</p>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Privacy Policy | Pocket Aces Court Cup 2{% endblock %}
+
+{% block extra_head %}
+<style>
+  .policy-page {
+    min-height: calc(100svh - var(--nav-h));
+    padding-block: var(--section-y);
+    position: relative;
+  }
+
+  .policy-hero {
+    border-bottom: 2px solid var(--volt);
+    margin-bottom: clamp(2rem, 5vw, 4rem);
+    padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .policy-kicker,
+  .policy-updated {
+    font: 700 var(--fs-mono-sm)/1.4 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .policy-kicker {
+    color: var(--volt);
+    margin: 0 0 0.75rem;
+  }
+
+  .policy-title {
+    color: var(--paper);
+    font: italic 800 var(--fs-display-lg)/0.88 var(--font-display);
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+  }
+
+  .policy-updated {
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .policy-panel {
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    clip-path: var(--card-clip);
+    color: var(--muted);
+    font: 400 var(--fs-body)/1.75 var(--font-body);
+    margin-inline: auto;
+    max-width: 72rem;
+    padding: clamp(1.5rem, 4vw, 4rem);
+  }
+
+  .policy-panel h2,
+  .policy-panel h3,
+  .policy-panel h4 {
+    color: var(--paper);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .policy-panel h2 {
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-display-md);
+    font-style: italic;
+    line-height: 1;
+    margin: 3.5rem 0 1.25rem;
+    padding-top: 1.5rem;
+  }
+
+  .policy-panel h2:first-of-type {
+    border-top: 0;
+    margin-top: 2rem;
+    padding-top: 0;
+  }
+
+  .policy-panel h3 {
+    font-size: var(--fs-display-sm);
+    line-height: 1.1;
+    margin: 2rem 0 0.875rem;
+  }
+
+  .policy-panel h4 {
+    color: var(--volt);
+    font-size: 1.125rem;
+    letter-spacing: 0.05em;
+    margin: 1.5rem 0 0.75rem;
+  }
+
+  .policy-panel p {
+    margin: 0 0 1rem;
+  }
+
+  .policy-panel ul {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+  }
+
+  .policy-panel li {
+    border-top: 1px solid var(--line);
+    padding: 0.75rem 0 0.75rem 1.5rem;
+    position: relative;
+  }
+
+  .policy-panel li::before {
+    background: var(--volt);
+    content: '';
+    height: 7px;
+    left: 0;
+    position: absolute;
+    top: 1.35rem;
+    width: 7px;
+  }
+
+  .policy-panel li ul {
+    margin: 0.75rem 0 0;
+  }
+
+  .policy-panel strong {
+    color: var(--paper);
+  }
+
+  .policy-panel a {
+    color: var(--paper);
+    text-decoration-color: var(--volt);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  .policy-panel a:hover {
+    color: var(--volt);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="policy-page">
+  <div class="container">
+    <header class="policy-hero" data-reveal>
+      <p class="policy-kicker">// Legal file 01</p>
+      <h1 class="policy-title">Privacy Policy</h1>
+      <p class="policy-updated">Last updated: February 28, 2026</p>
+    </header>
+    <article class="policy-panel" data-reveal>
 <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
 <p>We use Your Personal Data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy. This Privacy Policy has been created with the help of the <a href="https://www.termsfeed.com/privacy-policy-generator/" target="_blank">Privacy Policy Generator</a>.</p>
 <h2>Interpretation and Definitions</h2>
@@ -209,4 +353,9 @@
 <p>If you have any questions about this Privacy Policy, You can contact us:</p>
 <ul>
 <li>By email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ed84838b82ad9d828e8688998c8e889ec399888c80">[email&#160;protected]</a></li>
-</ul><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+</ul>
+    </article>
+  </div>
+</section>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+{% endblock %}
