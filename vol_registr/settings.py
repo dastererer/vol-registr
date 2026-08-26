@@ -160,7 +160,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ASSET_VERSION = os.environ.get('STATIC_ASSET_VERSION', 'arena-2026-09-v4')
+STATIC_ASSET_VERSION = os.environ.get('STATIC_ASSET_VERSION', 'arena-2026-09-v6')
 STORAGES = {
     'staticfiles': {
         'BACKEND': 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage',

@@ -12,6 +12,12 @@ window.APP_CONFIG = Object.freeze({
     /* ── Breakpoints ──────────────────────────────── */
     MOBILE_BREAKPOINT: 768,
 
+    /* ── Accessibility ────────────────────────────── */
+    /** True when the user requests reduced motion. Decorative
+        animations must be skipped; functional transitions
+        complete instantly (see GSAP timeScale guard below). */
+    REDUCED_MOTION: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+
     /* ── API Routes ───────────────────────────────── */
     API_REGISTER_URL: '/api/register/',
 
@@ -68,3 +74,14 @@ window.APP_CONFIG = Object.freeze({
         celebrationSpin: 720,
     },
 });
+
+/* ── Reduced Motion Guard ─────────────────────────
+   Honour prefers-reduced-motion for every GSAP-driven
+   animation site-wide: run the global timeline ~1000x
+   faster so tweens complete instantly while callbacks
+   and control flow stay intact. CSS animations and
+   transitions are already killed via the
+   `@media (prefers-reduced-motion: reduce)` block. */
+if (window.APP_CONFIG.REDUCED_MOTION && window.gsap) {
+    window.gsap.globalTimeline.timeScale(1000);
+}

@@ -12,9 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const CFG = window.APP_CONFIG;
     const isMobileView = window.matchMedia('(max-width: 768px)').matches;
+    const reducedMotion = CFG.REDUCED_MOTION === true;
 
     // ─── Hero Intro Timeline ────────────────────────
-    initHeroIntro(CFG.hero);
+    if (!reducedMotion) {
+        initHeroIntro(CFG.hero);
+    }
 
     // ─── Card Modal (desktop only) ────────────────────
     if (!isMobileView) {
@@ -28,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof ScrollTrigger !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger);
 
-        // Skip scroll animations on mobile
-        if (!isMobileView) {
+        // Skip scroll animations on mobile and for reduced motion
+        if (!isMobileView && !reducedMotion) {
             initCardsFlyIn(CFG.cards);
             initLocationScrollAnim(CFG.scroll);
             initEditorialSectionAnim(CFG.scroll);
@@ -120,10 +123,12 @@ function initHeroIntro(cfg) {
  * @param {object} cfg - player timing config.
  */
 function animateHeroPlayer(tl, cfg) {
+    const isPhotoBackground = Boolean(document.querySelector('.hero-player--photo'));
+
     if (AppUtils.isMobile()) {
         gsap.set('.hero-player', { x: 0 });
         tl.to('.hero-player', {
-            opacity: cfg.mobileOpacity,
+            opacity: isPhotoBackground ? 1 : cfg.mobileOpacity,
             duration: cfg.duration,
             ease: cfg.ease,
         }, '-=1.5');
@@ -277,7 +282,7 @@ function initEditorialSectionAnim(cfg) {
         stagger: 0.08,
     });
 
-    gsap.from(['.venue-hero', '.venue-card'], {
+    gsap.from(['.arena-heading', '.arena-swiper'], {
         scrollTrigger: { trigger: '.section--arena', start: item.start },
         y: item.y,
         opacity: 0,

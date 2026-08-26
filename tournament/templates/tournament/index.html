@@ -19,7 +19,7 @@
                         <span class="hero-title__line" data-i18n="hero.title.final_top">COURT</span>
                     </span>
                     <span class="hero-title__line-wrap">
-                        <span class="hero-title__line" data-i18n="hero.title.final_bottom">CUP 2</span>
+                        <span class="hero-title__line" data-i18n="hero.title.final_bottom">CUP 3</span>
                     </span>
                 </span>
                 <span class="hero-title__stage hero-title__stage--intro" aria-hidden="true">
@@ -33,7 +33,7 @@
             </h1>
 
             <p class="hero-text" data-i18n="hero.text">
-                Registration is open for Pocket Aces Court Cup 2. Outdoor volleyball, 8 teams, first serve at 09:00 on Saturday, September 26, 2026. Lock your spot before registration closes.
+                Registration is open for Pocket Aces Court Cup 3. Outdoor volleyball, 8 teams, first serve at 09:00 on Saturday, September 26, 2026. Lock your spot before registration closes.
             </p>
 
             <div class="hero-mobile-facts" aria-hidden="true">
@@ -95,7 +95,7 @@
         </div>
 
         <div class="hero-player-container{% if hero_photo_url %} hero-player-container--photo{% endif %}" id="heroPlayerContainer">
-            <span class="hero__ghost-number" aria-hidden="true">02</span>
+            <span class="hero__ghost-number" aria-hidden="true">03</span>
             <span class="hero__volt-block" aria-hidden="true"></span>
             {% if hero_photo_url %}
             <div class="hero-photo-frame">
@@ -126,51 +126,8 @@
 <!-- Tournament Ticker -->
 <div class="ticker">
     <div class="ticker__track">
-        <span class="ticker__copy ticker__item" data-i18n="ticker.items">POCKET ACES COURT CUP 2 /// SAT 26.09.2026 /// FIRST SERVE 09:00 /// 8 TEAMS /// 150 ZŁ PER TEAM /// OUTDOOR ///</span>
-        <span class="ticker__copy ticker__item" data-i18n="ticker.items" aria-hidden="true">POCKET ACES COURT CUP 2 /// SAT 26.09.2026 /// FIRST SERVE 09:00 /// 8 TEAMS /// 150 ZŁ PER TEAM /// OUTDOOR ///</span>
-    </div>
-</div>
-
-<!-- Registered Teams Modal -->
-<div id="registeredTeamsModal"
-     class="rt-modal__overlay"
-     role="dialog"
-     aria-modal="true"
-     aria-labelledby="registeredTeamsModalTitle">
-    <div class="rt-modal__content sports-scoreboard">
-        <button id="registeredTeamsModalClose" class="rt-modal__close" type="button" aria-label="Close">&times;</button>
-        <div class="rt-modal__header">
-            <h2 id="registeredTeamsModalTitle" class="rt-modal__title" data-i18n="registered.modal_title">Registered Teams</h2>
-            <div class="rt-modal__subtitle" data-i18n="registered.modal_subtitle">Pocket Aces Court Cup 2</div>
-        </div>
-
-        <div class="rt-modal__teams-list">
-            <div class="rt-table-header">
-                <span class="rt-col-rank">#</span>
-                <span class="rt-col-team" data-i18n="registered.col_team">Team</span>
-                <span class="rt-col-captain" data-i18n="registered.col_captain">Captain</span>
-                <span class="rt-col-action"></span>
-            </div>
-
-            {% if teams %}
-                {% for team in teams %}
-                    <div class="rt-team-row {% if forloop.counter <= max_slots %}rt-in-tournament{% else %}rt-reserve{% endif %}">
-                        <span class="rt-col-rank">{{ forloop.counter }}</span>
-                        <span class="rt-col-team">{{ team.name }}</span>
-                        <span class="rt-col-captain">{{ team.cap_name }} {{ team.cap_surname }}</span>
-                        <span class="rt-col-action">
-                            <a href="{% url 'tournament_team' team.id %}" class="rt-team-link" aria-label="{{ team.name }}">
-                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                    <path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"/>
-                                </svg>
-                            </a>
-                        </span>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="rt-no-teams" data-i18n="registered.empty">No registered teams.</div>
-            {% endif %}
-        </div>
+        <span class="ticker__copy ticker__item" data-i18n="ticker.items">POCKET ACES COURT CUP 3 /// SAT 26.09.2026 /// FIRST SERVE 09:00 /// 8 TEAMS /// 150 ZŁ PER TEAM /// OUTDOOR ///</span>
+        <span class="ticker__copy ticker__item" data-i18n="ticker.items" aria-hidden="true">POCKET ACES COURT CUP 3 /// SAT 26.09.2026 /// FIRST SERVE 09:00 /// 8 TEAMS /// 150 ZŁ PER TEAM /// OUTDOOR ///</span>
     </div>
 </div>
 
@@ -368,11 +325,6 @@
     </div>
 </section>
 
-<!-- Card Modal Overlay -->
-<div class="card-modal-overlay" id="cardModalOverlay">
-    <div class="card-modal__card" id="cardModalCard"></div>
-</div>
-
 <!-- Location Section -->
 <section class="section section--location">
     <div class="location-grid container">
@@ -452,46 +404,55 @@
 <section class="section section--arena section--alt">
     <div class="container">
         <div class="venue-block">
-            <article class="venue-hero" data-reveal>
-                <span class="venue-hero__accent" aria-hidden="true"></span>
-                <img src="{% static 'assets/arena/1.jpg' %}"
-                     alt="Outdoor volleyball court"
-                     width="1280"
-                     height="687"
-                     loading="lazy">
-                <div class="venue-hero__content section-heading-wrap">
-                    <span class="section-kicker">// 04</span>
-                    <span class="section-ghost" aria-hidden="true">VENUE</span>
-                    <h2 class="section-heading" data-i18n="arena.heading">The Venue</h2>
-                    <div class="divider divider--wide"></div>
-                    <p class="arena-note" data-i18n="arena_note">A cleaner outdoor setting, compact surroundings, and enough atmosphere to make the whole day feel like a proper event.</p>
-                </div>
-                <span class="venue-hero__index" aria-hidden="true">01</span>
-            </article>
+            <div class="section-heading-wrap arena-heading" data-reveal>
+                <span class="section-kicker">// 04</span>
+                <span class="section-ghost" aria-hidden="true">VENUE</span>
+                <h2 class="section-heading" data-i18n="arena.heading">The Venue</h2>
+                <div class="divider divider--wide"></div>
+                <p class="arena-note" data-i18n="arena_note">A cleaner outdoor setting, compact surroundings, and enough atmosphere to make the whole day feel like a proper event.</p>
+            </div>
 
-            <div class="venue-grid">
-                <article class="venue-card" data-reveal>
-                    <span class="venue-card__accent" aria-hidden="true"></span>
+            <div class="arena-swiper swiper" data-reveal aria-label="Court photo gallery">
+                <div class="swiper-wrapper">
+                    <figure class="arena-slide swiper-slide">
+                        <img src="{% static 'assets/arena/1.jpg' %}"
+                             alt="Outdoor volleyball court"
+                             width="1280"
+                             height="687"
+                             loading="lazy">
+                        <figcaption class="arena-slide__index">01 / 03</figcaption>
+                    </figure>
+                    <figure class="arena-slide swiper-slide">
                     <img src="{% static 'assets/arena/2.jpg' %}"
                          alt="Outdoor court arrival area"
                          width="1280"
                          height="906"
                          loading="lazy">
-                    <div class="venue-card__overlay">
-                        <span class="venue-card__index" aria-hidden="true">02</span>
-                    </div>
-                </article>
-                <article class="venue-card" data-reveal>
-                    <span class="venue-card__accent" aria-hidden="true"></span>
-                    <img src="{% static 'assets/arena/3.jpg' %}"
-                         alt="Outdoor court facilities"
-                         width="1280"
-                         height="931"
-                         loading="lazy">
-                    <div class="venue-card__overlay">
-                        <span class="venue-card__index" aria-hidden="true">03</span>
-                    </div>
-                </article>
+                        <figcaption class="arena-slide__index">02 / 03</figcaption>
+                    </figure>
+                    <figure class="arena-slide swiper-slide">
+                        <img src="{% static 'assets/arena/3.jpg' %}"
+                             alt="Outdoor court facilities"
+                             width="1280"
+                             height="931"
+                             loading="lazy">
+                        <figcaption class="arena-slide__index">03 / 03</figcaption>
+                    </figure>
+                </div>
+
+                <div class="arena-controls">
+                    <button class="arena-nav arena-nav--prev" type="button" aria-label="Previous court photo">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M19 12H5M11 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" />
+                        </svg>
+                    </button>
+                    <div class="arena-pagination" aria-label="Choose court photo"></div>
+                    <button class="arena-nav arena-nav--next" type="button" aria-label="Next court photo">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -549,11 +510,61 @@
                     <h3 class="road-item__title" data-i18n="road.step4.title">Game Day</h3>
                 </div>
                 <div class="road-item__marker" aria-hidden="true"></div>
-                <div class="road-item__desc" data-i18n="road.step4.desc">Pocket Aces Court Cup 2 starts at 09:00 at the outdoor court by Dormitory No. 8.</div>
+                <div class="road-item__desc" data-i18n="road.step4.desc">Pocket Aces Court Cup 3 starts at 09:00 at the outdoor court by Dormitory No. 8.</div>
             </div>
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block modals %}
+<!-- Registered Teams Modal -->
+<div id="registeredTeamsModal"
+     class="rt-modal__overlay"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="registeredTeamsModalTitle">
+    <div class="rt-modal__content sports-scoreboard">
+        <button id="registeredTeamsModalClose" class="rt-modal__close" type="button" aria-label="Close">&times;</button>
+        <div class="rt-modal__header">
+            <h2 id="registeredTeamsModalTitle" class="rt-modal__title" data-i18n="registered.modal_title">Registered Teams</h2>
+            <div class="rt-modal__subtitle" data-i18n="registered.modal_subtitle">Pocket Aces Court Cup 3</div>
+        </div>
+
+        <div class="rt-modal__teams-list">
+            <div class="rt-table-header">
+                <span class="rt-col-rank">#</span>
+                <span class="rt-col-team" data-i18n="registered.col_team">Team</span>
+                <span class="rt-col-captain" data-i18n="registered.col_captain">Captain</span>
+                <span class="rt-col-action"></span>
+            </div>
+
+            {% if teams %}
+                {% for team in teams %}
+                    <div class="rt-team-row {% if forloop.counter <= max_slots %}rt-in-tournament{% else %}rt-reserve{% endif %}">
+                        <span class="rt-col-rank">{{ forloop.counter }}</span>
+                        <span class="rt-col-team">{{ team.name }}</span>
+                        <span class="rt-col-captain">{{ team.cap_name }} {{ team.cap_surname }}</span>
+                        <span class="rt-col-action">
+                            <a href="{% url 'tournament_team' team.id %}" class="rt-team-link" aria-label="{{ team.name }}">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"/>
+                                </svg>
+                            </a>
+                        </span>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="rt-no-teams" data-i18n="registered.empty">No registered teams.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Card Modal Overlay -->
+<div class="card-modal-overlay" id="cardModalOverlay">
+    <div class="card-modal__card" id="cardModalCard"></div>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -566,5 +577,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script src="{% static_v 'js/cards-swiper.js' %}"></script>
+<script src="{% static_v 'js/arena-swiper.js' %}"></script>
 <script src="{% static_v 'js/index-page.js' %}"></script>
 {% endblock %}

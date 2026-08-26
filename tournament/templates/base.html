@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Pocket Aces Court Cup 2 — 26.09.2026{% endblock %}</title>
+    <title>{% block title %}Pocket Aces Court Cup 3 — 26.09.2026{% endblock %}</title>
     {% load static static_v %}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -254,10 +254,10 @@
           loading="lazy"
         />
         <p class="site-footer__copyright" data-i18n="footer_copyright">
-          &copy; 2026 POCKET ACES SPORT CLUB
+          &copy; 2026 POCKET ACES SPORT CLUB · COURT CUP 3
         </p>
         <p class="site-footer__event" data-i18n="footer_event">
-          SAT 26.09.2026 · OUTDOOR
+          COURT CUP 3 · SAT 26.09.2026 · OUTDOOR
         </p>
       </div>
     </footer>
@@ -303,6 +303,9 @@
         <div id="voteStatus" class="vote-modal-status" style="display: none"></div>
       </div>
     </div>
+
+    <!-- Page-level modals (kept outside .site-main stacking context so they overlay the sticky nav) -->
+    {% block modals %}{% endblock %}
 
     <!-- Global config & utils (loaded before page-specific scripts) -->
     <script src="{% static_v 'js/config.js' %}"></script>

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static static_v %}
 
-{% block title %}Register | Pocket Aces Court Cup 2{% endblock %}
+{% block title %}Register | Pocket Aces Court Cup 3{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -37,7 +37,7 @@
 
   .reg-brand__hero::after {
     color: transparent;
-    content: '02';
+    content: '03';
     font: italic 800 clamp(8rem, 22vw, 18rem)/0.8 var(--font-display);
     opacity: 0.55;
     pointer-events: none;
@@ -992,7 +992,7 @@
       </h1>
       <!-- [CONFIRM] registration deadline -->
       <p class="reg-brand__desc" data-i18n="reg_desc">
-        Registration is open for Pocket Aces Court Cup 2. Outdoor volleyball, 8 teams, first serve at 09:00 on Saturday, September 26, 2026. Secure your spot before 20.09.2026.
+        Registration is open for Pocket Aces Court Cup 3. Outdoor volleyball, 8 teams, first serve at 09:00 on Saturday, September 26, 2026. Secure your spot before 20.09.2026.
       </p>
       <ul class="reg-brand__facts">
         <li class="reg-fact">
@@ -1199,12 +1199,14 @@
       <div class="reg-panel reg-panel--hidden reg-success" id="stepSuccess">
         <div class="reg-success__icon" aria-hidden="true">YOU'RE IN.</div>
         <h2 class="reg-success__title" data-i18n="reg_success">Registration Sent!</h2>
-        <p class="reg-success__text" data-i18n="reg_success_txt">Your team has been submitted for Pocket Aces Court Cup 2. Payment details and the deadline will be sent to your email address shortly.</p>
+        <p class="reg-success__text" data-i18n="reg_success_txt">Your team has been submitted for Pocket Aces Court Cup 3. Payment details and the deadline will be sent to your email address shortly.</p>
       </div>
     </form>
   </div>
 </main>
+{% endblock %}
 
+{% block modals %}
 <div id="scCropModal" class="reg-modal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="scModalTitle">
   <div class="reg-modal__content sc-modal-content">
     <button type="button" class="reg-modal__close" id="closeScModalBtn" aria-label="Close">&times;</button>
