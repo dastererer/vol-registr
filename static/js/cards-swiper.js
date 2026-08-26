@@ -5,11 +5,11 @@
 (function () {
   'use strict';
 
-  const MOBILE_BP = 992;
+  const MOBILE_BP = 768;
   let swiperInstance = null;
 
   function shouldUseSwiper() {
-    return window.innerWidth < MOBILE_BP || window.matchMedia('(pointer: coarse)').matches;
+    return window.innerWidth < MOBILE_BP;
   }
 
   function syncSlideVisibility(swiper) {

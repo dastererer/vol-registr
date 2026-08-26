@@ -1,342 +1,251 @@
 {% extends 'base.html' %}
 {% load static static_v %}
 
-{% block title %}FAQ | Pocket Aces Court cup 2{% endblock %}
+{% block title %}FAQ | Pocket Aces Court Cup 2{% endblock %}
 
 {% block extra_head %}
 <style>
-  .sports-bg-image {
-    background-image:
-      linear-gradient(180deg, rgba(7, 11, 20, 0.06), rgba(7, 11, 20, 0.14)),
-      url("{% static 'assets/arena/bg.jpg' %}");
-    background-position: center center;
-    opacity: 0.24;
-  }
-
-  .sports-bg-overlay {
-    background: linear-gradient(180deg, rgba(7, 11, 20, 0.36) 0%, rgba(7, 11, 20, 0.9) 100%);
-  }
-
   .faq-section {
-    background: transparent;
-    padding-top: clamp(8rem, 15vh, 12rem);
-    padding-bottom: clamp(6rem, 10vh, 10rem);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
+    min-height: calc(100svh - var(--nav-h));
+    padding-block: var(--section-y);
+    position: relative;
   }
 
   .faq-board {
     display: grid;
-    gap: clamp(3rem, 6vw, 6rem);
+    gap: clamp(2rem, 5vw, 5rem);
     align-items: start;
-    width: 100%;
   }
 
   .faq-rail {
     display: grid;
-    gap: 2rem;
-    align-content: start;
+    gap: 1.25rem;
   }
 
   .faq-rail__panel,
   .faq-form__card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 2rem;
-    background: linear-gradient(155deg, rgba(7, 18, 31, 0.88), rgba(10, 22, 36, 0.98));
-    border: 1px solid rgba(228, 21, 97, 0.22);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.05),
-      0 30px 60px rgba(2, 6, 23, 0.3),
-      0 0 40px rgba(228, 21, 97, 0.1);
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    clip-path: var(--card-clip);
+    padding: clamp(1.5rem, 3vw, 3rem);
   }
 
-  .faq-rail__panel {
-    padding: clamp(2.5rem, 5vw, 3.5rem);
-  }
-
-  .faq-rail__panel::before,
-  .faq-form__card::before {
-    content: '';
-    position: absolute;
-    inset: 0.75rem;
-    border-radius: calc(2rem - 0.75rem);
-    border: 1px solid rgba(73, 192, 255, 0.2);
-    pointer-events: none;
+  .faq-kicker {
+    color: var(--volt);
+    font: 700 var(--fs-mono-sm)/1.2 var(--font-mono);
+    letter-spacing: 0.14em;
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
   }
 
   .faq-title {
-    text-align: left;
-    margin-bottom: 1.5rem;
-    font-size: clamp(3rem, 8vw, 5rem);
-    line-height: 0.9;
-  }
-
-  .faq-rail__panel .divider {
+    color: var(--paper);
+    font: italic 800 var(--fs-display-lg)/0.9 var(--font-display);
     margin: 0;
-    width: 5rem;
-    height: 4px;
-    background: var(--brand-blue);
-  }
-
-  .faq-sidebar {
-    width: 100%;
-    position: static;
-  }
-
-  .faq-form__card {
-    padding: 2.5rem 2rem;
+    overflow-wrap: anywhere;
+    text-transform: uppercase;
   }
 
   .faq-form__header {
-    margin-bottom: 1.5rem;
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 900;
+    color: var(--paper);
+    font: italic 800 var(--fs-display-sm)/1 var(--font-display);
     letter-spacing: 0.04em;
+    margin-bottom: 1.5rem;
     text-transform: uppercase;
-    color: #fff;
-    font-size: 1.4rem;
   }
 
   .faq-form__body {
     display: grid;
-    gap: 1.25rem;
+    gap: 1rem;
   }
 
   .faq-form__input,
   .faq-form__textarea {
-    background: rgba(4, 12, 22, 0.7);
-    border: 1px solid rgba(73, 192, 255, 0.22);
-    border-radius: 1.2rem;
-    padding: 1.2rem;
-    color: #fff;
-    font-size: 1.05rem;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    border-radius: 0;
+    color: var(--paper);
+    font: 400 0.95rem/1.5 var(--font-body);
+    padding: 0.875rem;
+    width: 100%;
+  }
+
+  .faq-form__input {
+    height: 48px;
   }
 
   .faq-form__textarea {
     min-height: 150px;
+    resize: vertical;
+  }
+
+  .faq-form__input::placeholder,
+  .faq-form__textarea::placeholder {
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  .faq-form__input:focus,
+  .faq-form__textarea:focus {
+    border-color: var(--volt);
+    outline: 2px solid var(--volt);
+    outline-offset: 0;
   }
 
   .faq-form__btn {
-    border-radius: 999px;
-    padding: 1.1rem;
-    font-weight: 800;
-    font-size: 1rem;
-    background: linear-gradient(135deg, var(--brand-pink), var(--brand-blue));
-    color: #fff;
-    border: none;
+    align-items: center;
+    background: var(--volt);
+    border: 2px solid var(--volt);
+    border-radius: 0;
+    clip-path: var(--btn-clip);
+    color: var(--ink);
     cursor: pointer;
+    display: inline-flex;
+    font: 700 1.25rem/1 var(--font-display);
+    height: 52px;
+    justify-content: center;
+    letter-spacing: 0.06em;
+    padding-inline: 1.625rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    box-shadow: 0 15px 30px rgba(228, 21, 97, 0.25);
-    transition: all 0.3s ease;
+    transition: transform var(--t-hover) var(--ease-out), filter var(--t-hover) var(--ease-out), background-color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out), color var(--t-hover) var(--ease-out);
   }
 
   .faq-form__btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 20px 40px rgba(228, 21, 97, 0.35);
+    filter: drop-shadow(6px 6px 0 var(--paper));
+    transform: translate(-3px, -3px);
+  }
+
+  .faq-form__btn:active {
+    filter: none;
+    transform: translate(0, 0);
   }
 
   .faq-questions {
     counter-reset: faq-step;
-    position: relative;
-    display: grid;
-    gap: 1.5rem;
-  }
-
-  .faq-questions::before {
-    content: '';
-    position: absolute;
-    top: 2rem;
-    bottom: 2rem;
-    left: 1.85rem;
-    width: 2px;
-    background: linear-gradient(180deg, rgba(73, 192, 255, 0.4), rgba(228, 21, 97, 0.3));
-    pointer-events: none;
   }
 
   .faq-item {
+    background: var(--ink-2);
+    border: 1px solid var(--line);
     counter-increment: faq-step;
-    position: relative;
-    width: 100%;
-    padding-left: 5.5rem;
-    border-radius: 1.75rem;
-    background: linear-gradient(155deg, rgba(7, 18, 31, 0.88), rgba(10, 22, 36, 0.98));
-    border: 1px solid rgba(228, 21, 97, 0.18);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.04),
-      0 25px 50px rgba(2, 6, 23, 0.2);
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  }
-
-  .faq-item::before {
-    content: counter(faq-step, decimal-leading-zero);
-    position: absolute;
-    top: 1.5rem;
-    left: 1rem;
-    width: 1.8rem;
-    height: 1.8rem;
-    display: grid;
-    place-items: center;
-    border-radius: 999px;
-    background: rgba(73, 192, 255, 0.2);
-    border: 1px solid rgba(73, 192, 255, 0.3);
-    color: #fff;
-    font-size: 0.85rem;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    z-index: 2;
+    margin-bottom: -1px;
   }
 
   .faq-item.open {
-    border-color: rgba(228, 21, 97, 0.4);
-    background: linear-gradient(155deg, rgba(12, 25, 41, 0.92), rgba(15, 30, 48, 0.98));
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.05),
-      0 35px 70px rgba(2, 6, 23, 0.3),
-      0 0 40px rgba(73, 192, 255, 0.12);
+    border-left: 2px solid var(--volt);
   }
 
   .faq-question {
-    width: 100%;
-    padding: 1.8rem 4.5rem 1.75rem 0;
-    font-size: clamp(1.2rem, 2vw, 1.45rem);
-    line-height: 1.3;
-    font-weight: 800;
-    color: #fff;
+    align-items: center;
     background: transparent;
-    border: none;
-    text-align: left;
+    border: 0;
+    color: var(--paper);
     cursor: pointer;
+    display: grid;
+    font: 600 1.25rem/1.15 var(--font-display);
+    gap: 0.875rem;
+    grid-template-columns: 2.5rem 1fr 1.25rem;
+    padding: 1.125rem 1.25rem;
     position: relative;
-    font-family: var(--font-display);
+    text-align: left;
     text-transform: uppercase;
-    font-style: italic;
+    width: 100%;
+  }
+
+  .faq-question::before {
+    align-items: center;
+    align-self: center;
+    background: var(--volt);
+    color: var(--ink);
+    content: counter(faq-step, decimal-leading-zero);
+    display: inline-flex;
+    font: 700 var(--fs-mono-sm)/1 var(--font-mono);
+    justify-content: center;
+    letter-spacing: 0.04em;
+    width: 2rem;
+    height: 2rem;
   }
 
   .faq-question::after {
+    color: var(--paper);
     content: '+';
-    position: absolute;
-    top: 50%;
-    right: 2rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: grid;
-    place-items: center;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    transform: translateY(-50%) rotate(0deg);
-    transition: all 0.3s ease;
-    font-size: 1.4rem;
-    color: #fff;
-    font-style: normal;
+    font: 400 1.5rem/1 var(--font-mono);
+    justify-self: end;
+    transform: rotate(0deg);
+    transition: transform 200ms var(--ease-out), color 200ms var(--ease-out);
   }
 
   .faq-item.open .faq-question::after {
-    transform: translateY(-50%) rotate(45deg);
-    background: var(--brand-pink);
-    border-color: transparent;
-    box-shadow: 0 0 20px rgba(228, 21, 97, 0.4);
+    color: var(--volt);
+    transform: rotate(45deg);
   }
 
   .faq-answer {
-    background: transparent;
-    padding: 0 2rem 0 0;
     max-height: 0;
     overflow: hidden;
-    transition: all 0.4s ease;
+    transition: max-height 300ms var(--ease-out);
   }
 
   .faq-answer p {
-    padding-top: 1.25rem;
-    padding-bottom: 2rem;
-    font-size: 1.15rem;
-    color: rgba(255,255,255,0.8);
-    line-height: 1.7;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 2px solid var(--volt);
+    color: var(--muted);
+    font: 400 0.95rem/1.7 var(--font-body);
+    margin: 0 1.25rem 1.25rem 4.5rem;
+    padding: 0 0 0 1.25rem;
+  }
+
+  .faq-answer a {
+    color: var(--paper);
+    text-decoration-color: var(--volt);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
   }
 
   .faq-item.open .faq-answer {
-    padding: 0 1.3rem 1.35rem 0;
-    max-height: 500px;
+    max-height: 24rem;
   }
 
   .faq-ask__success {
-    color: #4ade80;
-    margin-top: 1rem;
-    font-weight: 700;
+    color: var(--ok) !important;
+    font: 700 var(--fs-mono-sm)/1.4 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
   @media (min-width: 1024px) {
     .faq-board {
-      grid-template-columns: minmax(18rem, 22rem) minmax(0, 1fr);
+      grid-template-columns: minmax(18rem, 4fr) minmax(0, 8fr);
     }
 
     .faq-rail {
       position: sticky;
-      top: 2rem;
+      top: calc(var(--nav-h) + 1.5rem);
     }
   }
 
-  @media (max-width: 767.98px) {
-    .faq-rail__panel,
-    .faq-form__card {
-      border-radius: 1.35rem;
-    }
-
-    .faq-rail__panel::before,
-    .faq-form__card::before {
-      inset: 0.45rem;
-      border-radius: calc(1.35rem - 0.45rem);
-    }
-
-    .faq-questions::before {
-      left: 1.15rem;
-    }
-
-    .faq-item {
-      padding-left: 3.6rem;
-    }
-
-    .faq-item::before {
-      left: 0.58rem;
-      top: 0.92rem;
-    }
-
+  @media (max-width: 600px) {
     .faq-question {
-      padding-right: 3rem;
-      font-size: 1rem;
+      font-size: 1.05rem;
+      grid-template-columns: 2.25rem 1fr 1rem;
+      padding-inline: 1rem;
     }
 
-    .faq-answer,
-    .faq-item.open .faq-answer {
-      padding-right: 1rem;
+    .faq-answer p {
+      margin-left: 3.25rem;
+      padding-left: 0.875rem;
     }
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Background decorations -->
-<div class="sports-bg-wrapper">
-  <div class="sports-bg-image"></div>
-  <div class="sports-bg-grid"></div>
-  <div class="sports-bg-stripes"></div>
-  <div class="sports-bg-glow"></div>
-  <div class="sports-bg-overlay"></div>
-</div>
-
 <section class="faq-section section">
   <div class="container">
     <div class="faq-board">
-      <aside class="faq-rail">
+      <aside class="faq-rail" data-reveal>
         <div class="faq-rail__panel">
+          <p class="faq-kicker">// Court notes</p>
           <h1 class="faq-title" data-i18n="faq.title">FAQ</h1>
-          <div class="divider divider--wide"></div>
         </div>
 
         <div class="faq-sidebar">
@@ -344,8 +253,8 @@
             <div class="faq-form__card">
               <div class="faq-form__header" data-i18n="faq.ask_title">Ask a question</div>
               <div class="faq-form__body">
-                <input type="email" class="faq-form__input" name="email" placeholder="Your email" required data-i18n-ph="faq.ask_email_ph">
-                <textarea class="faq-form__textarea" name="question" placeholder="Your question" required data-i18n-ph="faq.ask_question_ph"></textarea>
+                <input type="email" class="faq-form__input" name="email" placeholder="Your email" aria-label="Your email" required data-i18n-ph="faq.ask_email_ph">
+                <textarea class="faq-form__textarea" name="question" placeholder="Your question" aria-label="Your question" required data-i18n-ph="faq.ask_question_ph"></textarea>
                 <button type="submit" class="faq-form__btn" data-i18n="faq.ask_btn">Send</button>
               </div>
             </div>
@@ -353,7 +262,7 @@
         </div>
       </aside>
 
-      <div class="faq-questions">
+      <div class="faq-questions faq-list" data-reveal>
         <div class="faq-item">
           <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q1">What if a player is under 18?</button>
           <div class="faq-answer">
@@ -387,7 +296,8 @@
         <div class="faq-item">
           <button class="faq-question" type="button" aria-expanded="false" data-i18n="faq.q6">Can we change a player after registration?</button>
           <div class="faq-answer">
-            <p data-i18n="faq.a6">Roster changes are accepted only until registration closes on June 3. Once the tournament starts, roster changes are not allowed.</p>
+            <!-- [CONFIRM] registration deadline -->
+            <p data-i18n="faq.a6">Roster changes are accepted only until registration closes on 20.09.2026. Once the tournament starts, roster changes are not allowed.</p>
           </div>
         </div>
         <div class="faq-item">
@@ -401,8 +311,6 @@
   </div>
 </section>
 {% endblock %}
-
-
 
 {% block scripts %}
   <script src="{% static_v 'js/faq.js' %}"></script>

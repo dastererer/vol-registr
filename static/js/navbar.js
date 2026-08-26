@@ -9,23 +9,32 @@
     en: {
       // Main page (index.html)
       hero: {
-        label: 'June 6 • 09:00 • Outdoor Court by Dormitory No. 8',
+        label: 'SAT 26.09.2026 • 09:00 • OUTDOOR COURT BY DORMITORY NO. 8',
         title: {
           intro_top: 'POCKET',
           intro_bottom: 'ACES',
           final_top: 'COURT',
           final_bottom: 'CUP 2'
         },
-        text: 'Registration is open for Pocket Aces Court cup 2. Outdoor play, 8 teams, first serve at 09:00. Lock your spot before registration closes on June 3.',
+        text: 'Registration is open for Pocket Aces Court Cup 2. Outdoor volleyball, 8 teams, first serve at 09:00 on Saturday, September 26, 2026. Lock your spot before registration closes.',
         mobile_fact1: 'Tournament Day',
         mobile_fact2: 'Team Limit',
         mobile_fact3: 'Outdoor Court',
-        price: { label: 'per team' },
-        counter: { label: 'Teams Registered' },
+        price: { label: 'ENTRY' },
+        counter: { label: 'SLOTS' },
+        stats: {
+          date_label: 'DATE',
+          date_value: '26.09 SAT',
+          serve_label: 'FIRST SERVE'
+        },
         cta: 'Join Tournament',
         closed: 'Registration Closed'
       },
+      ticker: {
+        items: 'POCKET ACES COURT CUP 2 /// SAT 26.09.2026 /// FIRST SERVE 09:00 /// 8 TEAMS /// 150 ZŁ PER TEAM /// OUTDOOR ///'
+      },
       voting: {
+        kicker: '// FAN AWARD',
         title: 'Fan Favorite',
         subtitle: 'Most Popular Team',
         count: 'Fans',
@@ -42,13 +51,13 @@
         },
         card2: {
           title: 'Registration',
-          text: 'Registration is live now and only 8 teams make the field. Secure your place before the June 3 deadline.',
-          list1: 'Deadline: June 3',
+          text: 'Registration is live now and only 8 teams make the field. Secure your place before the 20.09.2026 deadline.',
+          list1: 'Deadline: 20.09.2026',
           list2: 'Entry fee: 150 zł'
         },
         card3: {
           title: 'Outdoor Matchday',
-          text: 'We meet at the outdoor court by Dormitory No. 8 on June 6 at 09:00 for a full tournament day.',
+          text: 'We meet at the outdoor court by Dormitory No. 8 on Saturday, September 26, 2026 at 09:00 for a full tournament day.',
           list1: 'Court by Dormitory No. 8',
           list2: 'Arrive 30-60 min early'
         },
@@ -63,9 +72,9 @@
       location: {
         kicker: 'Venue Details',
         title: 'The Venue',
-        text: 'Pocket Aces Court cup 2 moves to the outdoor court next to Dormitory No. 8 in Łódź. Bring your team 30-60 minutes early for registration and warm-up.',
+        text: 'Pocket Aces Court Cup 2 moves to the outdoor court next to Dormitory No. 8 in Łódź. Bring your team 30-60 minutes early for registration and warm-up.',
         info: { label: 'Location', value: 'Strajku Łódzkich Studentów 1981 r. 2, 91-404 Łódź' },
-        date: { label: 'Date', value: 'June 6, 09:00' },
+        date: { label: 'Date', value: 'SAT 26.09.2026, 09:00' },
         link: 'View on Google Maps'
       },
       location_pill1_title: 'Open-Air Setup',
@@ -75,9 +84,9 @@
       location_pill3_title: 'Compact Match Flow',
       location_pill3_copy: 'Short resets, clear sideline spacing, and enough room to keep every round feeling sharp.',
       registered: {
-        cta: 'See teams ->',
+        cta: 'SEE REGISTERED TEAMS',
         modal_title: 'Registered Teams',
-        modal_subtitle: 'Pocket Aces Court cup 2',
+        modal_subtitle: 'Pocket Aces Court Cup 2',
         col_team: 'Team',
         col_captain: 'Captain',
         col_level: 'Level',
@@ -89,20 +98,20 @@
       road: {
         heading: 'Registration Timeline',
         lead: 'From sign-up to first serve, these are the four moments that shape the event week.',
-        step1: { date: 'Open now', title: 'Now Open', desc: 'Team registration is open. Join now before all 8 spots are taken.' },
-        step2: { date: 'June 3', title: 'Registration Closes', desc: 'Final deadline to lock your team into the event.' },
-        step3: { date: 'After close', title: 'Captain Update', desc: 'Final event details will be sent to registered captains.' },
-        step4: { date: 'June 6, 09:00', title: 'Tournament Day', desc: 'Pocket Aces Court cup 2 starts at the outdoor court by Dormitory No. 8.' }
+        step1: { date: 'NOW', title: 'REGISTRATION OPEN', desc: 'Team registration is open. Join now before all 8 spots are taken.' },
+        step2: { date: '20.09.2026', title: 'ROSTER LOCK', desc: 'Final deadline to lock your team into the event.' },
+        step3: { date: '22.09.2026', title: 'SCHEDULE PUBLISHED', desc: 'The match schedule is published for registered captains.' },
+        step4: { date: 'SAT 26.09.2026', title: 'GAME DAY', desc: 'Pocket Aces Court Cup 2 starts at 09:00 at the outdoor court by Dormitory No. 8.' }
       },
       gallery_page: {
         eyebrow: 'Pocket Aces',
         title: 'Gallery',
-        subtitle: 'Photos and video highlights from Pocket Aces Court cup 2.',
+        subtitle: 'Photos and video highlights from Pocket Aces Court Cup 2.',
         photos_title: 'Photos',
         videos_title: 'Video Highlights',
         prev_title: 'Previous Tournament',
         prev_subtitle: 'Media Archive',
-        empty: 'Gallery will be updated once Pocket Aces Court cup 2 starts.'
+        empty: 'Gallery will be updated once Pocket Aces Court Cup 2 starts.'
       },
       // FAQ page
       faq: {
@@ -118,7 +127,7 @@
         q5: 'How many players can be on a team?',
         a5: 'You need 6 players on court to start a match, and you can register an unlimited number of substitutes.',
         q6: 'Can we change a player after registration?',
-        a6: 'Roster changes are accepted only until registration closes on June 3. Once the tournament starts, roster changes are not allowed.',
+        a6: 'Roster changes are accepted only until registration closes on 20.09.2026. Once the tournament starts, roster changes are not allowed.',
         q7: 'Where can we find the match schedule?',
         a7: 'The final format depends on the number of registered teams. Captains receive updates directly, and key schedule information will also appear on the website.',
         ask_title: 'Ask a question',
@@ -129,7 +138,7 @@
       },
       cs: {
         heading: 'Match Centre Soon',
-        sub: 'Match Centre opens on <strong>June 6 at 09:00</strong>. Until then, use the time left to register your team for Pocket Aces Court cup 2.',
+        sub: 'Match Centre opens on <strong>Saturday, September 26, 2026 at 09:00</strong>. Until then, use the time left to register your team for Pocket Aces Court Cup 2.',
         days: 'Days',
         hours: 'Hours',
         min: 'Min',
@@ -232,6 +241,12 @@
       footer_nav: 'Navigation',
       footer_documents: 'Documents',
       footer_connect: 'Connect',
+      footer_parental: 'Parental Consent Form',
+      footer_privacy: 'Privacy Policy',
+      footer_regulations_en: 'Regulations (EN)',
+      footer_regulations_pl: 'Regulations (PL)',
+      footer_copyright: '© 2026 POCKET ACES SPORT CLUB',
+      footer_event: 'SAT 26.09.2026 · OUTDOOR',
       footer_about: 'About',
       footer_identity: 'Pocket Aces Sport Club — community-run volleyball club organizing local tournaments and events.',
       site_identity: 'Pocket Aces Sport Club — community-run volleyball club organizing local tournaments and events.',
@@ -240,15 +255,15 @@
       reg_step3:     'Roster',
       reg_title:     'Active Registration',
       reg_subtitle:  'Court<br>Cup&nbsp;2',
-      reg_desc:      'Registration is open for Pocket Aces Court cup 2. We are taking 8 teams for the new outdoor event, so secure your spot before June 3.',
+      reg_desc:      'Registration is open for Pocket Aces Court Cup 2. We are taking 8 teams for the new outdoor event, so secure your spot before 20.09.2026.',
       reg_fact1_title: '8 Spots',
       reg_fact1_copy: 'Compact field, quick bracket, and no long wait between meaningful matches.',
-      reg_fact2_title: 'June 3',
-      reg_fact2_copy: 'Registration closes on June 3, so late roster decisions need to happen now.',
+      reg_fact2_title: '20.09.2026',
+      reg_fact2_copy: 'Registration closes on 20.09.2026, so late roster decisions need to happen now.',
       reg_fact3_title: 'Captain Flow',
       reg_fact3_copy: 'Badge, roster, and contact edits stay open through the team profile link.',
       reg_access_title: 'Need changes later?',
-      reg_access_copy: 'After confirmation, captains can still update the team badge and roster from the profile page until registration closes on June 3.',
+      reg_access_copy: 'After confirmation, captains can still update the team badge and roster from the profile page until registration closes on 20.09.2026.',
       reg_access_cta: 'Open captain profile',
       reg_identity:  'Team Details',
       reg_team_name: 'Team Name',
@@ -273,7 +288,7 @@
       reg_media:     'Badge & Entrance Song',
       reg_roster:    'Team Roster',
       reg_hint:      'Minimum 6 players required',
-      reg_note:      '<strong>Important:</strong><br>Captain must be listed as one of the players below.<br><br>Finish roster edits before June 3. This event is played outdoors, so in case of bad weather the tournament may be postponed and captains will be notified directly.',
+      reg_note:      '<strong>Important:</strong><br>Captain must be listed as one of the players below.<br><br>Finish roster edits before 20.09.2026. This event is played outdoors, so in case of bad weather the tournament may be postponed and captains will be notified directly.',
       reg_first:     'First Name',
       reg_last:      'Last Name',
       reg_jersey:    '#',
@@ -294,7 +309,7 @@
       reg_payment:   'I understand the entry fee is <strong>150 zł</strong> and payment details plus the payment deadline will be sent by email',
       reg_submit:    'Join Tournament',
       reg_success:   'Registration Sent!',
-      reg_success_txt: 'Your team has been submitted for Pocket Aces Court cup 2. Payment details and the deadline will be sent to your email address shortly.',
+      reg_success_txt: 'Your team has been submitted for Pocket Aces Court Cup 2. Payment details and the deadline will be sent to your email address shortly.',
       // Validation
       err_team_name: 'Team name is required.',
       err_league:    'Please select a league level.',
@@ -323,23 +338,32 @@
     pl: {
       // Main page (index.html)
       hero: {
-        label: '6 czerwca • 09:00 • Boisko przy akademiku nr 8',
+        label: 'SOB 26.09.2026 • 09:00 • BOISKO PLENEROWE PRZY DS NR 8',
         title: {
           intro_top: 'POCKET',
           intro_bottom: 'ACES',
           final_top: 'COURT',
           final_bottom: 'CUP 2'
         },
-        text: 'Rejestracja na Pocket Aces Court cup 2 jest otwarta. Gramy na zewnętrznym boisku, limit to 8 drużyn, a pierwszy gwizdek o 09:00. Zapisz ekipę przed końcem rejestracji 3 czerwca.',
+        text: 'Rejestracja na Pocket Aces Court Cup 2 jest otwarta. Gramy na zewnątrz, limit to 8 drużyn, pierwsze podanie 26 września 2026 o 09:00. Zapisz ekipę przed zamknięciem rejestracji.',
         mobile_fact1: 'Dzień Turnieju',
         mobile_fact2: 'Limit Drużyn',
         mobile_fact3: 'Boisko Outdoor',
-        price: { label: 'za drużynę' },
-        counter: { label: 'Zarejestrowane drużyny' },
+        price: { label: 'WPISOWE' },
+        counter: { label: 'MIEJSCA' },
+        stats: {
+          date_label: 'DATA',
+          date_value: '26.09 SOB',
+          serve_label: 'PIERWSZE PODANIE'
+        },
         cta: 'Zapisz się',
         closed: 'Rejestracja zamknięta'
       },
+      ticker: {
+        items: 'POCKET ACES COURT CUP 2 /// SOBOTA 26.09.2026 /// PIERWSZE PODANIE 09:00 /// 8 DRUŻYN /// 150 ZŁ OD DRUŻYNY /// NA ZEWNĄTRZ ///'
+      },
       voting: {
+        kicker: '// NAGRODA KIBICÓW',
         title: 'Ulubieńcy Publiczności',
         subtitle: 'Najpopularniejsza Drużyna',
         count: 'Głosów',
@@ -357,12 +381,12 @@
         card2: {
           title: 'Rejestracja',
           text: 'Zapisy trwają i tylko 8 drużyn wejdzie do turnieju. Zabezpiecz miejsce, zanim minie deadline.',
-          list1: 'Deadline: 3 czerwca',
+          list1: 'Termin: 20.09.2026',
           list2: 'Wpisowe: 150 zł'
         },
         card3: {
           title: 'Dzień turnieju open air',
-          text: 'Spotykamy się 6 czerwca o 09:00 na zewnętrznym boisku przy akademiku nr 8 na cały dzień grania.',
+          text: 'Spotykamy się w sobotę 26 września 2026 o 09:00 na boisku plenerowym przy DS nr 8 na cały dzień grania.',
           list1: 'Boisko przy akademiku nr 8',
           list2: 'Przyjazd 30-60 min wcześniej'
         },
@@ -377,9 +401,9 @@
       location: {
         kicker: 'Szczegóły obiektu',
         title: 'Obiekt',
-        text: 'Pocket Aces Court cup 2 gramy na zewnętrznym boisku przy akademiku nr 8 w Łodzi. Przyjedź z drużyną 30-60 minut wcześniej na rejestrację i rozgrzewkę.',
+        text: 'Pocket Aces Court Cup 2 gramy na boisku plenerowym przy DS nr 8 w Łodzi. Przyjedź z drużyną 30-60 minut wcześniej na rejestrację i rozgrzewkę.',
         info: { label: 'Lokalizacja', value: 'Strajku Łódzkich Studentów 1981 r. 2, 91-404 Łódź' },
-        date: { label: 'Data', value: '6 czerwca, 09:00' },
+        date: { label: 'Data', value: 'SOB 26.09.2026, 09:00' },
         link: 'Zobacz na Google Maps'
       },
       location_pill1_title: 'Open-Air Setup',
@@ -389,9 +413,9 @@
       location_pill3_title: 'Płynny Rytm Meczów',
       location_pill3_copy: 'Krótkie przerwy, czytelna przestrzeń przy linii i układ, który pozwala utrzymać tempo każdej rundy.',
       registered: {
-        cta: 'Zobacz drużyny ->',
+        cta: 'ZOBACZ ZAREJESTROWANE DRUŻYNY',
         modal_title: 'Zarejestrowane Drużyny',
-        modal_subtitle: 'Pocket Aces Court cup 2',
+        modal_subtitle: 'Pocket Aces Court Cup 2',
         col_team: 'Drużyna',
         col_captain: 'Kapitan',
         col_level: 'Poziom',
@@ -403,10 +427,10 @@
       road: {
         heading: 'Harmonogram zapisów',
         lead: 'Od zapisu do pierwszego gwizdka: te cztery momenty budują cały tydzień turniejowy.',
-        step1: { date: 'Teraz', title: 'Zapisy otwarte', desc: 'Rejestracja drużyn trwa. Dołącz zanim zniknie 8 miejsc.' },
-        step2: { date: '3 czerwca', title: 'Koniec rejestracji', desc: 'Ostateczny termin na zgłoszenie drużyny do turnieju.' },
-        step3: { date: 'Po zamknięciu', title: 'Info dla kapitanów', desc: 'Szczegóły organizacyjne wydarzenia trafią do zapisanych kapitanów.' },
-        step4: { date: '06.06, 09:00', title: 'Dzień turnieju', desc: 'Pocket Aces Court cup 2 startuje na boisku przy akademiku nr 8.' }
+        step1: { date: 'TERAZ', title: 'REJESTRACJA OTWARTA', desc: 'Rejestracja drużyn trwa. Dołącz zanim zniknie 8 miejsc.' },
+        step2: { date: '20.09.2026', title: 'ZAMKNIĘCIE SKŁADÓW', desc: 'Ostateczny termin na zgłoszenie drużyny do turnieju.' },
+        step3: { date: '22.09.2026', title: 'PUBLIKACJA HARMONOGRAMU', desc: 'Harmonogram meczów trafia do zarejestrowanych kapitanów.' },
+        step4: { date: 'SOB 26.09.2026', title: 'DZIEŃ TURNIEJU', desc: 'Pocket Aces Court Cup 2 startuje o 09:00 na boisku plenerowym przy DS nr 8.' }
       },
       // FAQ page
       faq: {
@@ -422,7 +446,7 @@
         q5: 'Ilu zawodników może być w drużynie?',
         a5: 'Do rozpoczęcia meczu potrzebujesz 6 zawodników na boisku, a rezerwowych możesz zgłosić bez limitu.',
         q6: 'Czy można zmienić zawodnika po rejestracji?',
-        a6: 'Zmiany w składzie są akceptowane tylko do końca rejestracji 3 czerwca. Po starcie turnieju nie można już zmieniać rosteru.',
+        a6: 'Zmiany w składzie są akceptowane tylko do końca rejestracji 20.09.2026. Po starcie turnieju nie można już zmieniać składu.',
         q7: 'Gdzie znajdziemy harmonogram meczów?',
         a7: 'Ostateczny format zależy od liczby zgłoszonych drużyn. Kapitanowie dostaną aktualizacje bezpośrednio, a najważniejsze informacje o harmonogramie pojawią się też na stronie.',
         ask_title: 'Zadaj pytanie',
@@ -433,7 +457,7 @@
       },
       cs: {
         heading: 'Match Centre wkrótce',
-        sub: 'Match Centre rusza <strong>6 czerwca o 09:00</strong>. Do tego czasu wykorzystaj odliczanie, żeby zapisać drużynę na Pocket Aces Court cup 2.',
+        sub: 'Match Centre rusza <strong>w sobotę 26 września 2026 o 09:00</strong>. Do tego czasu wykorzystaj odliczanie, żeby zapisać drużynę na Pocket Aces Court Cup 2.',
         days: 'Dni',
         hours: 'Godz',
         min: 'Min',
@@ -526,17 +550,17 @@
       nav_match_tip: 'Dostępne podczas turnieju',
       nav_faq:       'FAQ',
       nav_gallery:   'Galeria',
-      nav_roster:    'Profil druzyny',
+      nav_roster:    'Profil drużyny',
       nav_register:  'Zapisz się',
       gallery_page: {
         eyebrow: 'Pocket Aces',
         title: 'Galeria',
-        subtitle: 'Zdjęcia i skróty wideo z Pocket Aces Court cup 2.',
+        subtitle: 'Zdjęcia i skróty wideo z Pocket Aces Court Cup 2.',
         photos_title: 'Zdjęcia',
         videos_title: 'Skróty Wideo',
         prev_title: 'Poprzedni Turniej',
         prev_subtitle: 'Archiwum Mediów',
-        empty: 'Galeria zostanie zaktualizowana po rozpoczęciu Pocket Aces Court cup 2.'
+        empty: 'Galeria zostanie zaktualizowana po rozpoczęciu Pocket Aces Court Cup 2.'
       },
       nav: {
         tournament_hub: 'Centrum turnieju',
@@ -546,6 +570,12 @@
       footer_nav: 'Nawigacja',
       footer_documents: 'Dokumenty',
       footer_connect: 'Kontakt',
+      footer_parental: 'Zgoda rodzica',
+      footer_privacy: 'Polityka prywatności',
+      footer_regulations_en: 'Regulamin (EN)',
+      footer_regulations_pl: 'Regulamin (PL)',
+      footer_copyright: '© 2026 POCKET ACES SPORT CLUB',
+      footer_event: 'SOB 26.09.2026 · PLENER',
       footer_about: 'O nas',
       footer_identity: 'Pocket Aces Sport Club — lokalny klub siatkówki organizujący turnieje i wydarzenia.',
       site_identity: 'Pocket Aces Sport Club — lokalny klub siatkówki organizujący turnieje i wydarzenia.',
@@ -554,15 +584,15 @@
       reg_step3:     'Skład',
       reg_title:     'Aktywna Rejestracja',
       reg_subtitle:  'Court<br>Cup&nbsp;2',
-      reg_desc:      'Rejestracja na Pocket Aces Court cup 2 jest otwarta. Bierzemy 8 drużyn na nowe wydarzenie outdoorowe, więc zapisz skład przed 3 czerwca.',
+      reg_desc:      'Rejestracja na Pocket Aces Court Cup 2 jest otwarta. Bierzemy 8 drużyn na turniej plenerowy, więc zapisz skład przed 20.09.2026.',
       reg_fact1_title: '8 Miejsc',
       reg_fact1_copy: 'Kompaktowa stawka, szybka drabinka i bez długiego czekania między ważnymi meczami.',
-      reg_fact2_title: '3 Czerwca',
-      reg_fact2_copy: 'Rejestracja zamyka się 3 czerwca, więc decyzje o składzie trzeba domknąć teraz.',
+      reg_fact2_title: '20.09.2026',
+      reg_fact2_copy: 'Rejestracja zamyka się 20.09.2026, więc decyzje o składzie trzeba domknąć teraz.',
       reg_fact3_title: 'Captain Flow',
       reg_fact3_copy: 'Herb, skład i dane kontaktowe dalej można poprawiać z poziomu profilu drużyny.',
       reg_access_title: 'Chcesz coś zmienić później?',
-      reg_access_copy: 'Po zapisaniu drużyny kapitan nadal może zaktualizować herb i skład w profilu do końca rejestracji 3 czerwca.',
+      reg_access_copy: 'Po zapisaniu drużyny kapitan nadal może zaktualizować herb i skład w profilu do końca rejestracji 20.09.2026.',
       reg_access_cta: 'Otwórz profil kapitana',
       reg_identity:  'Dane drużyny',
       reg_team_name: 'Nazwa Drużyny',
@@ -587,7 +617,7 @@
       reg_media:     'Herb i piosenka wejścia',
       reg_roster:    'Skład Drużyny',
       reg_hint:      'Minimum 6 zawodników',
-      reg_note:      '<strong>Ważne:</strong><br>Kapitan musi być wpisany jako jeden z zawodników poniżej.<br><br>Zakończ zmiany w składzie do 3 czerwca. Turniej gramy na zewnątrz, więc w przypadku złej pogody wydarzenie może zostać przełożone, a kapitanowie dostaną informację bezpośrednio.',
+      reg_note:      '<strong>Ważne:</strong><br>Kapitan musi być wpisany jako jeden z zawodników poniżej.<br><br>Zakończ zmiany w składzie do 20.09.2026. Turniej gramy na zewnątrz, więc w przypadku złej pogody wydarzenie może zostać przełożone, a kapitanowie dostaną informację bezpośrednio.',
       reg_first:     'Imię',
       reg_last:      'Nazwisko',
       reg_jersey:    '#',
@@ -608,7 +638,7 @@
       reg_payment:   'Rozumiem, że wpisowe wynosi <strong>150 zł</strong>, a szczegóły płatności wraz z terminem zostaną przesłane e-mailem',
       reg_submit:    'Zapisz się',
       reg_success:   'Zgłoszenie wysłane!',
-      reg_success_txt: 'Twoja drużyna została zgłoszona do Pocket Aces Court cup 2. Szczegóły płatności i termin zostaną wysłane na Twój adres e-mail.',
+      reg_success_txt: 'Twoja drużyna została zgłoszona do Pocket Aces Court Cup 2. Szczegóły płatności i termin zostaną wysłane na Twój adres e-mail.',
       // Validation
       err_team_name: 'Nazwa drużyny jest wymagana.',
       err_league:    'Wybierz poziom ligi.',
@@ -638,10 +668,10 @@
 
   const MOBILE_TEXT_OVERRIDES = {
     en: {
-      'hero.text': 'Registration is open for Pocket Aces Court cup 2. Outdoor play, 8 teams, first serve at 09:00. Lock your spot before registration closes on June 3.'
+      'hero.text': 'Registration is open for Pocket Aces Court Cup 2. Outdoor volleyball, 8 teams, first serve at 09:00 on Saturday, September 26, 2026. Lock your spot before registration closes.'
     },
     pl: {
-      'hero.text': 'Rejestracja na Pocket Aces Court cup 2 jest otwarta. Gramy na zewnątrz, limit to 8 drużyn, a pierwszy gwizdek o 09:00. Zapisz ekipę przed końcem rejestracji 3 czerwca.'
+      'hero.text': 'Rejestracja na Pocket Aces Court Cup 2 jest otwarta. Gramy na zewnątrz, limit to 8 drużyn, pierwsze podanie 26 września 2026 o 09:00. Zapisz ekipę przed zamknięciem rejestracji.'
     }
   };
 

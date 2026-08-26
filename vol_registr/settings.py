@@ -16,6 +16,8 @@ import importlib
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
+from dotenv import load_dotenv
+
 try:
     import sqlite3  # noqa: F401
 except ModuleNotFoundError:
@@ -26,6 +28,7 @@ except ModuleNotFoundError:
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -157,7 +160,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ASSET_VERSION = os.environ.get('STATIC_ASSET_VERSION', 'dev-20260502-awards-card-copy-2')
+STATIC_ASSET_VERSION = os.environ.get('STATIC_ASSET_VERSION', 'arena-2026-09-v4')
 STORAGES = {
     'staticfiles': {
         'BACKEND': 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage',
@@ -170,10 +173,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'pocketacesteam@gmail.com'     # <-- ваш Gmail
-EMAIL_HOST_PASSWORD = 'nhiq zhdv msql zprj'   # <-- app password, не обычный пароль!
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_BACKEND = os.environ.get(
+    'EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend'
+)
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'true').lower() in {
+    '1', 'true', 'yes', 'on',
+}
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT', '10'))
+DEFAULT_FROM_EMAIL = os.environ.get(
+    'DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'noreply@pocketaces.team'
+)

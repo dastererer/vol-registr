@@ -78,12 +78,15 @@ function initHeroIntro(cfg) {
         });
     }, 3400);
 
-    // Logo
-    tl.to('.hero-logo', {
-        y: 0, opacity: 1,
-        duration: cfg.logo.duration,
-        ease: cfg.logo.ease,
-    });
+    // Logo (legacy templates may still provide one)
+    const heroLogo = document.querySelector('.hero-logo');
+    if (heroLogo) {
+        tl.to(heroLogo, {
+            y: 0, opacity: 1,
+            duration: cfg.logo.duration,
+            ease: cfg.logo.ease,
+        });
+    }
 
     // Date / location label
     tl.to('.hero-label', {

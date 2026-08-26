@@ -41,10 +41,26 @@ logger = logging.getLogger(__name__)
 SOUNDCLOUD_CLIENT_ID: str | None = None
 PREV_TOUR_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 PREV_TOUR_VIDEO_EXTENSIONS = {".mov", ".mp4", ".m4v"}
+PAGE_MEDIA_IMAGE_EXTENSIONS = {".webp", ".jpg", ".jpeg", ".png"}
 
 ROSTER_ACCESS_SALT = "tournament.roster-access"
 ROSTER_ACCESS_MAX_AGE = 60 * 60 * 24 * 3
 ROSTER_MIN_PLAYERS = 6
+
+
+def _page_media_url(stem: str) -> str:
+    """Return the first matching file from media/page without fixing an extension."""
+    page_media_dir = Path(settings.MEDIA_ROOT) / "page"
+    direct_candidate = page_media_dir / stem
+    extension_candidates = sorted(page_media_dir.glob(f"{stem}.*")) if page_media_dir.exists() else []
+    for candidate in [direct_candidate, *extension_candidates]:
+        if candidate.is_file() and (
+            candidate == direct_candidate
+            or candidate.suffix.lower() in PAGE_MEDIA_IMAGE_EXTENSIONS
+        ):
+            media_base = settings.MEDIA_URL.rstrip("/")
+            return f"{media_base}/page/{candidate.name}"
+    return ""
 
 ROSTER_MESSAGE_DEFAULTS = {
     "rp.msg_link_invalid": "This access link is invalid or has expired.",
@@ -461,6 +477,7 @@ def index(request):
         "registration_closed": REGISTRATION_CLOSED,
         "registration_deadline": REGISTRATION_DEADLINE_ISO,
         "voting_enabled": voting_enabled,
+        "hero_photo_url": _page_media_url("main_photo"),
     }
     return render(request, "tournament/index.html", context)
 
@@ -516,6 +533,7 @@ def api_register_team(request):
 
 
     try:
+        email_sent = None
         with transaction.atomic():
             team = register_team(form.cleaned_data, players_data=players_data)
             if logo_file:
@@ -544,7 +562,7 @@ def api_register_team(request):
                     f"Dziekujemy za rejestracje druzyny {team.name} na Pocket Aces Court cup 2.\n\n"
                     "Aby dokonczyc rejestracje, prosimy o oplate wpisowego 150 zl na ponizszy numer BLIK:\n"
                     f"BLIK: {blik}\n"
-                    f"TytuÅ‚: {team.name}\n\n"
+                    f"Tytuł: {team.name}\n\n"
                     "W razie pytan odpowiedz na tego maila.\n\n"
                     "Do zobaczenia na boisku!\n\n"
                     "Pocket Aces Sports Club\n"
@@ -561,15 +579,27 @@ def api_register_team(request):
                     "Pocket Aces Sports Club\n"
                 )
 
-            send_mail(
-                subject=subject,
-                message=message,
-                from_email=None,  # Uses DEFAULT_FROM_EMAIL
-                recipient_list=[user_email],
-                fail_silently=False,
-            )
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=None,  # Uses DEFAULT_FROM_EMAIL
+                    recipient_list=[user_email],
+                    fail_silently=False,
+                )
+                email_sent = True
+            except Exception as exc:
+                email_sent = False
+                logger.warning(
+                    "Team %s was registered, but its payment email could not be sent: %s",
+                    team.id,
+                    exc,
+                )
 
-        return JsonResponse({"success": True, "team_id": team.id})
+        response_data = {"success": True, "team_id": team.id}
+        if email_sent is not None:
+            response_data["email_sent"] = email_sent
+        return JsonResponse(response_data)
 
     except ValueError as exc:
         return JsonResponse({"success": False, "error": str(exc)}, status=400)

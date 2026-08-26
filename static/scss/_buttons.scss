@@ -21,7 +21,7 @@
   border-radius: $radius-2xl;
   border: none;
   cursor: pointer;
-  transition: all $transition-base;
+  transition: transform $transition-base, background-color $transition-base, color $transition-base, border-color $transition-base;
   box-shadow: 0 20px 25px -5px rgba($color-sky-500, 0.3);
 
   &:hover {
@@ -61,7 +61,7 @@
   letter-spacing: 0.2em;
   padding: 1.25rem 0;
   border-radius: $radius-xl;
-  transition: all $transition-base;
+  transition: transform $transition-base, background-color $transition-base, color $transition-base, border-color $transition-base;
   position: relative;
   overflow: hidden;
   border: none;
