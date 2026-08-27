@@ -85,6 +85,10 @@
             >Team Profile</a
           >
 
+          <a href="{% url 'platform:team_list' %}" class="site-nav__link">Teams</a>
+
+          <a href="{% url 'platform:free_agents' %}" class="site-nav__link">Free Agents</a>
+
           {% if not registration_closed %}
           <a
             href="{% url 'register' %}"
@@ -92,6 +96,14 @@
             data-i18n="nav_register"
             >Join Tournament</a
           >
+          {% endif %}
+
+          {% if request.user.is_authenticated %}
+          <a href="{% url 'platform:profile' %}" class="site-nav__link">Account</a>
+          <a href="{% url 'logout' %}" class="site-nav__link">Log out</a>
+          {% else %}
+          <a href="{% url 'login' %}" class="site-nav__link">Log in</a>
+          <a href="{% url 'platform:signup' %}" class="site-nav__link">Sign up</a>
           {% endif %}
         </div>
 
@@ -121,6 +133,18 @@
       <div class="site-nav__overlay" id="navOverlay"></div>
     </nav>
 
+    <!-- Sponsor banner -->
+    <aside class="sponsor-banner" style="background:{{ sponsor.background_color }};color:{{ sponsor.text_color }};">
+      <div class="sponsor-banner__inner">
+        <span class="sponsor-banner__label">Powered by</span>
+        <a href="{{ sponsor.website }}" target="_blank" rel="noopener" class="sponsor-banner__brand">
+          <img src="{{ sponsor.logo_url }}" alt="{{ sponsor.name }}" loading="lazy" />
+          <span>{{ sponsor.name }}</span>
+        </a>
+        <span class="sponsor-banner__tagline">{{ sponsor.tagline }}</span>
+      </div>
+    </aside>
+
     <div class="site-main">
       {% block content %}{% endblock %}
     </div>
@@ -128,6 +152,22 @@
     <!-- Site Footer -->
     <footer class="site-footer">
       <div class="site-footer__wordmark" aria-hidden="true">POCKET ACES</div>
+
+      <!-- Sponsor footer block -->
+      <div class="sponsor-footer" style="background:{{ sponsor.background_color }};color:{{ sponsor.text_color }};">
+        <div class="sponsor-footer__inner">
+          <a href="{{ sponsor.website }}" target="_blank" rel="noopener" class="sponsor-footer__logo">
+            <img src="{{ sponsor.logo_url }}" alt="{{ sponsor.name }}" loading="lazy" />
+          </a>
+          <div class="sponsor-footer__body">
+            <strong>{{ sponsor.name }}</strong>
+            <span>{{ sponsor.tagline }}</span>
+          </div>
+          <a href="{% url 'platform:team_list' %}" class="sponsor-footer__cta" style="background:{{ sponsor.accent_color }};color:#fff;">
+            Order for your team
+          </a>
+        </div>
+      </div>
 
       <div class="site-footer__inner">
         <div class="site-footer__col">

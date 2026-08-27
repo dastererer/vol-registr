@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ profile.display_name|default:profile.user.username }} — Player Card — Pocket Aces{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<section class="platform-section">
+  <div class="platform-container">
+    <p class="platform-subhead">Digital Trading Card</p>
+    <h1 class="platform-heading">Player Card</h1>
+
+    <div class="player-card-wrap">
+      <div id="tradingCard" class="trading-card">
+        <div class="trading-card__header">
+          <div class="trading-card__team">{{ team.name|default:"FREE AGENT" }}</div>
+          <div class="trading-card__name">{{ profile.display_name|default:profile.user.username|upper }}</div>
+        </div>
+        <div class="trading-card__photo">
+          {% if team_logo_url %}
+          <img src="{{ team_logo_url }}" alt="" class="trading-card__logo">
+          {% endif %}
+          {% if profile.photo %}
+          <img src="{{ profile.photo.url }}" alt="{{ profile.display_name|default:profile.user.username }}">
+          {% else %}
+          <i class="fas fa-user trading-card__photo-placeholder"></i>
+          {% endif %}
+        </div>
+        <div class="trading-card__stats">
+          <div class="trading-card__stat"><b>{{ position_label }}</b>Position</div>
+          <div class="trading-card__stat"><b>{{ team.roster_profiles.count|default:0 }}</b>Squad</div>
+          <div class="trading-card__stat"><b>{{ profile.user.username|upper }}</b>Handle</div>
+          <div class="trading-card__stat"><b>{{ profile.user.date_joined|date:"Y" }}</b>Member</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;">
+        <button id="downloadCard" class="platform-btn"><i class="fas fa-download"></i> Download Card</button>
+        <button id="shareCard" class="platform-btn platform-btn--secondary"><i class="fas fa-share-alt"></i> Share</button>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const card = document.getElementById('tradingCard');
+    const downloadBtn = document.getElementById('downloadCard');
+    const shareBtn = document.getElementById('shareCard');
+
+    downloadBtn.addEventListener('click', async () => {
+      const canvas = await html2canvas(card, { backgroundColor: null, scale: 2 });
+      const link = document.createElement('a');
+      link.download = 'pocket-aces-card.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+
+    shareBtn.addEventListener('click', async () => {
+      const canvas = await html2canvas(card, { backgroundColor: null, scale: 2 });
+      canvas.toBlob(async (blob) => {
+        const file = new File([blob], 'pocket-aces-card.png', { type: 'image/png' });
+        const shareData = {
+          title: 'Pocket Aces Player Card',
+          text: 'Check out my Pocket Aces player card!',
+          files: [file],
+        };
+        if (navigator.canShare && navigator.canShare(shareData)) {
+          try { await navigator.share(shareData); } catch (e) { /* cancelled */ }
+        } else {
+          alert('Sharing not supported on this device. Download the card instead.');
+        }
+      }, 'image/png');
+    });
+  });
+</script>
+{% endblock %}

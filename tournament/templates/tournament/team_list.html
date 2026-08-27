@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Teams — Pocket Aces{% endblock %}
+
+{% block content %}
+<section class="platform-section">
+  <div class="platform-container">
+    <p class="platform-subhead">Rosters</p>
+    <h1 class="platform-heading">Teams</h1>
+
+    <div style="margin-bottom:1.5rem;">
+      <a href="{% url 'platform:team_create' %}" class="platform-btn">+ Create Team</a>
+      <a href="{% url 'platform:free_agents' %}" class="platform-btn platform-btn--secondary">Free Agents</a>
+    </div>
+
+    <div class="team-grid">
+      {% for team in teams %}
+      <article class="team-card">
+        <h2 class="team-card__name">{{ team.name }}</h2>
+        <p class="team-meta">{{ team.roster_profiles.count }} player{{ team.roster_profiles.count|pluralize }}</p>
+        {% if team.roster_profiles.exists %}
+        <ul class="team-card__roster">
+          {% for p in team.roster_profiles.all %}
+          <li>{{ p.display_name|default:p.user.username }} {% if p.position %}<span class="team-meta">({{ p.get_position_display }})</span>{% endif %}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <a href="{% url 'platform:team_detail' team_id=team.id %}" class="platform-btn" style="margin-top:1rem; width:100%;">Open Team</a>
+      </article>
+      {% empty %}
+      <p>No teams yet. <a href="{% url 'platform:team_create' %}">Create the first one</a>.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

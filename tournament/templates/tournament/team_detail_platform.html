@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ team.name }} — Team — Pocket Aces{% endblock %}
+
+{% block content %}
+<section class="platform-section">
+  <div class="platform-container">
+    <p class="platform-subhead">Team HQ</p>
+    <h1 class="platform-heading">{{ team.name }}</h1>
+
+    {% if is_captain %}
+    <div class="platform-card" style="max-width:640px; margin-bottom:1.5rem;">
+      <h2 class="platform-subhead">Captain Dashboard</h2>
+      <a href="{% url 'platform:pizza_order' team_id=team.id %}" class="platform-btn" style="background:{{ sponsor.accent_color }}; border-color:{{ sponsor.accent_color }};">
+        🍕 Order Pizzas
+      </a>
+
+      {% if applications %}
+      <h3 class="platform-subhead" style="margin-top:1.5rem;">Pending Applications</h3>
+      {% for app in applications %}
+      <div class="application-item">
+        <div>
+          <strong>{{ app.profile.display_name|default:app.profile.user.username }}</strong>
+          <p class="team-meta">{{ app.message|linebreaksbr }}</p>
+        </div>
+        <div style="display:flex; gap:0.5rem;">
+          <form method="post" action="{% url 'platform:application_resolve' application_id=app.id action='accept' %}">
+            {% csrf_token %}
+            <button class="platform-btn">Accept</button>
+          </form>
+          <form method="post" action="{% url 'platform:application_resolve' application_id=app.id action='reject' %}">
+            {% csrf_token %}
+            <button class="platform-btn platform-btn--danger">Reject</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="team-meta" style="margin-top:1rem;">No pending applications.</p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="platform-card" style="max-width:640px; margin-bottom:1.5rem;">
+      <h2 class="platform-subhead">Roster</h2>
+      {% if team.roster_profiles.exists %}
+      <ul class="team-card__roster">
+        {% for p in team.roster_profiles.all %}
+        <li>
+          <a href="{% url 'platform:player_card' profile_id=p.id %}">{{ p.display_name|default:p.user.username }}</a>
+          {% if p.position %}<span class="team-meta">— {{ p.get_position_display }}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>No players have joined yet.</p>
+      {% endif %}
+
+      {% if can_apply %}
+      <div class="platform-card" style="margin-top:1.5rem; background:var(--ink-3); color:var(--paper);">
+        <h3 class="platform-subhead" style="color:var(--paper);">Want to join?</h3>
+        <form method="post" action="{% url 'platform:team_apply' team_id=team.id %}" class="platform-form">
+          {% csrf_token %}
+          {{ application_form.message }}
+          <button type="submit" class="platform-btn">Apply to Join</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

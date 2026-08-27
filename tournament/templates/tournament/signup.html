@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign up — Pocket Aces{% endblock %}
+
+{% block content %}
+<section class="platform-section">
+  <div class="platform-container" style="max-width:520px;">
+    <p class="platform-subhead">Join the Platform</p>
+    <h1 class="platform-heading">Create Account</h1>
+
+    <div class="platform-card">
+      <form method="post" class="platform-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<small style="color:var(--signal);">{{ field.errors|striptags }}</small>{% endif %}
+        {% endfor %}
+        <button type="submit" class="platform-btn" style="width:100%;">Create Account</button>
+      </form>
+    </div>
+
+    <p style="margin-top:1rem; text-align:center;">
+      Already have an account? <a href="{% url 'login' %}" style="text-decoration:underline;">Log in</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

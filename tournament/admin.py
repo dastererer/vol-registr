@@ -4,9 +4,13 @@ from django.http import HttpResponse
 
 from .models import (
     AuditEntry,
+    PizzaOrder,
     Player,
+    PlayerProfile,
     Team,
+    TeamApplication,
     TeamFanVote,
+    TeamInvite,
 )
 
 
@@ -38,6 +42,38 @@ class PlayerAdmin(admin.ModelAdmin):
     list_display = ("first_name", "last_name", "team", "jersey_number", "position")
     list_filter = ("position", "team__group_name")
     search_fields = ("first_name", "last_name", "team__name", "jersey_number")
+
+
+@admin.register(PlayerProfile)
+class PlayerProfileAdmin(admin.ModelAdmin):
+    list_display = ("user", "display_name", "position", "team", "is_free_agent", "phone")
+    list_filter = ("position", "is_free_agent", "team__group_name")
+    search_fields = ("user__username", "user__email", "display_name", "phone")
+    raw_id_fields = ("user", "team")
+
+
+@admin.register(TeamApplication)
+class TeamApplicationAdmin(admin.ModelAdmin):
+    list_display = ("profile", "team", "status", "created_at", "resolved_at")
+    list_filter = ("status",)
+    search_fields = ("profile__user__username", "team__name")
+    raw_id_fields = ("profile", "team")
+
+
+@admin.register(TeamInvite)
+class TeamInviteAdmin(admin.ModelAdmin):
+    list_display = ("team", "profile", "status", "created_at", "resolved_at")
+    list_filter = ("status",)
+    search_fields = ("team__name", "profile__user__username")
+    raw_id_fields = ("team", "profile")
+
+
+@admin.register(PizzaOrder)
+class PizzaOrderAdmin(admin.ModelAdmin):
+    list_display = ("team", "pizza_type", "quantity", "created_by", "created_at")
+    list_filter = ("pizza_type",)
+    search_fields = ("team__name",)
+    raw_id_fields = ("team", "created_by")
 
 
 @admin.register(TeamFanVote)

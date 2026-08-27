@@ -12,6 +12,30 @@ MAX_TOURNAMENT_SLOTS = 8
 REGISTRATION_CLOSED = False
 REGISTRATION_DEADLINE_ISO = "2026-06-03T23:59:00+02:00"
 
+# ── Membership workflow statuses ─────────────────────────
+APPLICATION_PENDING = "PENDING"
+APPLICATION_ACCEPTED = "ACCEPTED"
+APPLICATION_REJECTED = "REJECTED"
+
+APPLICATION_STATUS_CHOICES = [
+    (APPLICATION_PENDING, "Pending"),
+    (APPLICATION_ACCEPTED, "Accepted"),
+    (APPLICATION_REJECTED, "Rejected"),
+]
+
+INVITE_PENDING = "PENDING"
+INVITE_ACCEPTED = "ACCEPTED"
+INVITE_REJECTED = "REJECTED"
+INVITE_CANCELLED = "CANCELLED"
+
+INVITE_STATUS_CHOICES = [
+    (INVITE_PENDING, "Pending"),
+    (INVITE_ACCEPTED, "Accepted"),
+    (INVITE_REJECTED, "Rejected"),
+    (INVITE_CANCELLED, "Cancelled"),
+]
+
+
 # ── Payment Status ───────────────────────────────────────
 PAYMENT_WAITING = 0
 PAYMENT_ACCEPTED = 1
@@ -41,6 +65,52 @@ PAYMENT_ACCOUNTS = [
     {"blik": "793 424 526", "capacity": 6},
     {"blik": "572 637 803", "capacity": 3},
     {"blik": "535 054 366", "capacity": 3},
+]
+
+
+# ── Sponsor / Pizzeria Kultowa ───────────────────────────
+PIZZERIA_KULTOWA = {
+    "name": "Pizzeria Kultowa",
+    "tagline": "Kultowa pizza z dostawą na każdy mecz",
+    "accent_color": "#BF1A20",
+    "background_color": "#111111",
+    "text_color": "#FFFFFF",
+    "logo_url": "https://cs.cdn-upm.com/themes/b7746e1a-9a35-11ec-9695-525400080621/assets-20/logopizzeriakultowa3.webp?v=3",
+    "website": "https://www.pizzeriakultowa.pl/menu",
+}
+
+PIZZA_KULTOWA = "KULTOWA"
+PIZZA_KLASYK = "KLASYK"
+PIZZA_RARYTAS = "RARYTAS"
+PIZZA_BAJERANCKA = "BAJERANCKA"
+PIZZA_ZASADNICZA = "ZASADNICZA"
+PIZZA_SZTOS = "SZTOS"
+
+PIZZA_CHOICES = [
+    (
+        PIZZA_KULTOWA,
+        "KULTOWA — sos pomidorowy, mozzarella, szynka, pieczarki, oregano",
+    ),
+    (
+        PIZZA_KLASYK,
+        "KLASYK — sos pomidorowy, mozzarella, oregano (VEGE)",
+    ),
+    (
+        PIZZA_RARYTAS,
+        "RARYTAS — sos pomidorowy, mozzarella, szynka, ananas, oregano",
+    ),
+    (
+        PIZZA_BAJERANCKA,
+        "BAJERANCKA — sos pomidorowy, mozzarella, salami peperoni, oliwki zielone, oregano",
+    ),
+    (
+        PIZZA_ZASADNICZA,
+        "ZASADNICZA — sos pomidorowy, mozzarella, szynka, oregano",
+    ),
+    (
+        PIZZA_SZTOS,
+        "SZTOS — sos pomidorowy, mozzarella, salami peperoni, ser pleśniowy, oregano",
+    ),
 ]
 
 # ── Field Limits ─────────────────────────────────────────
@@ -188,6 +258,10 @@ ROSTER_CODE_LENGTH = 6
 # ── DB Table Names ───────────────────────────────────────
 TABLE_TEAMS = "Teams"
 TABLE_PLAYERS = "Players"
+TABLE_PLAYER_PROFILES = "player_profiles"
+TABLE_TEAM_APPLICATIONS = "team_applications"
+TABLE_TEAM_INVITES = "team_invites"
+TABLE_PIZZA_ORDERS = "pizza_orders"
 TABLE_MATCHES = "matches"
 TABLE_GAME_SETS = "game_sets"
 TABLE_PLAYER_MATCH_STATS = "player_match_stats"
@@ -200,3 +274,5 @@ TABLE_GALLERY_PHOTOS = "gallery_photos"
 TABLE_GALLERY_VIDEOS = "gallery_videos"
 TABLE_AUDIT_ENTRIES = "audit_entries"
 TABLE_SCHEDULE_EVENTS = "schedule_events"
+TABLE_POWER_RANKING_ARTICLES = "power_ranking_articles"
+TABLE_HIGHLIGHTS = "highlights"

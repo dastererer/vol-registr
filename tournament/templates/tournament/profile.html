@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Your Profile — Pocket Aces{% endblock %}
+
+{% block content %}
+<section class="platform-section">
+  <div class="platform-container">
+    <p class="platform-subhead">Player Identity</p>
+    <h1 class="platform-heading">Your Profile</h1>
+
+    <div class="platform-card" style="max-width:640px;">
+      <form method="post" enctype="multipart/form-data" class="platform-form">
+        {% csrf_token %}
+        {% for field in form %}
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<small style="color:var(--muted);">{{ field.help_text }}</small>{% endif %}
+          {% if field.errors %}<small style="color:var(--signal);">{{ field.errors|striptags }}</small>{% endif %}
+        {% endfor %}
+        <button type="submit" class="platform-btn">Save Profile</button>
+        <a href="{% url 'platform:my_card' %}" class="platform-btn platform-btn--secondary">View Player Card</a>
+      </form>
+    </div>
+
+    <div class="platform-card" style="max-width:640px; margin-top:1.5rem;">
+      <h2 class="platform-subhead">Team Membership</h2>
+      {% if profile.team %}
+        <p><strong>{{ profile.team.name }}</strong></p>
+        <a href="{% url 'platform:team_detail' team_id=profile.team.id %}" class="platform-btn platform-btn--secondary">Team Page</a>
+        {% if profile.team.captain_user_id != request.user.id %}
+        <form method="post" action="{% url 'platform:leave_team' %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="platform-btn platform-btn--danger">Leave Team</button>
+        </form>
+        {% endif %}
+      {% else %}
+        <p>You are a free agent.</p>
+        <a href="{% url 'platform:team_list' %}" class="platform-btn">Browse Teams</a>
+        <a href="{% url 'platform:team_create' %}" class="platform-btn platform-btn--secondary">Create Team</a>
+      {% endif %}
+
+      {% if profile.invites.all %}
+      <h3 class="platform-subhead" style="margin-top:1.5rem;">Pending Invites</h3>
+      <ul>
+        {% for invite in profile.invites.all %}
+        {% if invite.status == "PENDING" %}
+        <li>
+          {{ invite.team.name }}
+          <form method="post" action="{% url 'platform:resolve_invite' invite_id=invite.id action='accept' %}" style="display:inline;">
+            {% csrf_token %}
+            <button class="platform-btn">Accept</button>
+          </form>
+          <form method="post" action="{% url 'platform:resolve_invite' invite_id=invite.id action='reject' %}" style="display:inline;">
+            {% csrf_token %}
+            <button class="platform-btn platform-btn--danger">Reject</button>
+          </form>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

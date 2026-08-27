@@ -1,0 +1,50 @@
+{% extends "panel/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="pnl-cr">
+  <div class="pnl-kpi-grid" style="margin-bottom:24px;">
+    {% for row in type_totals %}
+    <div class="pnl-kpi" style="border-left:3px solid {{ sponsor.accent_color }};">
+      <div class="pnl-kpi__icon"><i class="fas fa-pizza-slice"></i></div>
+      <div class="pnl-kpi__body">
+        <span class="pnl-kpi__value pnl-mono">{{ row.total }}</span>
+        <span class="pnl-kpi__label">{{ row.pizza_type }}</span>
+      </div>
+    </div>
+    {% empty %}
+    <div class="pnl-kpi">
+      <div class="pnl-kpi__body">
+        <span class="pnl-kpi__label">No pizza orders yet.</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="pnl-card" style="background:var(--pnl-surface); border:1px solid var(--pnl-border); padding:16px;">
+    <h2 style="margin-bottom:16px;">Kitchen Logistics</h2>
+    <table class="pizza-table" style="color:var(--pnl-text);">
+      <thead>
+        <tr><th>Pizza</th><th>Team</th><th>Qty</th></tr>
+      </thead>
+      <tbody>
+        {% for row in orders %}
+        <tr>
+          <td>{{ row.pizza_type }}</td>
+          <td>{{ row.team__name }}</td>
+          <td>{{ row.total }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:24px; display:flex; align-items:center; gap:16px;">
+    <img src="{{ sponsor.logo_url }}" alt="{{ sponsor.name }}" style="height:48px;">
+    <div>
+      <strong>{{ sponsor.name }}</strong><br>
+      <a href="{{ sponsor.website }}" target="_blank" rel="noopener" style="color:var(--pnl-accent);">{{ sponsor.website }}</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

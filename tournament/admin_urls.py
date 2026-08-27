@@ -32,6 +32,7 @@ from .panel.backup_views import (
     db_download_current,
     db_restore,
 )
+from tournament.platform_views import pizza_admin_summary_view
 
 app_name = "panel"
 
@@ -58,6 +59,7 @@ urlpatterns = [
     path("players/<int:pk>/", player_detail_view, name="player_detail"),
     path("players/<int:pk>/edit/", player_edit_view, name="player_edit"),
     path("players/<int:pk>/delete/", player_delete_view, name="player_delete"),
+    path("pizza-summary/", pizza_admin_summary_view, name="pizza_summary"),
 
     # ── DB Backup / Restore ──
     path("backup/", db_backup_view, name="db_backup"),

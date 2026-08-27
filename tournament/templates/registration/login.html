@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Log in — Pocket Aces{% endblock %}
+
+{% block content %}
+<section class="platform-section">
+  <div class="platform-container" style="max-width:520px;">
+    <p class="platform-subhead">Platform Access</p>
+    <h1 class="platform-heading">Log In</h1>
+
+    {% if form.errors %}
+    <div class="platform-card" style="border-color:var(--signal); margin-bottom:1rem;">
+      Invalid username or password.
+    </div>
+    {% endif %}
+
+    <div class="platform-card">
+      <form method="post" action="{% url 'login' %}" class="platform-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next|default:'/profile/' }}">
+        <label for="id_username">Username</label>
+        <input type="text" name="username" id="id_username" autofocus required>
+
+        <label for="id_password">Password</label>
+        <input type="password" name="password" id="id_password" required>
+
+        <button type="submit" class="platform-btn" style="width:100%;">Log in</button>
+      </form>
+    </div>
+
+    <p style="margin-top:1rem; text-align:center;">
+      No account? <a href="{% url 'platform:signup' %}" style="text-decoration:underline;">Sign up</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

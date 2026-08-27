@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Free Agents — Pocket Aces{% endblock %}
+
+{% block content %}
+<section class="platform-section">
+  <div class="platform-container">
+    <p class="platform-subhead">Transfer Market</p>
+    <h1 class="platform-heading">Free Agents</h1>
+
+    <div class="free-agent-filter">
+      <a href="{% url 'platform:free_agents' %}" class="{% if not selected_position %}active{% endif %}">All</a>
+      {% for code, label in position_choices %}
+      <a href="{% url 'platform:free_agents' %}?position={{ code }}" class="{% if selected_position == code %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="free-agent-grid">
+      {% for p in profiles %}
+      <article class="free-agent-card">
+        <h2 class="free-agent-card__name">{{ p.display_name|default:p.user.username }}</h2>
+        <p class="free-agent-card__meta">
+          {% if p.position %}{{ p.get_position_display }}{% else %}No position{% endif %}
+        </p>
+        {% if p.photo %}
+        <img src="{{ p.photo.url }}" alt="" style="width:100%; height:160px; object-fit:cover; margin-bottom:0.75rem;">
+        {% endif %}
+        {% if captain_team %}
+        <form method="post" action="{% url 'platform:send_invite' profile_id=p.id %}" class="platform-form">
+          {% csrf_token %}
+          <textarea name="message" rows="2" placeholder="Recruiting message..." style="margin-bottom:0.5rem;"></textarea>
+          <button type="submit" class="platform-btn" style="width:100%;">Send Invite</button>
+        </form>
+        {% elif request.user.is_authenticated %}
+        <p class="team-meta">Create or captain a team to recruit.</p>
+        {% else %}
+        <a href="{% url 'login' %}" class="platform-btn" style="width:100%;">Log in to Recruit</a>
+        {% endif %}
+      </article>
+      {% empty %}
+      <p>No free agents available.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

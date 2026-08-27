@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create Team — Pocket Aces{% endblock %}
+
+{% block content %}
+<section class="platform-section">
+  <div class="platform-container" style="max-width:520px;">
+    <p class="platform-subhead">Start a Squad</p>
+    <h1 class="platform-heading">Create Team</h1>
+
+    <div class="platform-card">
+      <form method="post" class="platform-form">
+        {% csrf_token %}
+        <label for="id_name">Team Name</label>
+        {{ form.name }}
+        <button type="submit" class="platform-btn" style="width:100%;">Create & Become Captain</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
