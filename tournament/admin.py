@@ -4,9 +4,11 @@ from django.http import HttpResponse
 
 from .models import (
     AuditEntry,
+    Highlight,
     PizzaOrder,
     Player,
     PlayerProfile,
+    PowerRankingArticle,
     Team,
     TeamApplication,
     TeamFanVote,
@@ -73,6 +75,22 @@ class PizzaOrderAdmin(admin.ModelAdmin):
     list_display = ("team", "pizza_type", "quantity", "created_by", "created_at")
     list_filter = ("pizza_type",)
     search_fields = ("team__name",)
+    raw_id_fields = ("team", "created_by")
+
+
+@admin.register(PowerRankingArticle)
+class PowerRankingArticleAdmin(admin.ModelAdmin):
+    list_display = ("title", "publish_date", "author", "is_published")
+    list_filter = ("is_published",)
+    search_fields = ("title", "content")
+    date_hierarchy = "publish_date"
+
+
+@admin.register(Highlight)
+class HighlightAdmin(admin.ModelAdmin):
+    list_display = ("title", "team", "domain", "created_by", "created_at")
+    list_filter = ("team",)
+    search_fields = ("title", "url")
     raw_id_fields = ("team", "created_by")
 
 

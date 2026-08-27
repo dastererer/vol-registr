@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import platform_views
+from . import phase2_views, platform_views
 
 app_name = "platform"
 
@@ -37,4 +37,11 @@ urlpatterns = [
     # Pizza
     path("teams/<int:team_id>/pizza/", platform_views.pizza_order_view, name="pizza_order"),
     path("pizza/<int:order_id>/delete/", platform_views.pizza_order_delete_view, name="pizza_delete"),
+    # Power Rankings
+    path("rankings/", phase2_views.rankings_list_view, name="rankings"),
+    path("rankings/<int:article_id>/", phase2_views.ranking_detail_view, name="ranking_detail"),
+    path("rankings/create/", phase2_views.ranking_create_view, name="ranking_create"),
+    # Live Feed
+    path("live-feed/", phase2_views.live_feed_view, name="live_feed"),
+    path("live-feed/submit/", phase2_views.highlight_submit_view, name="highlight_submit"),
 ]

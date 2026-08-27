@@ -18,9 +18,11 @@ from .constants import (
     PIZZA_CHOICES,
     POSITION_CHOICES,
     TABLE_AUDIT_ENTRIES,
+    TABLE_HIGHLIGHTS,
     TABLE_PIZZA_ORDERS,
     TABLE_PLAYER_PROFILES,
     TABLE_PLAYERS,
+    TABLE_POWER_RANKING_ARTICLES,
     TABLE_TEAM_APPLICATIONS,
     TABLE_TEAM_INVITES,
     TABLE_TEAMS,
@@ -398,4 +400,65 @@ class PizzaOrder(models.Model):
 
     def __str__(self) -> str:
         return f"{self.quantity}x {self.pizza_type} for {self.team.name}"
+
+
+
+# ── Media & Hype ──────────────────────────────────────────────────────────────
+
+class PowerRankingArticle(models.Model):
+    """Pre-tournament hype article ranking teams."""
+
+    title = models.CharField(max_length=200)
+    content = models.TextField(help_text="Rich text content. Use Markdown or HTML.")
+    publish_date = models.DateTimeField(db_index=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    is_published = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = TABLE_POWER_RANKING_ARTICLES
+        ordering = ["-publish_date"]
+        verbose_name = "Power Ranking Article"
+        verbose_name_plural = "Power Ranking Articles"
+
+    def __str__(self) -> str:
+        return self.title
+
+
+class Highlight(models.Model):
+    """External video highlight shared by authenticated users."""
+
+    title = models.CharField(max_length=200)
+    url = models.URLField(max_length=500)
+    team = models.ForeignKey(
+        Team,
+        on_delete=models.CASCADE,
+        related_name="highlights",
+    )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        db_table = TABLE_HIGHLIGHTS
+        ordering = ["-created_at"]
+        verbose_name = "Highlight"
+        verbose_name_plural = "Highlights"
+
+    def __str__(self) -> str:
+        return self.title
+
+    @property
+    def domain(self) -> str:
+        from urllib.parse import urlparse
+        return urlparse(self.url).netloc.replace("www.", "")
 

@@ -89,6 +89,10 @@
 
           <a href="{% url 'platform:free_agents' %}" class="site-nav__link">Free Agents</a>
 
+          <a href="{% url 'platform:rankings' %}" class="site-nav__link">Rankings</a>
+
+          <a href="{% url 'platform:live_feed' %}" class="site-nav__link">Live Feed</a>
+
           {% if not registration_closed %}
           <a
             href="{% url 'register' %}"

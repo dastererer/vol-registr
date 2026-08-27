@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Submit Highlight — Pocket Aces{% endblock %}
+
+{% block content %}
+<section class="platform-section">
+  <div class="platform-container" style="max-width:520px;">
+    <p class="platform-subhead">Live Feed</p>
+    <h1 class="platform-heading">Submit Highlight</h1>
+
+    <div class="platform-card">
+      <form method="post" class="platform-form">
+        {% csrf_token %}
+        {% for field in form %}
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<small style="color:var(--signal);">{{ field.errors|striptags }}</small>{% endif %}
+        {% endfor %}
+        <button type="submit" class="platform-btn" style="width:100%;">Submit</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -9,11 +9,14 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from .constants import PIZZA_CHOICES, POSITION_CHOICES
 from .models import (
+    Highlight,
     PizzaOrder,
     PlayerProfile,
+    PowerRankingArticle,
     Team,
     TeamApplication,
     TeamInvite,
@@ -135,5 +138,37 @@ class PizzaOrderForm(forms.ModelForm):
         fields = ["pizza_type", "quantity"]
         widgets = {
             "quantity": forms.NumberInput(attrs={"min": 1, "max": 99}),
+        }
+
+
+
+# ── Media & Hype ─────────────────────────────────────────────────────────────
+
+class PowerRankingArticleForm(forms.ModelForm):
+    """Admin/editor form for publishing power rankings."""
+
+    class Meta:
+        model = PowerRankingArticle
+        fields = ["title", "content", "publish_date", "is_published"]
+        widgets = {
+            "publish_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+        }
+
+    def clean_publish_date(self):
+        value = self.cleaned_data.get("publish_date")
+        if value is not None and timezone.is_naive(value):
+            value = timezone.make_aware(value)
+        return value
+
+
+class HighlightForm(forms.ModelForm):
+    """Authenticated users submit external video links."""
+
+    class Meta:
+        model = Highlight
+        fields = ["title", "url", "team"]
+        widgets = {
+            "title": forms.TextInput(attrs={"placeholder": "e.g. Insane block vs Tigers"}),
+            "url": forms.URLInput(attrs={"placeholder": "https://youtube.com/shorts/..."}),
         }
 

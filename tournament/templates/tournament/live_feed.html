@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Live Feed — Pocket Aces{% endblock %}
+
+{% block content %}
+<section class="platform-section">
+  <div class="platform-container" style="max-width:560px;">
+    <p class="platform-subhead">Tournament Hype</p>
+    <h1 class="platform-heading">Live Feed</h1>
+
+    <div style="margin-bottom:1.5rem;">
+      {% if request.user.is_authenticated %}
+      <a href="{% url 'platform:highlight_submit' %}" class="platform-btn">+ Submit Highlight</a>
+      {% else %}
+      <a href="{% url 'login' %}?next={% url 'platform:highlight_submit' %}" class="platform-btn">Log in to Submit</a>
+      {% endif %}
+    </div>
+
+    <div class="feed-stack">
+      {% for h in highlights %}
+      <article class="feed-card">
+        <div class="feed-card__header">
+          <span class="feed-card__team">{{ h.team.name }}</span>
+          <span class="feed-card__time">{{ h.created_at|timesince }} ago</span>
+        </div>
+        <h2 class="feed-card__title">{{ h.title }}</h2>
+        <a href="{{ h.url }}" target="_blank" rel="noopener" class="feed-card__link">
+          <i class="fas fa-play-circle"></i> Watch on {{ h.domain }}
+        </a>
+        {% if h.created_by %}<p class="team-meta">posted by {{ h.created_by.username }}</p>{% endif %}
+      </article>
+      {% empty %}
+      <p>No highlights yet. Be the first to share the action.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -131,6 +131,30 @@
     </div>
 </div>
 
+{% if latest_rankings %}
+<!-- Power Rankings Hype -->
+<section class="section section--rankings" id="rankings">
+    <div class="container">
+        <div class="section-heading-wrap" data-reveal>
+            <span class="section-kicker">// HYPE</span>
+            <span class="section-ghost" aria-hidden="true">RANK</span>
+            <h2 class="section-heading">Power Rankings</h2>
+            <p class="section-subtitle">Pre-tournament takes from the desk.</p>
+        </div>
+        <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            {% for article in latest_rankings %}
+            <article class="platform-card" data-reveal>
+                <h3 style="font-family: var(--font-display); text-transform: uppercase; font-size: 1.5rem; margin-bottom: 0.5rem;">{{ article.title }}</h3>
+                <p class="team-meta">{{ article.publish_date|date:"j F Y" }}</p>
+                <p style="margin: 0.75rem 0;">{{ article.content|truncatewords:25 }}</p>
+                <a href="{% url 'platform:ranking_detail' article_id=article.id %}" class="platform-btn platform-btn--secondary">Read</a>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
 {% if voting_enabled %}
 <!-- Fan Voting -->
 <section class="section section--fan-voting" id="fan-voting">

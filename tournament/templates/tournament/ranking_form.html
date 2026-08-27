@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create Ranking — Pocket Aces{% endblock %}
+
+{% block content %}
+<section class="platform-section">
+  <div class="platform-container" style="max-width:720px;">
+    <p class="platform-subhead">Admin</p>
+    <h1 class="platform-heading">New Power Ranking</h1>
+
+    <div class="platform-card">
+      <form method="post" class="platform-form">
+        {% csrf_token %}
+        {% for field in form %}
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<small style="color:var(--muted);">{{ field.help_text }}</small>{% endif %}
+          {% if field.errors %}<small style="color:var(--signal);">{{ field.errors|striptags }}</small>{% endif %}
+        {% endfor %}
+        <button type="submit" class="platform-btn">Publish</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

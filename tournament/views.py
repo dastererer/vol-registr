@@ -21,6 +21,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.templatetags.static import static as static_url
 from django.core.mail import send_mail
 from django.urls import reverse
+from django.utils import timezone
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_GET, require_POST
@@ -467,6 +468,7 @@ def index(request):
     total_votes = sum(t.confirmed_votes for t in teams)
     max_votes = max((t.confirmed_votes for t in teams), default=1)
     
+    from .models import PowerRankingArticle
     context = {
         "available_slots": available,
         "registered_teams": MAX_TOURNAMENT_SLOTS - available,
@@ -478,6 +480,9 @@ def index(request):
         "registration_deadline": REGISTRATION_DEADLINE_ISO,
         "voting_enabled": voting_enabled,
         "hero_photo_url": _page_media_url("main_photo"),
+        "latest_rankings": PowerRankingArticle.objects.filter(
+            is_published=True, publish_date__lte=timezone.now()
+        ).order_by("-publish_date")[:3],
     }
     return render(request, "tournament/index.html", context)
 
