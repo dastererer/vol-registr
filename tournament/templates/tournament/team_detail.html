@@ -104,7 +104,9 @@
     grid-column: 1 / -1;
   }
 
-  .team-vote-btn {
+  /* Scoped (.team-vote-wrap) so these win over the voting board's
+     44px icon-button rules (.vote-btn) in brutal.css. */
+  .team-vote-wrap .team-vote-btn {
     align-items: center;
     background: var(--signal);
     border: 2px solid var(--signal);
@@ -115,13 +117,18 @@
     display: inline-flex;
     font: 700 1.2rem/1 var(--font-display);
     gap: 0.625rem;
+    height: auto;
     min-height: 52px;
     padding: 0 1.625rem;
     text-transform: uppercase;
     transition: transform var(--t-hover) var(--ease-out), filter var(--t-hover) var(--ease-out);
+    width: auto;
   }
 
-  .team-vote-btn:hover {
+  .team-vote-wrap .team-vote-btn:hover {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: var(--ink);
     filter: drop-shadow(6px 6px 0 var(--paper));
     transform: translate(-3px, -3px);
   }
@@ -298,8 +305,8 @@
       width: 6rem;
     }
 
-    .team-vote-btn,
-    .contact-link {
+    .team-vote-wrap .team-vote-btn,
+    .team-sidebar .contact-link {
       width: 100%;
     }
 

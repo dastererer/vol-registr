@@ -2383,113 +2383,12 @@ select option {
   gap: 14px;
 }
 
-/* Team details */
-.team-detail-content {
-  display: grid;
-  grid-template-columns: minmax(260px, 4fr) minmax(0, 8fr);
-  gap: clamp(2rem, 4vw, 4rem);
-}
-
-.team-sidebar {
-  min-width: 0;
-}
-
-.team-header,
-.team-card {
-  padding: clamp(1.5rem, 3vw, 3rem);
-  background: var(--ink-2);
-  border: 1px solid var(--line);
-  clip-path: var(--card-clip);
-}
-
-.team-header__logo {
-  width: min(220px, 100%);
-  aspect-ratio: 1;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  object-fit: contain;
-  background: var(--ink-3);
-  border: 1px solid var(--line-strong);
-}
-
-.team-name {
-  margin-bottom: 1rem;
-  color: var(--paper);
-  font: italic 800 var(--fs-display-lg)/0.85 var(--font-display);
-  text-transform: uppercase;
-}
-
-.team-grid {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.team-card-title {
-  color: var(--paper);
-  font: 700 var(--fs-display-md)/1 var(--font-display);
-  text-transform: uppercase;
-}
-
-.cap-info-item,
-.roster-item {
-  display: grid;
-  grid-template-columns: minmax(90px, 0.35fr) 1fr;
-  align-items: center;
-  min-height: 58px;
-  padding-block: 10px;
-  gap: 14px;
-  border-top: 1px solid var(--line);
-}
-
-.cap-info-label,
-.player-number {
-  color: var(--volt);
-  font: 700 11px/1.4 var(--font-mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.cap-info-value,
-.player-name {
-  color: var(--paper);
-  font: 700 20px/1.1 var(--font-display);
-  text-transform: uppercase;
-}
-
-.player-icon {
-  color: var(--volt);
-}
-
-.team-song-preview,
-.song-preview-box {
-  display: grid;
-  grid-template-columns: 72px 1fr;
-  align-items: center;
-  padding: 12px;
-  gap: 14px;
-  background: var(--ink-3);
-  border: 1px solid var(--line);
-}
-
-.team-song-preview__art,
-.team-song-preview__art-placeholder,
-.song-preview-art {
-  width: 72px;
-  height: 72px;
-  object-fit: cover;
-}
-
-.team-song-preview__title,
-.song-preview-title {
-  color: var(--paper);
-  font: 700 20px/1.1 var(--font-display);
-  text-transform: uppercase;
-}
-
-.team-song-preview__artist,
-.song-preview-artist {
-  color: var(--muted);
-}
+/* Team details — layout is owned by team_detail.html's scoped styles.
+   (Legacy duplicate rules removed: they loaded after the page's inline
+   styles and overrode its grid, squeezing cards into narrow columns and
+   wrapping roster icons onto a second row. The `.song-preview-*` classes
+   used by roster_update.html are likewise fully styled inline there.)
+   `.team-detail-content` keeps only the shared container rule above. */
 
 /* Roster access/editor */
 .roster-shell__inner {
