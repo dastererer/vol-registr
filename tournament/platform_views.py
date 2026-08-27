@@ -93,7 +93,7 @@ def team_list_view(request):
 
 def team_detail_platform_view(request, team_id):
     team = get_object_or_404(Team, pk=team_id)
-    profile = request.user.player_profile if request.user.is_authenticated else None
+    profile = _get_or_create_profile(request.user) if request.user.is_authenticated else None
     is_captain = _is_captain(request.user, team)
     applications = team.applications.filter(status=APPLICATION_PENDING) if is_captain else None
     pending_invites = team.invites.filter(status=INVITE_PENDING) if is_captain else None
