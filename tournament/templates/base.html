@@ -16,14 +16,12 @@
     <link rel="stylesheet" href="{% static_v 'css/sports-bg.css' %}" />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+      href="https://unpkg.com/aos@2.3.4/dist/aos.css"
     />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     {% block extra_head %}{% endblock %}
     <link rel="stylesheet" href="{% static_v 'css/brutal.css' %}" />
   </head>
@@ -85,13 +83,12 @@
             >Team Profile</a
           >
 
-          <a href="{% url 'platform:team_list' %}" class="site-nav__link">Teams</a>
-
-          <a href="{% url 'platform:free_agents' %}" class="site-nav__link">Free Agents</a>
-
-          <a href="{% url 'platform:rankings' %}" class="site-nav__link">Rankings</a>
-
-          <a href="{% url 'platform:live_feed' %}" class="site-nav__link">Live Feed</a>
+          <a
+            href="{% url 'platform:free_agents' %}"
+            class="site-nav__link"
+            data-i18n="nav_free_agents"
+            >Free Agents</a
+          >
 
           {% if not registration_closed %}
           <a
@@ -102,13 +99,6 @@
           >
           {% endif %}
 
-          {% if request.user.is_authenticated %}
-          <a href="{% url 'platform:profile' %}" class="site-nav__link">Account</a>
-          <a href="{% url 'logout' %}" class="site-nav__link">Log out</a>
-          {% else %}
-          <a href="{% url 'login' %}" class="site-nav__link">Log in</a>
-          <a href="{% url 'platform:signup' %}" class="site-nav__link">Sign up</a>
-          {% endif %}
         </div>
 
         <div class="site-nav__controls">
@@ -137,18 +127,6 @@
       <div class="site-nav__overlay" id="navOverlay"></div>
     </nav>
 
-    <!-- Sponsor banner -->
-    <aside class="sponsor-banner" style="background:{{ sponsor.background_color }};color:{{ sponsor.text_color }};">
-      <div class="sponsor-banner__inner">
-        <span class="sponsor-banner__label">Powered by</span>
-        <a href="{{ sponsor.website }}" target="_blank" rel="noopener" class="sponsor-banner__brand">
-          <img src="{{ sponsor.logo_url }}" alt="{{ sponsor.name }}" loading="lazy" />
-          <span>{{ sponsor.name }}</span>
-        </a>
-        <span class="sponsor-banner__tagline">{{ sponsor.tagline }}</span>
-      </div>
-    </aside>
-
     <div class="site-main">
       {% block content %}{% endblock %}
     </div>
@@ -158,17 +136,18 @@
       <div class="site-footer__wordmark" aria-hidden="true">POCKET ACES</div>
 
       <!-- Sponsor footer block -->
-      <div class="sponsor-footer" style="background:{{ sponsor.background_color }};color:{{ sponsor.text_color }};">
+      <div class="sponsor-footer" data-aos="fade-up" data-aos-duration="550">
         <div class="sponsor-footer__inner">
-          <a href="{{ sponsor.website }}" target="_blank" rel="noopener" class="sponsor-footer__logo">
-            <img src="{{ sponsor.logo_url }}" alt="{{ sponsor.name }}" loading="lazy" />
-          </a>
+          <div class="sponsor-footer__mark" aria-hidden="true">
+            <span>PA</span><span>×</span><span>PK</span>
+          </div>
           <div class="sponsor-footer__body">
+            <span class="sponsor-footer__eyebrow">Official food partner</span>
             <strong>{{ sponsor.name }}</strong>
             <span>{{ sponsor.tagline }}</span>
           </div>
-          <a href="{% url 'platform:team_list' %}" class="sponsor-footer__cta" style="background:{{ sponsor.accent_color }};color:#fff;">
-            Order for your team
+          <a href="{{ sponsor.website }}" target="_blank" rel="noopener" class="sponsor-footer__cta">
+            View menu <span aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
@@ -306,7 +285,8 @@
       </div>
     </footer>
 
-    <!-- Vote modal -->
+    {% if voting_enabled %}
+    <!-- Vote modal: emitted only while fan voting is active. -->
     <div
       id="voteModal"
       class="rt-modal__overlay"
@@ -324,7 +304,13 @@
           &times;
         </button>
         <h2 class="rt-modal__title vote-modal-title" id="voteModalTitle">
-          <i class="fas fa-heart"></i> <span id="voteTeamName"></span>
+          <canvas
+            class="motion-canvas vote-modal-motion"
+            width="64"
+            height="64"
+            data-lottie-src="{% static 'assets/motion/volleyball.json' %}"
+          ></canvas>
+          <span id="voteTeamName"></span>
         </h2>
         <p class="rt-modal__subtitle vote-modal-subtitle">
           Support your favorite team! Enter your email to confirm your vote. One vote per person.
@@ -344,9 +330,26 @@
             Send Confirmation
           </button>
         </form>
-        <div id="voteStatus" class="vote-modal-status" style="display: none"></div>
+        <div id="voteStatus" class="vote-modal-status" style="display: none">
+          <canvas
+            class="motion-canvas vote-modal-result-motion vote-modal-result-motion--success"
+            width="112"
+            height="112"
+            data-lottie-src="{% static 'assets/motion/success.json' %}"
+            data-lottie-loop="false"
+          ></canvas>
+          <canvas
+            class="motion-canvas vote-modal-result-motion vote-modal-result-motion--error"
+            width="112"
+            height="112"
+            data-lottie-src="{% static 'assets/motion/error.json' %}"
+            data-lottie-loop="false"
+          ></canvas>
+          <p id="voteStatusText"></p>
+        </div>
       </div>
     </div>
+    {% endif %}
 
     <!-- Page-level modals (kept outside .site-main stacking context so they overlay the sticky nav) -->
     {% block modals %}{% endblock %}
@@ -354,20 +357,32 @@
     <!-- Global config & utils (loaded before page-specific scripts) -->
     <script src="{% static_v 'js/config.js' %}"></script>
     <script src="{% static_v 'js/utils.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     {% block scripts %}{% endblock %}
     <script src="{% static_v 'js/navbar.js' %}"></script>
+    <script type="module" src="{% static_v 'js/motion.js' %}"></script>
 
+    {% if voting_enabled %}
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const voteModal = document.getElementById('voteModal');
         const voteForm = document.getElementById('voteForm');
         const voteStatus = document.getElementById('voteStatus');
+        const voteStatusText = document.getElementById('voteStatusText');
         const voteModalClose = document.getElementById('voteModalClose');
 
+        const closeVoteModal = () => {
+          voteModal.classList.remove('active');
+          document.body.classList.remove('rt-modal-open');
+        };
+
         if (voteModalClose) {
-          voteModalClose.addEventListener('click', () => {
-            voteModal.classList.remove('active');
+          voteModalClose.addEventListener('click', closeVoteModal);
+          voteModal.addEventListener('click', (event) => {
+            if (event.target === voteModal) closeVoteModal();
+          });
+          document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && voteModal.classList.contains('active')) closeVoteModal();
           });
         }
 
@@ -381,6 +396,7 @@
             voteStatus.style.display = 'none';
             voteForm.style.display = 'flex';
             voteModal.classList.add('active');
+            document.body.classList.add('rt-modal-open');
           });
         });
 
@@ -406,17 +422,23 @@
               const data = await res.json();
 
               voteForm.style.display = 'none';
-              voteStatus.style.display = 'block';
+              voteStatus.style.display = 'grid';
 
               if (data.success) {
-                voteStatus.innerHTML = '<i class="fas fa-check-circle" class="vote-modal-icon-success"></i><br>Confirmation email sent! Please check your inbox.';
+                voteStatus.classList.remove('vote-modal-status--error');
+                voteStatus.classList.add('vote-modal-status--success');
+                voteStatusText.textContent = 'Confirmation email sent. Please check your inbox.';
               } else {
-                voteStatus.innerHTML = `<i class="fas fa-exclamation-circle" class="vote-modal-icon-error"></i><br>${data.error || 'Failed to send confirmation.'}`;
+                voteStatus.classList.remove('vote-modal-status--success');
+                voteStatus.classList.add('vote-modal-status--error');
+                voteStatusText.textContent = data.error || 'Failed to send confirmation.';
               }
             } catch (err) {
               voteForm.style.display = 'none';
-              voteStatus.style.display = 'block';
-              voteStatus.innerHTML = '<i class="fas fa-exclamation-circle" class="vote-modal-icon-error"></i><br>Network error. Please try again.';
+              voteStatus.style.display = 'grid';
+              voteStatus.classList.remove('vote-modal-status--success');
+              voteStatus.classList.add('vote-modal-status--error');
+              voteStatusText.textContent = 'Network error. Please try again.';
             }
 
             btn.disabled = false;
@@ -425,5 +447,6 @@
         }
       });
     </script>
+    {% endif %}
   </body>
 </html>

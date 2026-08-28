@@ -450,7 +450,12 @@ def _save_roster_profile(request, team):
 
 def index(request):
     """Landing page with live slot counter."""
-    from .constants import REGISTRATION_CLOSED, REGISTRATION_DEADLINE_ISO, FAN_VOTING_ENABLED
+    from .constants import (
+        FAN_VOTING_ENABLED,
+        PAYMENT_REFUND,
+        REGISTRATION_CLOSED,
+        REGISTRATION_DEADLINE_ISO,
+    )
     
     # Allow hiding voting via query param ?hide_voting=1
     hide_voting = request.GET.get('hide_voting') == '1'
@@ -460,7 +465,7 @@ def index(request):
 
     # Teams with confirmed vote count, sorted by votes DESC, then by name
     from django.db.models import Count, Q
-    teams = Team.objects.annotate(
+    teams = Team.objects.exclude(payment_status=PAYMENT_REFUND).annotate(
         confirmed_votes=Count('fan_votes', filter=Q(fan_votes__confirmed_at__isnull=False))
     ).order_by('-confirmed_votes', 'name')
     
@@ -468,10 +473,10 @@ def index(request):
     total_votes = sum(t.confirmed_votes for t in teams)
     max_votes = max((t.confirmed_votes for t in teams), default=1)
     
-    from .models import PowerRankingArticle
+    hero_photo = _page_media_url("main_photo")
     context = {
         "available_slots": available,
-        "registered_teams": MAX_TOURNAMENT_SLOTS - available,
+        "registered_teams": len(teams),
         "max_slots": MAX_TOURNAMENT_SLOTS,
         "teams": teams,
         "total_votes": total_votes,
@@ -479,10 +484,24 @@ def index(request):
         "registration_closed": REGISTRATION_CLOSED,
         "registration_deadline": REGISTRATION_DEADLINE_ISO,
         "voting_enabled": voting_enabled,
-        "hero_photo_url": _page_media_url("main_photo"),
-        "latest_rankings": PowerRankingArticle.objects.filter(
-            is_published=True, publish_date__lte=timezone.now()
-        ).order_by("-publish_date")[:3],
+        "hero_photo_url": hero_photo,
+        "hero_slides": [
+            {
+                "url": hero_photo or static_url("assets/prev-tour/photo_2026-04-25_14-25-03.jpg"),
+                "label": "ONE COURT. ONE DAY.",
+                "number": "01",
+            },
+            {
+                "url": static_url("assets/prev-tour/photo_2026-04-25_14-25-04.jpg"),
+                "label": "EIGHT TEAMS.",
+                "number": "02",
+            },
+            {
+                "url": static_url("assets/prev-tour/photo_2026-04-25_14-25-09.jpg"),
+                "label": "EVERY POINT COUNTS.",
+                "number": "03",
+            },
+        ],
     }
     return render(request, "tournament/index.html", context)
 
@@ -495,8 +514,19 @@ def index(request):
 
 def tournament_team(request, team_id):
     """Public team profile showing roster, logo, and entrance song."""
-    team = get_object_or_404(Team, id=team_id)
-    return render(request, "tournament/team_detail.html", {"team": team})
+    from .constants import FAN_VOTING_ENABLED
+
+    team = get_object_or_404(Team.objects.prefetch_related("players"), id=team_id)
+    confirmed_votes = team.fan_votes.filter(confirmed_at__isnull=False).count()
+    return render(
+        request,
+        "tournament/team_detail.html",
+        {
+            "team": team,
+            "confirmed_votes": confirmed_votes,
+            "voting_enabled": FAN_VOTING_ENABLED,
+        },
+    )
 
 
 def register(request):

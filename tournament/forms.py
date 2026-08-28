@@ -1,26 +1,9 @@
-"""
-Django forms for tournament team registration and the platform account layer.
-
-Handles input validation and sanitization
-before data reaches the service layer.
-"""
+"""Validated public forms for tournament registration and player requests."""
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from django.utils import timezone
 
-from .constants import PIZZA_CHOICES, POSITION_CHOICES
-from .models import (
-    Highlight,
-    PizzaOrder,
-    PlayerProfile,
-    PowerRankingArticle,
-    Team,
-    TeamApplication,
-    TeamInvite,
-)
+from .constants import FREE_AGENT_NEW, PAYMENT_REFUND
+from .models import FreeAgentApplication, Team
 
 
 class PlayerForm(forms.Form):
@@ -59,116 +42,57 @@ class TeamRegistrationForm(forms.Form):
         }
 
 
-# ── Auth & Player Profile ────────────────────────────────────────────────────
+# ── Public Free-Agent Request ────────────────────────────
 
-class SignUpForm(UserCreationForm):
-    """Frictionless signup — email is required."""
+class FreeAgentApplicationForm(forms.ModelForm):
+    """No-account application delivered to the selected team captain."""
 
-    email = forms.EmailField(required=True)
-    first_name = forms.CharField(max_length=50, required=False, strip=True)
-    last_name = forms.CharField(max_length=50, required=False, strip=True)
-
-    class Meta:
-        model = User
-        fields = ["username", "email", "first_name", "last_name", "password1", "password2"]
-
-    def clean_email(self):
-        email = self.cleaned_data.get("email")
-        if User.objects.filter(email=email).exists():
-            raise ValidationError("An account with this email already exists.")
-        return email
-
-
-class PlayerProfileForm(forms.ModelForm):
-    """Editable player identity."""
+    privacy = forms.BooleanField(
+        required=True,
+        label="I agree that my contact details can be sent to the selected team captain.",
+    )
 
     class Meta:
-        model = PlayerProfile
-        fields = ["display_name", "position", "photo", "phone", "is_free_agent"]
-        widgets = {
-            "display_name": forms.TextInput(attrs={"placeholder": "How you want to appear on your card"}),
-            "phone": forms.TextInput(attrs={"placeholder": "Contact phone"}),
+        model = FreeAgentApplication
+        fields = ["first_name", "last_name", "email", "team", "message"]
+        labels = {
+            "first_name": "First name",
+            "last_name": "Last name",
+            "email": "Email",
+            "team": "Team",
+            "message": "Message to the captain",
         }
-
-
-# ── Team Engine ──────────────────────────────────────────────────────────────
-
-class TeamCreateForm(forms.ModelForm):
-    """Create a new team and become its captain."""
-
-    class Meta:
-        model = Team
-        fields = ["name"]
         widgets = {
-            "name": forms.TextInput(attrs={"placeholder": "Team name"}),
-        }
-
-
-class TeamApplicationForm(forms.ModelForm):
-    """Ask to join a team."""
-
-    class Meta:
-        model = TeamApplication
-        fields = ["message"]
-        widgets = {
+            "first_name": forms.TextInput(attrs={"autocomplete": "given-name", "placeholder": "Maksym"}),
+            "last_name": forms.TextInput(attrs={"autocomplete": "family-name", "placeholder": "Kotsiubailo"}),
+            "email": forms.EmailInput(attrs={"autocomplete": "email", "placeholder": "you@example.com"}),
+            "team": forms.Select(),
             "message": forms.Textarea(
-                attrs={"rows": 3, "placeholder": "Tell the captain why you want to join..."}
+                attrs={
+                    "rows": 5,
+                    "maxlength": 1200,
+                    "placeholder": "Tell the captain about your experience, position and availability.",
+                }
             ),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["team"].queryset = Team.objects.exclude(
+            payment_status=PAYMENT_REFUND
+        ).order_by("name")
+        self.fields["team"].empty_label = "Choose a registered team"
 
-class TeamInviteForm(forms.ModelForm):
-    """Captain recruits a free agent."""
-
-    class Meta:
-        model = TeamInvite
-        fields = ["message"]
-        widgets = {
-            "message": forms.Textarea(
-                attrs={"rows": 3, "placeholder": "Why should they join your team?"}
-            ),
-        }
-
-
-class PizzaOrderForm(forms.ModelForm):
-    """Captain pre-orders pizzas for game day."""
-
-    class Meta:
-        model = PizzaOrder
-        fields = ["pizza_type", "quantity"]
-        widgets = {
-            "quantity": forms.NumberInput(attrs={"min": 1, "max": 99}),
-        }
-
-
-
-# ── Media & Hype ─────────────────────────────────────────────────────────────
-
-class PowerRankingArticleForm(forms.ModelForm):
-    """Admin/editor form for publishing power rankings."""
-
-    class Meta:
-        model = PowerRankingArticle
-        fields = ["title", "content", "publish_date", "is_published"]
-        widgets = {
-            "publish_date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
-        }
-
-    def clean_publish_date(self):
-        value = self.cleaned_data.get("publish_date")
-        if value is not None and timezone.is_naive(value):
-            value = timezone.make_aware(value)
-        return value
-
-
-class HighlightForm(forms.ModelForm):
-    """Authenticated users submit external video links."""
-
-    class Meta:
-        model = Highlight
-        fields = ["title", "url", "team"]
-        widgets = {
-            "title": forms.TextInput(attrs={"placeholder": "e.g. Insane block vs Tigers"}),
-            "url": forms.URLInput(attrs={"placeholder": "https://youtube.com/shorts/..."}),
-        }
-
+    def clean(self):
+        cleaned = super().clean()
+        email = cleaned.get("email")
+        team = cleaned.get("team")
+        if email and team and FreeAgentApplication.objects.filter(
+            email__iexact=email,
+            team=team,
+            status=FREE_AGENT_NEW,
+        ).exists():
+            raise forms.ValidationError(
+                "You already have an open request for this team. The captain has your message."
+            )
+        return cleaned

@@ -2,9 +2,40 @@
 {% load static %}
 {% load static_v %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
-<section class="hero" id="hero">
+<section class="hero hero--swiper" id="hero">
+    <div class="hero-bg-swiper swiper" aria-label="Pocket Aces tournament moments">
+        <div class="swiper-wrapper">
+            {% for slide in hero_slides %}
+            <div class="swiper-slide hero-bg-slide">
+                <img
+                    src="{{ slide.url }}"
+                    alt=""
+                    class="hero-bg-slide__image"
+                    width="1600"
+                    height="900"
+                    {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+                >
+                <div class="hero-bg-slide__meta" aria-hidden="true">
+                    <span>{{ slide.number }}</span>
+                    <strong>{{ slide.label }}</strong>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="hero-bg-scrim" aria-hidden="true"></div>
+    <div class="hero-bg-progress" aria-hidden="true">
+        {% for slide in hero_slides %}<span></span>{% endfor %}
+    </div>
+
     <div class="hero-content container">
         <div class="hero__left">
             <div class="hero__label-wrap">
@@ -94,27 +125,6 @@
             </div>
         </div>
 
-        <div class="hero-player-container{% if hero_photo_url %} hero-player-container--photo{% endif %}" id="heroPlayerContainer">
-            <span class="hero__ghost-number" aria-hidden="true">03</span>
-            <span class="hero__volt-block" aria-hidden="true"></span>
-            {% if hero_photo_url %}
-            <div class="hero-photo-frame">
-                <img src="{{ hero_photo_url }}"
-                     alt="Pocket Aces volleyball match"
-                     class="hero-player hero-player--photo"
-                     width="1600"
-                     height="900"
-                     fetchpriority="high">
-            </div>
-            {% else %}
-            <img src="{% static 'assets/main_player.png' %}"
-                 alt="Volleyball player"
-                 class="hero-player"
-                 width="2000"
-                 height="2999"
-                 fetchpriority="high">
-            {% endif %}
-        </div>
     </div>
 
     <div class="scroll-indicator" aria-hidden="true">
@@ -130,30 +140,6 @@
         <span class="ticker__copy ticker__item" data-i18n="ticker.items" aria-hidden="true">POCKET ACES COURT CUP 3 /// SAT 26.09.2026 /// FIRST SERVE 09:00 /// 8 TEAMS /// 150 ZŁ PER TEAM /// OUTDOOR ///</span>
     </div>
 </div>
-
-{% if latest_rankings %}
-<!-- Power Rankings Hype -->
-<section class="section section--rankings" id="rankings">
-    <div class="container">
-        <div class="section-heading-wrap" data-reveal>
-            <span class="section-kicker">// HYPE</span>
-            <span class="section-ghost" aria-hidden="true">RANK</span>
-            <h2 class="section-heading">Power Rankings</h2>
-            <p class="section-subtitle">Pre-tournament takes from the desk.</p>
-        </div>
-        <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-            {% for article in latest_rankings %}
-            <article class="platform-card" data-reveal>
-                <h3 style="font-family: var(--font-display); text-transform: uppercase; font-size: 1.5rem; margin-bottom: 0.5rem;">{{ article.title }}</h3>
-                <p class="team-meta">{{ article.publish_date|date:"j F Y" }}</p>
-                <p style="margin: 0.75rem 0;">{{ article.content|truncatewords:25 }}</p>
-                <a href="{% url 'platform:ranking_detail' article_id=article.id %}" class="platform-btn platform-btn--secondary">Read</a>
-            </article>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
 
 {% if voting_enabled %}
 <!-- Fan Voting -->
@@ -592,6 +578,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.voting-board__meter-fill[data-vote-width]').forEach((meter) => {
@@ -602,5 +589,6 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <script src="{% static_v 'js/cards-swiper.js' %}"></script>
 <script src="{% static_v 'js/arena-swiper.js' %}"></script>
+<script src="{% static_v 'js/hero-swiper.js' %}"></script>
 <script src="{% static_v 'js/index-page.js' %}"></script>
 {% endblock %}

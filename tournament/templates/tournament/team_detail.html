@@ -1,402 +1,116 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends "base.html" %}
+{% load static static_v %}
 
-{% block title %}{{ team.name }} - Pocket Aces Court Cup 3{% endblock %}
-
-{% block extra_head %}
-<style>
-  .team-detail-section {
-    min-height: calc(100svh - var(--nav-h));
-    overflow: hidden;
-    padding-block: var(--section-y);
-    position: relative;
-  }
-
-  .team-detail-content {
-    position: relative;
-  }
-
-  .back-btn,
-  .contact-link {
-    align-items: center;
-    border: 1px solid var(--line-strong);
-    clip-path: var(--btn-clip);
-    color: var(--paper);
-    display: inline-flex;
-    font: 700 1rem/1 var(--font-display);
-    gap: 0.625rem;
-    justify-content: center;
-    letter-spacing: 0.08em;
-    min-height: 44px;
-    padding: 0.75rem 1.125rem;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: transform var(--t-hover) var(--ease-out), background-color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out), color var(--t-hover) var(--ease-out), filter var(--t-hover) var(--ease-out);
-  }
-
-  .back-btn {
-    margin-bottom: clamp(2rem, 5vw, 4rem);
-  }
-
-  .back-btn:hover,
-  .contact-link:hover {
-    background: var(--volt);
-    border-color: var(--volt);
-    color: var(--ink);
-    filter: drop-shadow(5px 5px 0 var(--paper));
-    transform: translate(-2px, -2px);
-  }
-
-  .team-header {
-    display: grid;
-    gap: 1.25rem;
-    grid-template-columns: auto minmax(0, 1fr);
-    margin-bottom: clamp(2rem, 5vw, 4rem);
-    position: relative;
-  }
-
-  .team-header__logo {
-    align-self: end;
-    background: var(--ink-3);
-    border: 2px solid var(--volt);
-    clip-path: var(--card-clip);
-    display: grid;
-    height: clamp(6rem, 12vw, 10rem);
-    padding: 0.75rem;
-    place-items: center;
-    width: clamp(6rem, 12vw, 10rem);
-  }
-
-  .team-header__logo img {
-    display: block;
-    height: 100%;
-    object-fit: contain;
-    width: 100%;
-  }
-
-  .team-header__main {
-    align-self: end;
-    min-width: 0;
-  }
-
-  .team-kicker,
-  .cap-info-label {
-    color: var(--volt);
-    font: 700 var(--fs-mono-sm)/1.3 var(--font-mono);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .team-kicker {
-    margin: 0 0 0.75rem;
-  }
-
-  .team-name {
-    color: var(--paper);
-    font: italic 800 var(--fs-display-lg)/0.86 var(--font-display);
-    letter-spacing: 0.01em;
-    margin: 0;
-    overflow-wrap: anywhere;
-    text-transform: uppercase;
-  }
-
-  .team-vote-wrap {
-    grid-column: 1 / -1;
-  }
-
-  /* Scoped (.team-vote-wrap) so these win over the voting board's
-     44px icon-button rules (.vote-btn) in brutal.css. */
-  .team-vote-wrap .team-vote-btn {
-    align-items: center;
-    background: var(--signal);
-    border: 2px solid var(--signal);
-    border-radius: 0;
-    clip-path: var(--btn-clip);
-    color: var(--ink);
-    cursor: pointer;
-    display: inline-flex;
-    font: 700 1.2rem/1 var(--font-display);
-    gap: 0.625rem;
-    height: auto;
-    min-height: 52px;
-    padding: 0 1.625rem;
-    text-transform: uppercase;
-    transition: transform var(--t-hover) var(--ease-out), filter var(--t-hover) var(--ease-out);
-    width: auto;
-  }
-
-  .team-vote-wrap .team-vote-btn:hover {
-    background: var(--signal);
-    border-color: var(--signal);
-    color: var(--ink);
-    filter: drop-shadow(6px 6px 0 var(--paper));
-    transform: translate(-3px, -3px);
-  }
-
-  .team-grid {
-    display: grid;
-    gap: clamp(1rem, 2vw, 2rem);
-    grid-template-columns: minmax(16rem, 4fr) minmax(0, 8fr);
-  }
-
-  .team-sidebar {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .team-card {
-    align-self: start;
-    background: var(--ink-2);
-    border: 1px solid var(--line);
-    clip-path: var(--card-clip);
-    min-width: 0;
-    padding: clamp(1.25rem, 3vw, 2rem);
-  }
-
-  .team-card-title {
-    align-items: center;
-    border-bottom: 2px solid var(--volt);
-    color: var(--paper);
-    display: flex;
-    font: italic 800 var(--fs-display-sm)/1 var(--font-display);
-    gap: 0.75rem;
-    letter-spacing: 0.04em;
-    margin: 0 0 1.5rem;
-    padding-bottom: 0.875rem;
-    text-transform: uppercase;
-  }
-
-  .team-card-title i {
-    color: var(--volt);
-  }
-
-  .cap-info-item {
-    border-bottom: 1px solid var(--line);
-    display: grid;
-    gap: 0.5rem;
-    padding-block: 0.875rem;
-  }
-
-  .cap-info-item:last-child {
-    border-bottom: 0;
-  }
-
-  .cap-info-value {
-    color: var(--paper);
-    font: 700 1.35rem/1.1 var(--font-display);
-    overflow-wrap: anywhere;
-    text-transform: uppercase;
-  }
-
-  .roster-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .roster-item {
-    align-items: center;
-    border-top: 1px solid var(--line);
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: 3.5rem 1fr auto;
-    min-height: 64px;
-    padding: 0.75rem 0;
-    transition: background-color var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out), padding-left var(--t-hover) var(--ease-out);
-  }
-
-  .roster-item:first-child {
-    border-top: 0;
-  }
-
-  .roster-item:hover {
-    background: var(--ink-3);
-    border-color: var(--volt);
-    padding-left: 0.75rem;
-  }
-
-  .player-number {
-    background: var(--volt);
-    color: var(--ink);
-    display: grid;
-    font: 700 var(--fs-mono-md)/1 var(--font-mono);
-    height: 36px;
-    place-items: center;
-    width: 36px;
-  }
-
-  .player-name {
-    color: var(--paper);
-    font: 700 1.25rem/1 var(--font-display);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .player-icon {
-    color: var(--line-strong);
-    transition: color var(--t-hover) var(--ease-out), transform var(--t-hover) var(--ease-out);
-  }
-
-  .roster-item:hover .player-icon {
-    color: var(--volt);
-    transform: rotate(12deg);
-  }
-
-  .team-song-preview {
-    align-items: center;
-    background: var(--ink-3);
-    border: 1px solid var(--line);
-    display: grid;
-    gap: 0.875rem;
-    grid-template-columns: 52px minmax(0, 1fr);
-    margin-bottom: 1rem;
-    padding: 0.75rem;
-  }
-
-  .team-song-preview__art,
-  .team-song-preview__art-placeholder {
-    background: var(--ink);
-    border: 1px solid var(--line-strong);
-    display: grid;
-    height: 52px;
-    object-fit: cover;
-    place-items: center;
-    width: 52px;
-  }
-
-  .team-song-preview__meta {
-    min-width: 0;
-  }
-
-  .team-song-preview__title {
-    color: var(--paper);
-    font: 700 1.1rem/1.1 var(--font-display);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .team-song-preview__artist,
-  .team-empty {
-    color: var(--muted);
-    font: 400 0.85rem/1.5 var(--font-body);
-  }
-
-  .team-song-preview__artist {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  @media (max-width: 800px) {
-    .team-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 540px) {
-    .team-header {
-      grid-template-columns: 1fr;
-    }
-
-    .team-header__logo {
-      height: 6rem;
-      width: 6rem;
-    }
-
-    .team-vote-wrap .team-vote-btn,
-    .team-sidebar .contact-link {
-      width: 100%;
-    }
-
-    .roster-item {
-      grid-template-columns: 2.75rem 1fr auto;
-    }
-  }
-</style>
-{% endblock %}
+{% block title %}{{ team.name }} — Pocket Aces Court Cup 3{% endblock %}
 
 {% block content %}
-<section class="team-detail-section">
-  <div class="container team-detail-content">
-    <a href="{% url 'index' %}#registeredTeamsModal" class="back-btn">
-      <i class="fas fa-arrow-left" aria-hidden="true"></i>
-      <span data-i18n="team_back">Wróć do listy drużyn</span>
+<section class="team-showcase">
+  <div class="team-showcase__ghost" aria-hidden="true">TEAM / {{ team.id|stringformat:"02d" }}</div>
+  <div class="container team-showcase__inner">
+    <a class="team-showcase__back" href="{% url 'index' %}#registeredTeamsModal">
+      <span aria-hidden="true">←</span> <span data-i18n="team.back">Registered teams</span>
     </a>
 
-    <header class="team-header" data-reveal>
-      {% if team.logo_path %}
-      <div class="team-header__logo">
-        <img src="/media/{{ team.logo_path }}" alt="{{ team.name }} badge" width="160" height="160">
+    <header class="team-showcase__hero">
+      <div class="team-showcase__identity" data-aos="fade-right">
+        <div class="team-showcase__logo">
+          {% if team.logo_path %}
+          <img src="{{ team.logo_path|asset_url }}" alt="{{ team.name }} badge" width="320" height="320">
+          {% else %}
+          <canvas
+            class="motion-canvas"
+            width="160"
+            height="160"
+            data-lottie-src="{% static 'assets/motion/volleyball.json' %}"
+          ></canvas>
+          {% endif %}
+        </div>
+        <span class="team-showcase__seed">CC3 / {{ team.id|stringformat:"02d" }}</span>
       </div>
-      {% endif %}
-      <div class="team-header__main">
-        <p class="team-kicker" aria-hidden="true">// 02 — TEAM</p>
-        <h1 class="team-name">{{ team.name }}</h1>
-      </div>
-      <div class="team-vote-wrap">
-        <button type="button" class="vote-btn-main vote-btn team-vote-btn" data-team-id="{{ team.id }}" data-team-name="{{ team.name }}">
-          <i class="fas fa-heart" aria-hidden="true"></i>
-          <span data-i18n="voting.cta">Vote for this team</span>
-        </button>
+
+      <div class="team-showcase__intro" data-aos="fade-left">
+        <p class="section-kicker" data-i18n="team.kicker">// REGISTERED TEAM</p>
+        <h1>{{ team.name }}</h1>
+        <div class="team-showcase__stats" aria-label="Team facts">
+          <div><span data-i18n="team.roster">Roster</span><strong>{{ team.players.count|stringformat:"02d" }}</strong></div>
+          <div><span data-i18n="team.status">Status</span><strong>{{ team.get_status_display }}</strong></div>
+          <div><span data-i18n="team.fans">Fan votes</span><strong>{{ confirmed_votes|stringformat:"02d" }}</strong></div>
+        </div>
+        <div class="team-showcase__actions">
+          <a class="btn btn-cta" href="{% url 'platform:free_agents' %}?team={{ team.id }}">
+            <span data-i18n="team.apply">Ask to join</span>
+          </a>
+          {% if voting_enabled %}
+          <button
+            type="button"
+            class="btn btn-outline vote-btn"
+            data-team-id="{{ team.id }}"
+            data-team-name="{{ team.name }}"
+          >
+            <span data-i18n="team.vote">Vote for team</span>
+          </button>
+          {% else %}
+          <span class="team-showcase__vote-state" data-i18n="team.vote_soon">Fan voting opens soon</span>
+          {% endif %}
+        </div>
       </div>
     </header>
 
-    <div class="team-grid">
-      <div class="team-sidebar">
-        <section class="team-card" data-reveal>
-          <h2 class="team-card-title"><i class="fas fa-user-shield" aria-hidden="true"></i> <span data-i18n="team_captain">Kapitan</span></h2>
-
-          <div class="cap-info-item">
-            <span class="cap-info-label" data-i18n="team_name">Imię i Nazwisko</span>
-            <span class="cap-info-value">{{ team.cap_name }} {{ team.cap_surname }}</span>
+    <div class="team-showcase__grid">
+      <article class="team-roster-board" data-aos="fade-up">
+        <header>
+          <div>
+            <p class="section-kicker">// 01</p>
+            <h2 data-i18n="team.squad">Matchday squad</h2>
           </div>
+          <span>{{ team.players.count }} / 12</span>
+        </header>
 
-          <div class="cap-info-item">
-            <span class="cap-info-label" data-i18n="team_email">Email</span>
-            <span class="cap-info-value">
-              <a href="mailto:{{ team.cap_email }}" class="contact-link"><span data-i18n="team_mail_to">Napisz</span> <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        <div class="team-roster-board__head" aria-hidden="true">
+          <span>#</span><span data-i18n="team.player">Player</span><span data-i18n="team.position">Position</span>
+        </div>
+        <ol class="team-roster-list">
+          {% for player in team.players.all %}
+          <li>
+            <span class="team-roster-list__number">{{ forloop.counter|stringformat:"02d" }}</span>
+            <strong>{{ player.first_name }} {{ player.last_name }}</strong>
+            <span>
+              {% if player.position %}{{ player.get_position_display }}{% else %}<span aria-hidden="true">—</span><span class="sr-only">Not specified</span>{% endif %}
             </span>
-          </div>
+          </li>
+          {% empty %}
+          <li class="team-roster-list__empty" data-i18n="team.empty">The captain is still completing the roster.</li>
+          {% endfor %}
+        </ol>
+      </article>
+
+      <aside class="team-showcase__side">
+        <section class="team-captain-card" data-aos="fade-up" data-aos-delay="80">
+          <p class="section-kicker">// 02</p>
+          <span data-i18n="team.captain">Captain</span>
+          <h2>{{ team.cap_name }} {{ team.cap_surname }}</h2>
+          <p data-i18n="team.contact_private">Contact stays private. Use the free-agent form and your message will be delivered by email.</p>
         </section>
 
-        {% if team.entrance_url %}
-        <section class="team-card" data-reveal>
-          <h2 class="team-card-title"><i class="fas fa-music" aria-hidden="true"></i> Entrance Song</h2>
-          <div class="team-song-preview">
+        <section class="team-song-card" data-aos="fade-up" data-aos-delay="140">
+          <p class="section-kicker">// 03</p>
+          <span data-i18n="team.entrance">Entrance track</span>
+          {% if team.entrance_url %}
+          <div class="team-song-card__track">
             {% if team.entrance_artwork_url %}
-            <img src="{{ team.entrance_artwork_url }}" alt="Artwork" class="team-song-preview__art" width="52" height="52" loading="lazy">
-            {% else %}
-            <div class="team-song-preview__art-placeholder"><i class="fas fa-music" aria-hidden="true"></i></div>
+            <img src="{{ team.entrance_artwork_url }}" alt="" width="72" height="72" loading="lazy">
             {% endif %}
-            <div class="team-song-preview__meta">
-              <div class="team-song-preview__title">{{ team.entrance_title }}</div>
-              <div class="team-song-preview__artist">{{ team.entrance_artist }}</div>
+            <div>
+              <strong>{{ team.entrance_title|default:"Team entrance" }}</strong>
+              <span>{{ team.entrance_artist|default:"SoundCloud" }}</span>
             </div>
           </div>
-          <a href="{{ team.entrance_url }}" target="_blank" rel="noopener" class="contact-link team-song-link"><i class="fab fa-soundcloud" aria-hidden="true"></i> Listen on SoundCloud</a>
+          <a href="{{ team.entrance_url }}" target="_blank" rel="noopener" data-i18n="team.listen">Listen to track ↗</a>
+          {% else %}
+          <p data-i18n="team.no_track">No entrance track selected yet.</p>
+          {% endif %}
         </section>
-        {% endif %}
-      </div>
-
-      <section class="team-card" data-reveal>
-        <h2 class="team-card-title"><i class="fas fa-users" aria-hidden="true"></i> <span data-i18n="team_roster">Skład Drużyny</span></h2>
-
-        {% if team.players.all %}
-        <ul class="roster-list">
-          {% for player in team.players.all %}
-          <li class="roster-item">
-            <div class="player-number">{% if player.jersey_number != "" and player.jersey_number is not None %}{{ player.jersey_number }}{% else %}-{% endif %}</div>
-            <div class="player-name">{{ player.first_name }} {{ player.last_name }}</div>
-            <div class="player-icon"><i class="fas fa-volleyball-ball" aria-hidden="true"></i></div>
-          </li>
-          {% endfor %}
-        </ul>
-        {% else %}
-        <p class="team-empty" data-i18n="team_empty">Brak dodanych graczy.</p>
-        {% endif %}
-      </section>
+      </aside>
     </div>
   </div>
 </section>

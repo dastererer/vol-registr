@@ -137,7 +137,8 @@ cython_debug/
 
 # Custom
 /staticfiles
-/tournament/migrations
+# Django migrations are source code and must remain versioned.
+/tournament/migrations/__pycache__/
 *.css.map
 db/database.db
 

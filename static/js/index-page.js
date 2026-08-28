@@ -123,17 +123,20 @@ function initHeroIntro(cfg) {
  * @param {object} cfg - player timing config.
  */
 function animateHeroPlayer(tl, cfg) {
-    const isPhotoBackground = Boolean(document.querySelector('.hero-player--photo'));
+    const heroPlayer = document.querySelector('.hero-player');
+    if (!heroPlayer) return;
+
+    const isPhotoBackground = heroPlayer.classList.contains('hero-player--photo');
 
     if (AppUtils.isMobile()) {
-        gsap.set('.hero-player', { x: 0 });
-        tl.to('.hero-player', {
+        gsap.set(heroPlayer, { x: 0 });
+        tl.to(heroPlayer, {
             opacity: isPhotoBackground ? 1 : cfg.mobileOpacity,
             duration: cfg.duration,
             ease: cfg.ease,
         }, '-=1.5');
     } else {
-        tl.to('.hero-player', {
+        tl.to(heroPlayer, {
             x: 0, opacity: 1,
             duration: cfg.duration,
             ease: cfg.ease,

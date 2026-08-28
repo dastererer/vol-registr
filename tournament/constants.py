@@ -10,29 +10,17 @@ MAX_TOURNAMENT_SLOTS = 8
 
 # ── Registration Gate ───────────────────────────────────
 REGISTRATION_CLOSED = False
-REGISTRATION_DEADLINE_ISO = "2026-06-03T23:59:00+02:00"
+REGISTRATION_DEADLINE_ISO = "2026-09-20T23:59:00+02:00"
 
-# ── Membership workflow statuses ─────────────────────────
-APPLICATION_PENDING = "PENDING"
-APPLICATION_ACCEPTED = "ACCEPTED"
-APPLICATION_REJECTED = "REJECTED"
+# ── Public free-agent requests ───────────────────────────
+FREE_AGENT_NEW = "NEW"
+FREE_AGENT_CONTACTED = "CONTACTED"
+FREE_AGENT_CLOSED = "CLOSED"
 
-APPLICATION_STATUS_CHOICES = [
-    (APPLICATION_PENDING, "Pending"),
-    (APPLICATION_ACCEPTED, "Accepted"),
-    (APPLICATION_REJECTED, "Rejected"),
-]
-
-INVITE_PENDING = "PENDING"
-INVITE_ACCEPTED = "ACCEPTED"
-INVITE_REJECTED = "REJECTED"
-INVITE_CANCELLED = "CANCELLED"
-
-INVITE_STATUS_CHOICES = [
-    (INVITE_PENDING, "Pending"),
-    (INVITE_ACCEPTED, "Accepted"),
-    (INVITE_REJECTED, "Rejected"),
-    (INVITE_CANCELLED, "Cancelled"),
+FREE_AGENT_STATUS_CHOICES = [
+    (FREE_AGENT_NEW, "New"),
+    (FREE_AGENT_CONTACTED, "Captain contacted"),
+    (FREE_AGENT_CLOSED, "Closed"),
 ]
 
 
@@ -78,40 +66,6 @@ PIZZERIA_KULTOWA = {
     "logo_url": "https://cs.cdn-upm.com/themes/b7746e1a-9a35-11ec-9695-525400080621/assets-20/logopizzeriakultowa3.webp?v=3",
     "website": "https://www.pizzeriakultowa.pl/menu",
 }
-
-PIZZA_KULTOWA = "KULTOWA"
-PIZZA_KLASYK = "KLASYK"
-PIZZA_RARYTAS = "RARYTAS"
-PIZZA_BAJERANCKA = "BAJERANCKA"
-PIZZA_ZASADNICZA = "ZASADNICZA"
-PIZZA_SZTOS = "SZTOS"
-
-PIZZA_CHOICES = [
-    (
-        PIZZA_KULTOWA,
-        "KULTOWA — sos pomidorowy, mozzarella, szynka, pieczarki, oregano",
-    ),
-    (
-        PIZZA_KLASYK,
-        "KLASYK — sos pomidorowy, mozzarella, oregano (VEGE)",
-    ),
-    (
-        PIZZA_RARYTAS,
-        "RARYTAS — sos pomidorowy, mozzarella, szynka, ananas, oregano",
-    ),
-    (
-        PIZZA_BAJERANCKA,
-        "BAJERANCKA — sos pomidorowy, mozzarella, salami peperoni, oliwki zielone, oregano",
-    ),
-    (
-        PIZZA_ZASADNICZA,
-        "ZASADNICZA — sos pomidorowy, mozzarella, szynka, oregano",
-    ),
-    (
-        PIZZA_SZTOS,
-        "SZTOS — sos pomidorowy, mozzarella, salami peperoni, ser pleśniowy, oregano",
-    ),
-]
 
 # ── Field Limits ─────────────────────────────────────────
 TEAM_NAME_MAX_LENGTH = 100
@@ -258,10 +212,7 @@ ROSTER_CODE_LENGTH = 6
 # ── DB Table Names ───────────────────────────────────────
 TABLE_TEAMS = "Teams"
 TABLE_PLAYERS = "Players"
-TABLE_PLAYER_PROFILES = "player_profiles"
-TABLE_TEAM_APPLICATIONS = "team_applications"
-TABLE_TEAM_INVITES = "team_invites"
-TABLE_PIZZA_ORDERS = "pizza_orders"
+TABLE_FREE_AGENT_APPLICATIONS = "free_agent_applications"
 TABLE_MATCHES = "matches"
 TABLE_GAME_SETS = "game_sets"
 TABLE_PLAYER_MATCH_STATS = "player_match_stats"
@@ -274,5 +225,3 @@ TABLE_GALLERY_PHOTOS = "gallery_photos"
 TABLE_GALLERY_VIDEOS = "gallery_videos"
 TABLE_AUDIT_ENTRIES = "audit_entries"
 TABLE_SCHEDULE_EVENTS = "schedule_events"
-TABLE_POWER_RANKING_ARTICLES = "power_ranking_articles"
-TABLE_HIGHLIGHTS = "highlights"
