@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Pocket Aces Court Cup 3 — 26.09.2026{% endblock %}</title>
     {% load static static_v %}
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -138,8 +139,12 @@
       <!-- Sponsor footer block -->
       <div class="sponsor-footer" data-aos="fade-up" data-aos-duration="550">
         <div class="sponsor-footer__inner">
-          <div class="sponsor-footer__mark" aria-hidden="true">
-            <span>PA</span><span>×</span><span>PK</span>
+          <div class="sponsor-footer__logo">
+            <img src="{% static 'assets/kultowa_logo.webp' %}"
+                 alt="{{ sponsor.name }}"
+                 width="160"
+                 height="auto"
+                 loading="lazy" />
           </div>
           <div class="sponsor-footer__body">
             <span class="sponsor-footer__eyebrow">Official food partner</span>

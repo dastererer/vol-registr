@@ -285,14 +285,6 @@ function initEditorialSectionAnim(cfg) {
         stagger: 0.08,
     });
 
-    gsap.from(['.arena-heading', '.arena-swiper'], {
-        scrollTrigger: { trigger: '.section--arena', start: item.start },
-        y: item.y,
-        opacity: 0,
-        scale: 0.97,
-        duration: item.duration,
-        stagger: 0.1,
-    });
 }
 
 /**
@@ -322,7 +314,11 @@ function initTimelineScrollAnim(cfg) {
 function initCardModal() {
     const overlay  = document.getElementById('cardModalOverlay');
     const modalBox = document.getElementById('cardModalCard');
-    if (!overlay || !modalBox) return;
+    const modalBody = document.getElementById('cardModalBody');
+    const closeButton = document.getElementById('cardModalClose');
+    if (!overlay || !modalBox || !modalBody || !closeButton) return;
+
+    let lastTrigger = null;
 
     // Click on any card wrapper → open modal
     document.querySelectorAll('.flip-card-wrapper').forEach(wrapper => {
@@ -333,28 +329,44 @@ function initCardModal() {
 
             // Clone front face into modal
             const clone = front.cloneNode(true);
-            modalBox.innerHTML = '';
-            modalBox.appendChild(clone);
+            clone.classList.add('card-modal__front');
+            clone.removeAttribute('style');
+            clone.querySelectorAll('[style]').forEach((node) => node.removeAttribute('style'));
+            clone.querySelectorAll('[id]').forEach((node) => node.removeAttribute('id'));
+
+            const title = clone.querySelector('.card-front__title');
+            if (title) title.id = 'cardModalTitle';
+
+            modalBody.replaceChildren(clone);
+            lastTrigger = wrapper.querySelector('.flip-card__open') || wrapper;
 
             overlay.classList.add('active');
+            overlay.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
+            window.requestAnimationFrame(() => closeButton.focus());
         });
     });
 
-    // Close on overlay click
-    overlay.addEventListener('click', () => closeCardModal(overlay));
+    closeButton.addEventListener('click', () => closeCardModal(overlay, lastTrigger));
+
+    // Close only when the dimmed backdrop itself is clicked.
+    overlay.addEventListener('click', (event) => {
+        if (event.target === overlay) closeCardModal(overlay, lastTrigger);
+    });
 
     // Close on Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && overlay.classList.contains('active')) {
-            closeCardModal(overlay);
+            closeCardModal(overlay, lastTrigger);
         }
     });
 }
 
-function closeCardModal(overlay) {
+function closeCardModal(overlay, lastTrigger = null) {
     overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    if (lastTrigger && typeof lastTrigger.focus === 'function') lastTrigger.focus();
 }
 
 // ═══════════════════════════════════════════════════════

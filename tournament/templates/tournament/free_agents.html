@@ -7,26 +7,6 @@
 <section class="free-agent-page">
   <div class="free-agent-page__ghost" aria-hidden="true">TRANSFER</div>
   <div class="container free-agent-page__inner">
-    <header class="free-agent-hero" data-aos="fade-up">
-      <div>
-        <p class="section-kicker" data-i18n="free.kicker">// FIND YOUR SIX</p>
-        <h1 class="free-agent-hero__title" data-i18n="free.title">Need a team?</h1>
-        <p class="free-agent-hero__lead" data-i18n="free.lead">
-          Pick a registered team, introduce yourself and your message goes straight
-          to its captain. No login required.
-        </p>
-      </div>
-      <div class="motion-badge" aria-hidden="true">
-        <canvas
-          class="motion-canvas"
-          width="160"
-          height="160"
-          data-lottie-src="{% static 'assets/motion/volleyball.json' %}"
-        ></canvas>
-        <span>{{ registered_team_count|stringformat:"02d" }} <small data-i18n="free.teams">teams</small></span>
-      </div>
-    </header>
-
     {% if submitted %}
     <div class="free-agent-success" role="status" data-aos="zoom-in">
       <canvas
@@ -51,6 +31,17 @@
     {% endif %}
 
     <div class="free-agent-layout">
+      <header class="free-agent-hero" data-aos="fade-up">
+        <div>
+          <p class="section-kicker" data-i18n="free.kicker">// FIND YOUR SIX</p>
+          <h1 class="free-agent-hero__title" data-i18n="free.title">Need a team?</h1>
+          <p class="free-agent-hero__lead" data-i18n="free.lead">
+            Pick a registered team, introduce yourself and your message goes straight
+            to its captain. No login required.
+          </p>
+        </div>
+      </header>
+
       <aside class="free-agent-steps" data-aos="fade-right">
         <p class="section-kicker" data-i18n="free.how_kicker">// HOW IT WORKS</p>
         <ol>

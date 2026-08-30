@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.querySelector('.hero-bg-swiper');
-  if (!root || typeof Swiper === 'undefined') return;
+  if (!root) return;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const progress = [...document.querySelectorAll('.hero-bg-progress span')];
+  const slides = [...root.querySelectorAll('.hero-bg-slide')];
 
   const setActiveProgress = (index) => {
     progress.forEach((item, itemIndex) => {
@@ -12,7 +13,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  const swiper = new Swiper(root, {
+  if (typeof window.Swiper !== 'function') {
+    let activeIndex = 0;
+    root.classList.add('hero-bg-swiper--fallback');
+
+    const setActiveSlide = (index) => {
+      slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle('is-fallback-active', slideIndex === index);
+      });
+      setActiveProgress(index);
+    };
+
+    setActiveSlide(activeIndex);
+    if (!reduceMotion && slides.length > 1) {
+      window.setInterval(() => {
+        if (document.hidden) return;
+        activeIndex = (activeIndex + 1) % slides.length;
+        setActiveSlide(activeIndex);
+      }, 5200);
+    }
+    return;
+  }
+
+  const swiper = new window.Swiper(root, {
     effect: 'fade',
     fadeEffect: { crossFade: true },
     loop: true,

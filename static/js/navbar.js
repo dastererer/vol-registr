@@ -71,7 +71,7 @@
       deal_lead: 'A compact outdoor event built for teams that want a sharp schedule, clear stakes, and a better matchday atmosphere.',
       location: {
         kicker: 'Venue Details',
-        title: 'The Venue',
+        title: 'The Court',
         text: 'Pocket Aces Court Cup 3 moves to the outdoor court next to Dormitory No. 8 in Łódź. Bring your team 30-60 minutes early for registration and warm-up.',
         info: { label: 'Location', value: 'Strajku Łódzkich Studentów 1981 r. 2, 91-404 Łódź' },
         date: { label: 'Date', value: 'SAT 26.09.2026, 09:00' },
@@ -444,8 +444,8 @@
       },
       deal_lead: 'Kompaktowy turniej open-air dla ekip, które chcą czytelnego rytmu dnia, jasnej stawki i lepszej atmosfery meczowej.',
       location: {
-        kicker: 'Szczegóły obiektu',
-        title: 'Obiekt',
+        kicker: 'Szczegóły boiska',
+        title: 'Boisko',
         text: 'Pocket Aces Court Cup 3 gramy na boisku plenerowym przy DS nr 8 w Łodzi. Przyjedź z drużyną 30-60 minut wcześniej na rejestrację i rozgrzewkę.',
         info: { label: 'Lokalizacja', value: 'Strajku Łódzkich Studentów 1981 r. 2, 91-404 Łódź' },
         date: { label: 'Data', value: 'SOB 26.09.2026, 09:00' },
