@@ -39,9 +39,27 @@
     <div class="hero-content container">
         <div class="hero__left">
             <div class="hero__label-wrap">
-                <span class="hero-label" data-i18n="hero.label">
+                <span class="hero-label hero-label--desktop" data-i18n="hero.label">
                     SAT 26.09.2026 • 09:00 • OUTDOOR COURT BY DORMITORY NO. 8
                 </span>
+                <span class="hero-label hero-label--mobile" data-i18n="hero.mobile_label">
+                    SAT 26.09 // ŁÓDŹ // 09:00
+                </span>
+                <a
+                    class="hero-sponsor-lockup"
+                    href="{{ sponsor.website }}"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="{{ sponsor.name }} — official food partner"
+                >
+                    <span class="hero-sponsor-lockup__eyebrow" data-i18n="hero.sponsor_kicker">Match fuel partner</span>
+                    <img
+                        src="{% static 'assets/kultowa_logo.webp' %}"
+                        alt="{{ sponsor.name }}"
+                        width="112"
+                        height="26"
+                    >
+                </a>
             </div>
 
             <h1 class="hero-title">

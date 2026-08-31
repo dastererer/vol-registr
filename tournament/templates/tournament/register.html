@@ -194,6 +194,10 @@
     min-width: 0;
   }
 
+  .reg-form-col > .reg-layout__access {
+    margin-top: 1rem;
+  }
+
   .reg-stepper {
     margin-bottom: 1rem;
   }
@@ -1017,14 +1021,6 @@
       <span class="reg-logo-hidden" data-i18n="reg_fact3_title">Captain Flow</span>
     </div>
 
-    <div class="reg-brand__panel reg-layout__access">
-      <div>
-        <span class="reg-brand__panel-kicker" data-i18n="reg_access_title">Need changes later?</span>
-        <!-- [CONFIRM] registration deadline -->
-        <p class="reg-brand__panel-copy" data-i18n="reg_access_copy">After confirmation, captains can still update the team badge and roster from the profile page until registration closes on 20.09.2026.</p>
-      </div>
-      <a class="reg-brand__link" href="/roster/" data-i18n="reg_access_cta">Open captain profile</a>
-    </div>
   </aside>
 
   <div class="reg-form-col">
@@ -1212,6 +1208,15 @@
         <p class="reg-success__text" data-i18n="reg_success_txt">Your team has been submitted for Pocket Aces Court Cup 3. Payment details and the deadline will be sent to your email address shortly.</p>
       </div>
     </form>
+
+    <div class="reg-brand__panel reg-layout__access">
+      <div>
+        <span class="reg-brand__panel-kicker" data-i18n="reg_access_title">Need changes later?</span>
+        <!-- [CONFIRM] registration deadline -->
+        <p class="reg-brand__panel-copy" data-i18n="reg_access_copy">After confirmation, captains can still update the team badge and roster from the profile page until registration closes on 20.09.2026.</p>
+      </div>
+      <a class="reg-brand__link" href="/roster/" data-i18n="reg_access_cta">Open captain profile</a>
+    </div>
   </div>
 </main>
 {% endblock %}

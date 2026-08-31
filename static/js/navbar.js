@@ -10,6 +10,8 @@
       // Main page (index.html)
       hero: {
         label: 'SAT 26.09.2026 • 09:00 • OUTDOOR COURT BY DORMITORY NO. 8',
+        mobile_label: 'SAT 26.09 // ŁÓDŹ // 09:00',
+        sponsor_kicker: 'Match fuel partner',
         title: {
           intro_top: 'POCKET',
           intro_bottom: 'ACES',
@@ -384,6 +386,8 @@
       // Main page (index.html)
       hero: {
         label: 'SOB 26.09.2026 • 09:00 • BOISKO PLENEROWE PRZY DS NR 8',
+        mobile_label: 'SOB 26.09 // ŁÓDŹ // 09:00',
+        sponsor_kicker: 'Partner na mecz',
         title: {
           intro_top: 'POCKET',
           intro_bottom: 'ACES',
