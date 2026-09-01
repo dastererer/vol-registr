@@ -57,6 +57,12 @@ function initHeroIntro(cfg) {
     const background = hero.querySelector('.hero-bg-swiper');
     const scrim = hero.querySelector('.hero-bg-scrim');
     const sweep = hero.querySelector('.hero-motion-sweep');
+    const sponsorIntro = hero.querySelector('.hero-sponsor-intro');
+    const sponsorOrbit = hero.querySelector('.hero-sponsor-intro__orbit');
+    const sponsorIntroItems = gsap.utils.toArray(hero.querySelectorAll(
+        '.hero-sponsor-intro__kicker, .hero-sponsor-intro__logo, .hero-sponsor-intro__slogan'
+    ));
+    const partner = hero.querySelector('.hero-partner');
     const label = hero.querySelector('.hero__label-wrap');
     const introStage = document.querySelector('.hero-title__stage--intro');
     const finalStage = document.querySelector('.hero-title__stage--final');
@@ -69,9 +75,6 @@ function initHeroIntro(cfg) {
         ? gsap.utils.toArray('.hero-mobile-fact')
         : gsap.utils.toArray('.hero-stats-row > *');
     const buttons = gsap.utils.toArray('.hero-btn-container > *');
-    const progress = hero.querySelector('.hero-bg-progress');
-    const activeMeta = hero.querySelector('.hero-bg-slide.swiper-slide-active .hero-bg-slide__meta')
-        || hero.querySelector('.hero-bg-slide__meta');
 
     [introStage, finalStage].forEach((stage) => {
         if (stage) stage.style.animation = 'none';
@@ -81,6 +84,10 @@ function initHeroIntro(cfg) {
     gsap.set(background, { opacity: 0.35, scale: 1.08, transformOrigin: 'center center' });
     gsap.set(scrim, { opacity: 0 });
     gsap.set(sweep, { opacity: 0, xPercent: 0 });
+    gsap.set(sponsorIntro, { autoAlpha: 1, clipPath: 'inset(0 100% 0 0)' });
+    gsap.set(sponsorOrbit, { opacity: 0, scale: 0.55, rotation: -18 });
+    gsap.set(sponsorIntroItems, { opacity: 0, y: 28 });
+    gsap.set(partner, { opacity: 0, y: 24, scale: 0.94 });
     gsap.set(label, { opacity: 0, x: -26, clipPath: 'inset(0 100% 0 0)' });
     gsap.set(introStage, { opacity: 1, xPercent: 0, clipPath: 'none' });
     gsap.set(finalStage, { opacity: 0, xPercent: 0, clipPath: 'none' });
@@ -90,8 +97,9 @@ function initHeroIntro(cfg) {
     gsap.set(factsPanel, { opacity: 0, clipPath: 'inset(0 100% 0 0)' });
     gsap.set(factItems, { opacity: 0, y: 20 });
     gsap.set(buttons, { opacity: 0, y: 24 });
-    gsap.set(progress, { opacity: 0, scaleX: 0.62, transformOrigin: 'right center' });
-    gsap.set(activeMeta, { opacity: 0, y: 24 });
+
+    const sponsorExitAt = cfg.sponsor.enterDuration + cfg.sponsor.itemDuration + cfg.sponsor.hold;
+    const tournamentStart = sponsorExitAt + (cfg.sponsor.exitDuration * 0.58);
 
     const tl = gsap.timeline({
         defaults: { ease: 'power4.out' },
@@ -110,12 +118,37 @@ function initHeroIntro(cfg) {
         ease: cfg.background.ease,
     }, 0)
         .to(scrim, { opacity: 1, duration: cfg.background.duration * 0.7 }, 0)
+        .to(sponsorIntro, {
+            clipPath: 'inset(0 0% 0 0)',
+            duration: cfg.sponsor.enterDuration,
+            ease: 'power4.inOut',
+        }, 0)
+        .to(sponsorOrbit, {
+            opacity: 0.28,
+            scale: 1,
+            rotation: 0,
+            duration: cfg.sponsor.itemDuration * 1.5,
+            ease: 'power3.out',
+        }, 0.1)
+        .to(sponsorIntroItems, {
+            opacity: 1,
+            y: 0,
+            duration: cfg.sponsor.itemDuration,
+            stagger: 0.08,
+            ease: 'power4.out',
+        }, 0.16)
+        .to(sponsorIntro, {
+            clipPath: 'inset(0 0 0 100%)',
+            duration: cfg.sponsor.exitDuration,
+            ease: 'power4.inOut',
+        }, sponsorExitAt)
+        .set(sponsorIntro, { autoAlpha: 0 }, sponsorExitAt + cfg.sponsor.exitDuration)
         .to(sweep, {
             xPercent: 400,
             opacity: 0.78,
             duration: cfg.sweep.duration * 0.72,
             ease: 'power2.in',
-        }, 0.12)
+        }, tournamentStart - 0.12)
         .to(sweep, {
             xPercent: 470,
             opacity: 0,
@@ -128,67 +161,62 @@ function initHeroIntro(cfg) {
             clipPath: 'inset(0 0% 0 0)',
             duration: cfg.label.duration,
             ease: cfg.label.ease,
-        }, 0.16)
+        }, tournamentStart)
         .to(introLines, {
             yPercent: 0,
             skewY: 0,
             duration: cfg.title.duration,
             stagger: cfg.title.stagger,
             ease: cfg.title.ease,
-        }, 0.3)
+        }, tournamentStart + 0.12)
         .to(introLines, {
             yPercent: -115,
             skewY: -2,
             duration: cfg.title.exitDuration,
             stagger: cfg.title.exitStagger,
             ease: 'power3.in',
-        }, 1.18)
-        .set(finalStage, { opacity: 1 }, 1.28)
+        }, tournamentStart + 1)
+        .set(finalStage, { opacity: 1 }, tournamentStart + 1.1)
         .to(finalLines, {
             yPercent: 0,
             skewY: 0,
             duration: cfg.title.duration,
             stagger: cfg.title.stagger,
             ease: cfg.title.ease,
-        }, 1.32)
+        }, tournamentStart + 1.14)
         .to(text, {
             opacity: 1,
             y: 0,
             duration: cfg.text.duration,
             ease: cfg.text.ease,
-        }, 1.7)
+        }, tournamentStart + 1.52)
         .to(factsPanel, {
             opacity: 1,
             clipPath: 'inset(0 0% 0 0)',
             duration: cfg.facts.duration,
             ease: cfg.facts.ease,
-        }, 1.76)
+        }, tournamentStart + 1.58)
         .to(factItems, {
             opacity: 1,
             y: 0,
             duration: cfg.facts.duration,
             stagger: cfg.facts.stagger,
             ease: cfg.facts.ease,
-        }, 1.86)
+        }, tournamentStart + 1.68)
+        .to(partner, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: cfg.partner.duration,
+            ease: cfg.partner.ease,
+        }, tournamentStart + 1.82)
         .to(buttons, {
             opacity: 1,
             y: 0,
             duration: cfg.buttons.duration,
             stagger: cfg.buttons.stagger,
             ease: cfg.buttons.ease,
-        }, 2.02)
-        .to(progress, {
-            opacity: 1,
-            scaleX: 1,
-            duration: cfg.progress.duration,
-            ease: cfg.progress.ease,
-        }, 2.12)
-        .to(activeMeta, {
-            opacity: 1,
-            y: 0,
-            duration: cfg.progress.duration,
-            ease: cfg.progress.ease,
-        }, 2.12);
+        }, tournamentStart + 1.98);
 }
 
 

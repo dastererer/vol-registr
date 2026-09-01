@@ -27,6 +27,11 @@
           date_value: '26.09 SAT',
           serve_label: 'FIRST SERVE'
         },
+        partner: {
+          intro: 'Court Cup 3 × Official Food Partner',
+          eyebrow: 'Official Food Partner',
+          cta: 'Menu / Order Online'
+        },
         cta: 'Join Tournament',
         closed: 'Registration Closed'
       },
@@ -400,6 +405,11 @@
           date_label: 'DATA',
           date_value: '26.09 SOB',
           serve_label: 'PIERWSZE PODANIE'
+        },
+        partner: {
+          intro: 'Court Cup 3 × Oficjalny Partner Gastronomiczny',
+          eyebrow: 'Oficjalny Partner Gastronomiczny',
+          cta: 'Menu / Zamów Online'
         },
         cta: 'Zapisz się',
         closed: 'Rejestracja zamknięta'

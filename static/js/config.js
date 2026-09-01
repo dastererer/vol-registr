@@ -25,12 +25,13 @@ window.APP_CONFIG = Object.freeze({
     hero: {
         background: { duration: 1.15, ease: 'power3.out' },
         sweep:      { duration: 1.25 },
+        sponsor:    { enterDuration: 0.5, itemDuration: 0.52, hold: 0.42, exitDuration: 0.62 },
         title:      { duration: 0.72, stagger: 0.1, exitDuration: 0.5, exitStagger: 0.06, ease: 'power4.out' },
         label:      { duration: 0.55, ease: 'power4.out' },
         text:       { duration: 0.55, ease: 'power3.out' },
         facts:      { duration: 0.5, stagger: 0.08, ease: 'power3.out' },
         buttons:    { duration: 0.55, stagger: 0.1, ease: 'back.out(1.35)' },
-        progress:   { duration: 0.55, ease: 'power3.out' },
+        partner:    { duration: 0.62, ease: 'back.out(1.2)' },
     },
 
     /* ── Flip Cards ───────────────────────────────── */

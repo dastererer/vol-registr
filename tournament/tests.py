@@ -90,6 +90,11 @@ class RegistrationApiTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '/media/page/main_photo.JPG')
         self.assertContains(response, 'hero-bg-swiper')
+        self.assertContains(response, 'hero-sponsor-intro')
+        self.assertContains(response, 'hero-partner')
+        self.assertNotContains(response, 'hero-bg-slide__meta')
+        self.assertNotContains(response, 'hero-bg-progress')
+        self.assertNotContains(response, 'scroll-indicator')
 
     def test_registration_rejects_a_team_after_all_slots_are_reserved(self):
         Team.objects.bulk_create(

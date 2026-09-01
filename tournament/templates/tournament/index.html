@@ -23,18 +23,26 @@
                     height="900"
                     {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
                 >
-                <div class="hero-bg-slide__meta" aria-hidden="true">
-                    <span>{{ slide.number }}</span>
-                    <strong>{{ slide.label }}</strong>
-                </div>
             </div>
             {% endfor %}
         </div>
     </div>
     <div class="hero-bg-scrim" aria-hidden="true"></div>
     <div class="hero-motion-sweep" aria-hidden="true"></div>
-    <div class="hero-bg-progress" aria-hidden="true">
-        {% for slide in hero_slides %}<span></span>{% endfor %}
+
+    <div class="hero-sponsor-intro" aria-hidden="true">
+        <div class="hero-sponsor-intro__orbit"></div>
+        <div class="hero-sponsor-intro__frame">
+            <span class="hero-sponsor-intro__kicker" data-i18n="hero.partner.intro">Court Cup 3 × Official Food Partner</span>
+            <img
+                class="hero-sponsor-intro__logo"
+                src="{% static 'assets/kultowa_logo.webp' %}"
+                alt=""
+                width="900"
+                height="210"
+            >
+            <span class="hero-sponsor-intro__slogan">Tak smakuje jakość</span>
+        </div>
     </div>
 
     <div class="hero-content container">
@@ -86,6 +94,26 @@
                 </div>
             </div>
 
+            <a
+                class="hero-partner"
+                href="{{ sponsor.website }}"
+                target="_blank"
+                rel="noopener"
+            >
+                <span class="hero-partner__eyebrow" data-i18n="hero.partner.eyebrow">Official Food Partner</span>
+                <span class="hero-partner__logo-wrap">
+                    <img
+                        class="hero-partner__logo"
+                        src="{% static 'assets/kultowa_logo.webp' %}"
+                        alt="{{ sponsor.name }}"
+                        width="900"
+                        height="210"
+                    >
+                </span>
+                <span class="hero-partner__cta" data-i18n="hero.partner.cta">Menu / Order Online</span>
+                <span class="hero-partner__arrow" aria-hidden="true">↗</span>
+            </a>
+
             <div class="hero-stats-row hero-stats-row--slashed" data-reveal>
                 <div class="hero-stat">
                     <span class="hero-stat__label" data-i18n="hero.stats.date_label">Date</span>
@@ -130,10 +158,6 @@
 
     </div>
 
-    <div class="scroll-indicator" aria-hidden="true">
-        <span class="scroll-indicator__label">SCROLL</span>
-        <span class="scroll-indicator__line"></span>
-    </div>
 </section>
 
 <!-- Tournament Ticker -->

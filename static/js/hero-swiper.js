@@ -3,15 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!root) return;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const progress = [...document.querySelectorAll('.hero-bg-progress span')];
   const slides = [...root.querySelectorAll('.hero-bg-slide')];
-
-  const setActiveProgress = (index) => {
-    progress.forEach((item, itemIndex) => {
-      item.classList.toggle('is-active', itemIndex === index);
-      item.classList.toggle('is-past', itemIndex < index);
-    });
-  };
 
   if (typeof window.Swiper !== 'function') {
     let activeIndex = 0;
@@ -21,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
       slides.forEach((slide, slideIndex) => {
         slide.classList.toggle('is-fallback-active', slideIndex === index);
       });
-      setActiveProgress(index);
     };
 
     setActiveSlide(activeIndex);
@@ -49,14 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
           disableOnInteraction: false,
           pauseOnMouseEnter: false,
         },
-    on: {
-      init(instance) {
-        setActiveProgress(instance.realIndex);
-      },
-      realIndexChange(instance) {
-        setActiveProgress(instance.realIndex);
-      },
-    },
   });
 
   document.addEventListener('visibilitychange', () => {

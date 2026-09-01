@@ -488,18 +488,12 @@ def index(request):
         "hero_slides": [
             {
                 "url": hero_photo or static_url("assets/prev-tour/photo_2026-04-25_14-25-03.jpg"),
-                "label": "ONE COURT. ONE DAY.",
-                "number": "01",
             },
             {
                 "url": static_url("assets/prev-tour/photo_2026-04-25_14-25-04.jpg"),
-                "label": "EIGHT TEAMS.",
-                "number": "02",
             },
             {
                 "url": static_url("assets/prev-tour/photo_2026-04-25_14-25-09.jpg"),
-                "label": "EVERY POINT COUNTS.",
-                "number": "03",
             },
         ],
     }
