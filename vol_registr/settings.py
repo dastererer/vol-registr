@@ -40,7 +40,7 @@ SECRET_KEY = 'django-insecure-o4bf9ey12d*dv5p%pi7nj8%b-py*9#tjt5#^x%4*!xy91e*%@d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.18.10', '127.0.0.1', 'localhost', 'demo.pocketaces.team', 'pocketaces.team','*']
+ALLOWED_HOSTS = ['192.168.18.2', '127.0.0.1', 'localhost', 'demo.pocketaces.team', 'pocketaces.team','*']
 
 # CSRF / cookie settings
 # If your frontend is served from a different origin (e.g. https://demo.pocketaces.team)
@@ -161,7 +161,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ASSET_VERSION = os.environ.get('STATIC_ASSET_VERSION', 'arena-2026-09-v12')
+STATIC_ASSET_VERSION = os.environ.get('STATIC_ASSET_VERSION', 'arena-2026-09-v13')
 STORAGES = {
     'staticfiles': {
         'BACKEND': 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage',
