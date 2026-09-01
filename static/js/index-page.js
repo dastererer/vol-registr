@@ -5,7 +5,7 @@
  *              Depends on: config.js, utils.js, gsap + ScrollTrigger (CDN).
  */
 
-/* global gsap, ScrollTrigger, window, APP_CONFIG, AppUtils */
+/* global gsap, ScrollTrigger, window, APP_CONFIG */
 
 document.addEventListener('DOMContentLoaded', () => {
     'use strict';
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const reducedMotion = CFG.REDUCED_MOTION === true;
 
     // ─── Hero Intro Timeline ────────────────────────
-    if (!reducedMotion) {
+    if (!reducedMotion && typeof gsap !== 'undefined') {
         initHeroIntro(CFG.hero);
     }
 
@@ -51,97 +51,144 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param {object} cfg - hero timings from APP_CONFIG.
  */
 function initHeroIntro(cfg) {
-    const tl = gsap.timeline();
+    const hero = document.querySelector('.hero--swiper');
+    if (!hero) return;
+
+    const background = hero.querySelector('.hero-bg-swiper');
+    const scrim = hero.querySelector('.hero-bg-scrim');
+    const sweep = hero.querySelector('.hero-motion-sweep');
+    const label = hero.querySelector('.hero__label-wrap');
     const introStage = document.querySelector('.hero-title__stage--intro');
     const finalStage = document.querySelector('.hero-title__stage--final');
     const introLines = document.querySelectorAll('.hero-title__stage--intro .hero-title__line');
     const finalLines = document.querySelectorAll('.hero-title__stage--final .hero-title__line');
+    const text = hero.querySelector('.hero-text');
+    const mobileFacts = window.matchMedia('(max-width: 767px)').matches;
+    const factsPanel = hero.querySelector(mobileFacts ? '.hero-mobile-facts' : '.hero-stats-row');
+    const factItems = mobileFacts
+        ? gsap.utils.toArray('.hero-mobile-fact')
+        : gsap.utils.toArray('.hero-stats-row > *');
+    const buttons = gsap.utils.toArray('.hero-btn-container > *');
+    const progress = hero.querySelector('.hero-bg-progress');
+    const activeMeta = hero.querySelector('.hero-bg-slide.swiper-slide-active .hero-bg-slide__meta')
+        || hero.querySelector('.hero-bg-slide__meta');
 
-    window.setTimeout(() => {
-        if (introStage) {
-            introStage.style.opacity = '0';
-            introStage.style.transform = 'translateX(-12%)';
-            introStage.style.animation = 'none';
-        }
-
-        introLines.forEach((line) => {
-            line.style.animation = 'none';
-        });
-
-        if (finalStage) {
-            finalStage.style.opacity = '1';
-            finalStage.style.transform = 'translateX(0)';
-            finalStage.style.animation = 'none';
-        }
-
-        finalLines.forEach((line) => {
-            line.style.opacity = '1';
-            line.style.transform = 'translateX(0)';
-            line.style.animation = 'none';
-        });
-    }, 3400);
-
-    // Logo (legacy templates may still provide one)
-    const heroLogo = document.querySelector('.hero-logo');
-    if (heroLogo) {
-        tl.to(heroLogo, {
-            y: 0, opacity: 1,
-            duration: cfg.logo.duration,
-            ease: cfg.logo.ease,
-        });
-    }
-
-    // Date / location label
-    tl.to('.hero-label', {
-        y: 0, opacity: 1,
-        duration: cfg.label.duration,
-        ease: cfg.label.ease,
-    }, '+=0.35');
-
-    // Subtitle, price, counter, CTA
-    tl.to(['.hero-text', '.hero-price', '.hero-counter', '.hero-btn-container'], {
-        y: 0, opacity: 1,
-        duration: cfg.text.duration,
-        stagger: cfg.text.stagger,
-        ease: cfg.text.ease,
-    }, '-=0.8');
-
-    // Player image
-    animateHeroPlayer(tl, cfg.player);
-
-    // Scroll indicator
-    tl.from('.scroll-indicator', {
-        opacity: 0, y: -20,
-        duration: cfg.scroll.duration,
-        delay: cfg.scroll.delay,
+    [introStage, finalStage].forEach((stage) => {
+        if (stage) stage.style.animation = 'none';
     });
-}
 
-/**
- * Animate the hero player image (slide on desktop, fade on mobile).
- * @param {gsap.core.Timeline} tl
- * @param {object} cfg - player timing config.
- */
-function animateHeroPlayer(tl, cfg) {
-    const heroPlayer = document.querySelector('.hero-player');
-    if (!heroPlayer) return;
+    hero.classList.add('hero--motion-running');
+    gsap.set(background, { opacity: 0.35, scale: 1.08, transformOrigin: 'center center' });
+    gsap.set(scrim, { opacity: 0 });
+    gsap.set(sweep, { opacity: 0, xPercent: 0 });
+    gsap.set(label, { opacity: 0, x: -26, clipPath: 'inset(0 100% 0 0)' });
+    gsap.set(introStage, { opacity: 1, xPercent: 0, clipPath: 'none' });
+    gsap.set(finalStage, { opacity: 0, xPercent: 0, clipPath: 'none' });
+    gsap.set(introLines, { yPercent: 115, skewY: 3 });
+    gsap.set(finalLines, { yPercent: 115, skewY: 3 });
+    gsap.set(text, { opacity: 0, y: 24 });
+    gsap.set(factsPanel, { opacity: 0, clipPath: 'inset(0 100% 0 0)' });
+    gsap.set(factItems, { opacity: 0, y: 20 });
+    gsap.set(buttons, { opacity: 0, y: 24 });
+    gsap.set(progress, { opacity: 0, scaleX: 0.62, transformOrigin: 'right center' });
+    gsap.set(activeMeta, { opacity: 0, y: 24 });
 
-    const isPhotoBackground = heroPlayer.classList.contains('hero-player--photo');
+    const tl = gsap.timeline({
+        defaults: { ease: 'power4.out' },
+        onComplete: () => {
+            gsap.set(introStage, { opacity: 0 });
+            gsap.set(finalStage, { opacity: 1 });
+            hero.classList.remove('hero--motion-running');
+            hero.classList.add('hero--motion-complete');
+        },
+    });
 
-    if (AppUtils.isMobile()) {
-        gsap.set(heroPlayer, { x: 0 });
-        tl.to(heroPlayer, {
-            opacity: isPhotoBackground ? 1 : cfg.mobileOpacity,
-            duration: cfg.duration,
-            ease: cfg.ease,
-        }, '-=1.5');
-    } else {
-        tl.to(heroPlayer, {
-            x: 0, opacity: 1,
-            duration: cfg.duration,
-            ease: cfg.ease,
-        }, '-=1.5');
-    }
+    tl.to(background, {
+        opacity: 1,
+        scale: 1,
+        duration: cfg.background.duration,
+        ease: cfg.background.ease,
+    }, 0)
+        .to(scrim, { opacity: 1, duration: cfg.background.duration * 0.7 }, 0)
+        .to(sweep, {
+            xPercent: 400,
+            opacity: 0.78,
+            duration: cfg.sweep.duration * 0.72,
+            ease: 'power2.in',
+        }, 0.12)
+        .to(sweep, {
+            xPercent: 470,
+            opacity: 0,
+            duration: cfg.sweep.duration * 0.28,
+            ease: 'power2.out',
+        })
+        .to(label, {
+            opacity: 1,
+            x: 0,
+            clipPath: 'inset(0 0% 0 0)',
+            duration: cfg.label.duration,
+            ease: cfg.label.ease,
+        }, 0.16)
+        .to(introLines, {
+            yPercent: 0,
+            skewY: 0,
+            duration: cfg.title.duration,
+            stagger: cfg.title.stagger,
+            ease: cfg.title.ease,
+        }, 0.3)
+        .to(introLines, {
+            yPercent: -115,
+            skewY: -2,
+            duration: cfg.title.exitDuration,
+            stagger: cfg.title.exitStagger,
+            ease: 'power3.in',
+        }, 1.18)
+        .set(finalStage, { opacity: 1 }, 1.28)
+        .to(finalLines, {
+            yPercent: 0,
+            skewY: 0,
+            duration: cfg.title.duration,
+            stagger: cfg.title.stagger,
+            ease: cfg.title.ease,
+        }, 1.32)
+        .to(text, {
+            opacity: 1,
+            y: 0,
+            duration: cfg.text.duration,
+            ease: cfg.text.ease,
+        }, 1.7)
+        .to(factsPanel, {
+            opacity: 1,
+            clipPath: 'inset(0 0% 0 0)',
+            duration: cfg.facts.duration,
+            ease: cfg.facts.ease,
+        }, 1.76)
+        .to(factItems, {
+            opacity: 1,
+            y: 0,
+            duration: cfg.facts.duration,
+            stagger: cfg.facts.stagger,
+            ease: cfg.facts.ease,
+        }, 1.86)
+        .to(buttons, {
+            opacity: 1,
+            y: 0,
+            duration: cfg.buttons.duration,
+            stagger: cfg.buttons.stagger,
+            ease: cfg.buttons.ease,
+        }, 2.02)
+        .to(progress, {
+            opacity: 1,
+            scaleX: 1,
+            duration: cfg.progress.duration,
+            ease: cfg.progress.ease,
+        }, 2.12)
+        .to(activeMeta, {
+            opacity: 1,
+            y: 0,
+            duration: cfg.progress.duration,
+            ease: cfg.progress.ease,
+        }, 2.12);
 }
 
 

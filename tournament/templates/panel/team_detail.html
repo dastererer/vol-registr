@@ -154,44 +154,6 @@
     {% endif %}
   </div>
 
-  {# ── Match history ─────────────────────────────────── #}
-  <div class="pnl-dash-card" style="margin-top:20px;">
-    <h3 class="pnl-dash-card__title">Match History</h3>
-    {% if matches %}
-    <div class="pnl-table-wrap">
-      <table class="pnl-table">
-        <thead>
-          <tr><th>#</th><th>Stage</th><th>Opponent</th><th>Score</th><th>Status</th><th>Time</th></tr>
-        </thead>
-        <tbody>
-          {% for m in matches %}
-          <tr>
-            <td>{{ m.match_number }}</td>
-            <td>{{ m.get_stage_display }}</td>
-            <td>
-              {% if m.team_a_id == team.pk %}
-                {{ m.team_b|default:"TBD" }}
-              {% else %}
-                {{ m.team_a|default:"TBD" }}
-              {% endif %}
-            </td>
-            <td>{{ m.score_a }} : {{ m.score_b }}</td>
-            <td>
-              <span class="pnl-badge pnl-badge--{% if m.status == 'FINISHED' %}green{% elif m.status == 'LIVE' %}red{% elif m.status == 'SCHEDULED' %}cyan{% else %}gray{% endif %}">
-                {{ m.get_status_display }}
-              </span>
-            </td>
-            <td>{{ m.start_time|date:"d M H:i" }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    {% else %}
-      <p class="pnl-muted">No matches yet.</p>
-    {% endif %}
-  </div>
-
   {# ── Audit Timeline ────────────────────────────────── #}
   <div class="pnl-dash-card" style="margin-top:20px;">
     <h3 class="pnl-dash-card__title"><i class="fas fa-history"></i> Recent Activity</h3>

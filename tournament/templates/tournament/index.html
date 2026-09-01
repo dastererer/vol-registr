@@ -32,6 +32,7 @@
         </div>
     </div>
     <div class="hero-bg-scrim" aria-hidden="true"></div>
+    <div class="hero-motion-sweep" aria-hidden="true"></div>
     <div class="hero-bg-progress" aria-hidden="true">
         {% for slide in hero_slides %}<span></span>{% endfor %}
     </div>
@@ -45,21 +46,6 @@
                 <span class="hero-label hero-label--mobile" data-i18n="hero.mobile_label">
                     SAT 26.09 // ŁÓDŹ // 09:00
                 </span>
-                <a
-                    class="hero-sponsor-lockup"
-                    href="{{ sponsor.website }}"
-                    target="_blank"
-                    rel="noopener"
-                    aria-label="{{ sponsor.name }} — official food partner"
-                >
-                    <span class="hero-sponsor-lockup__eyebrow" data-i18n="hero.sponsor_kicker">Match fuel partner</span>
-                    <img
-                        src="{% static 'assets/kultowa_logo.webp' %}"
-                        alt="{{ sponsor.name }}"
-                        width="112"
-                        height="26"
-                    >
-                </a>
             </div>
 
             <h1 class="hero-title">
@@ -93,10 +79,6 @@
                 <div class="hero-mobile-fact">
                     <span class="hero-mobile-fact__value">8</span>
                     <span class="hero-mobile-fact__label" data-i18n="hero.mobile_fact2">Team Limit</span>
-                </div>
-                <div class="hero-mobile-fact">
-                    <span class="hero-mobile-fact__value">OUTDOOR</span>
-                    <span class="hero-mobile-fact__label" data-i18n="hero.mobile_fact3">Outdoor Court</span>
                 </div>
                 <div class="hero-mobile-fact">
                     <span class="hero-mobile-fact__value">150 ZŁ</span>

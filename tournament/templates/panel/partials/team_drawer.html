@@ -80,29 +80,6 @@
   {% endif %}
 </div>
 
-{# ── Recent matches ── #}
-{% if recent_matches %}
-<div class="pnl-td-section">
-  <h4 class="pnl-td-section__title">Recent Matches</h4>
-  {% for m in recent_matches %}
-  <div class="pnl-td-match">
-    <span class="pnl-mono">M{{ m.match_number }}</span>
-    <span>
-      {% if m.team_a_id == team.pk %}
-        <strong>{{ team.name }}</strong> vs {{ m.team_b|default:"TBD" }}
-      {% else %}
-        {{ m.team_a|default:"TBD" }} vs <strong>{{ team.name }}</strong>
-      {% endif %}
-    </span>
-    <span class="pnl-mono">{{ m.score_a }}:{{ m.score_b }}</span>
-    <span class="pnl-badge pnl-badge--{% if m.status == 'FINISHED' %}green{% elif m.status == 'LIVE' %}red{% elif m.status == 'SCHEDULED' %}cyan{% else %}gray{% endif %} pnl-badge--sm">
-      {{ m.get_status_display }}
-    </span>
-  </div>
-  {% endfor %}
-</div>
-{% endif %}
-
 {# ── Full page link ── #}
 <div class="pnl-td-footer">
   <a href="{% url 'panel:team_detail' pk=team.pk %}" class="pnl-btn pnl-btn--primary pnl-btn--sm" style="width:100%;text-align:center;">

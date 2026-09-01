@@ -23,12 +23,14 @@ window.APP_CONFIG = Object.freeze({
 
     /* ── Hero Section Timings ─────────────────────── */
     hero: {
-        logo:       { duration: 0.4, ease: 'power4.out' },
-        title:      { duration: 0.7, stagger: 0.12, ease: 'power4.out' },
-        label:      { duration: 0.4, ease: 'power4.out' },
-        text:       { duration: 0.4, stagger: 0.08, ease: 'power4.out' },
-        player:     { duration: 0.8, ease: 'power4.out', mobileOpacity: 0.3 },
-        scroll:     { duration: 0.4, delay: 0.08 },
+        background: { duration: 1.15, ease: 'power3.out' },
+        sweep:      { duration: 1.25 },
+        title:      { duration: 0.72, stagger: 0.1, exitDuration: 0.5, exitStagger: 0.06, ease: 'power4.out' },
+        label:      { duration: 0.55, ease: 'power4.out' },
+        text:       { duration: 0.55, ease: 'power3.out' },
+        facts:      { duration: 0.5, stagger: 0.08, ease: 'power3.out' },
+        buttons:    { duration: 0.55, stagger: 0.1, ease: 'back.out(1.35)' },
+        progress:   { duration: 0.55, ease: 'power3.out' },
     },
 
     /* ── Flip Cards ───────────────────────────────── */

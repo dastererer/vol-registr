@@ -63,8 +63,8 @@ class FreeAgentApplicationForm(forms.ModelForm):
             "message": "Message to the captain",
         }
         widgets = {
-            "first_name": forms.TextInput(attrs={"autocomplete": "given-name", "placeholder": "Maksym"}),
-            "last_name": forms.TextInput(attrs={"autocomplete": "family-name", "placeholder": "Kotsiubailo"}),
+            "first_name": forms.TextInput(attrs={"autocomplete": "given-name", "placeholder": "James"}),
+            "last_name": forms.TextInput(attrs={"autocomplete": "family-name", "placeholder": "Smith"}),
             "email": forms.EmailInput(attrs={"autocomplete": "email", "placeholder": "you@example.com"}),
             "team": forms.Select(),
             "message": forms.Textarea(

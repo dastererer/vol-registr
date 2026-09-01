@@ -3,13 +3,14 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
+from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from .constants import MAX_TOURNAMENT_SLOTS, PAYMENT_REFUND
-from .models import FreeAgentApplication, Team
+from .models import FreeAgentApplication, Player, Team
 from .services import get_available_slots
 
 _STATIC_OVERRIDE = {
@@ -223,3 +224,48 @@ class PublicPlatformRethinkTests(TestCase):
                     target,
                     fetch_redirect_response=False,
                 )
+
+
+@override_settings(STORAGES=_STATIC_OVERRIDE)
+class PanelCurrentFunctionalityTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="panel-qa",
+            password="test-password",
+            is_staff=True,
+        )
+        self.client.force_login(self.user)
+        self.team = Team.objects.create(
+            name="London Spikers",
+            cap_name="James",
+            cap_surname="Smith",
+            cap_email="london.spikers@example.com",
+        )
+        self.player = Player.objects.create(
+            team=self.team,
+            first_name="Emily",
+            last_name="Johnson",
+        )
+
+    def test_control_room_renders_only_supported_operations(self):
+        response = self.client.get(reverse("panel:dashboard"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Registration Workflow")
+        self.assertContains(response, "London Spikers")
+        self.assertNotContains(response, "Match Results CSV")
+        self.assertNotContains(response, "Matches Played")
+
+    def test_panel_command_search_finds_current_entities(self):
+        response = self.client.get(reverse("panel:command_search"), {"q": "Emily"})
+
+        self.assertEqual(response.status_code, 200)
+        results = response.json()["results"]
+        self.assertTrue(any(item["label"] == "Emily Johnson" for item in results))
+
+    def test_player_detail_does_not_reference_retired_match_routes(self):
+        response = self.client.get(reverse("panel:player_detail", args=[self.player.pk]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Emily Johnson")
+        self.assertNotContains(response, "Match Stats")

@@ -81,20 +81,6 @@
   });
 })();
 
-/* ── Show/hide group field (match form) ─────────────── */
-
-(function () {
-  const stageSelect = document.getElementById('id_stage');
-  const groupField = document.getElementById('field-group');
-  if (!stageSelect || !groupField) return;
-
-  function toggle() {
-    groupField.style.display = stageSelect.value === 'GROUP' ? '' : 'none';
-  }
-  stageSelect.addEventListener('change', toggle);
-  toggle();
-})();
-
 /* ── Drawer open / close ────────────────────────────── */
 
 (function () {
@@ -434,94 +420,6 @@
   }
 })();
 
-/* ================================================================
-   6. Match Quick-Panel (drawer)
-   ================================================================ */
-(function () {
-  var overlay = document.getElementById('matchDrawerOverlay');
-  var drawer  = document.getElementById('matchDrawer');
-  var body    = document.getElementById('matchDrawerBody');
-  if (!overlay || !drawer || !body) return;
-
-  var csrfToken = (document.querySelector('[name=csrfmiddlewaretoken]') ||
-                   document.querySelector('meta[name="csrf-token"]') || {}).value ||
-                  (document.cookie.match(/csrftoken=([^;]+)/) || [])[1] || '';
-
-  function openMatchDrawer() {
-    overlay.classList.add('pnl-drawer-overlay--open');
-    drawer.classList.add('pnl-drawer--open');
-  }
-  function closeMatchDrawer() {
-    overlay.classList.remove('pnl-drawer-overlay--open');
-    drawer.classList.remove('pnl-drawer--open');
-    body.innerHTML = '';
-  }
-  overlay.addEventListener('click', closeMatchDrawer);
-  drawer.querySelector('.pnl-drawer__close').addEventListener('click', closeMatchDrawer);
-
-  /* Load panel via AJAX */
-  function loadMatchPanel(url) {
-    body.innerHTML = '<p class="pnl-muted" style="padding:2rem;">Loading…</p>';
-    openMatchDrawer();
-    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-      .then(function (r) { return r.json(); })
-      .then(function (data) { body.innerHTML = data.html; })
-      .catch(function () { body.innerHTML = '<p class="pnl-muted">Error loading panel.</p>'; });
-  }
-
-  /* Click on match link (table or grid) */
-  document.addEventListener('click', function (e) {
-    var link = e.target.closest('.pnl-match-panel-link');
-    if (link) { e.preventDefault(); loadMatchPanel(link.dataset.panelUrl); return; }
-
-    var cell = e.target.closest('.pnl-grid-schedule__cell[data-panel-url]');
-    if (cell && !e.target.closest('a')) { loadMatchPanel(cell.dataset.panelUrl); return; }
-  });
-
-  /* Delegated handlers inside drawer body */
-  body.addEventListener('click', function (e) {
-    /* Score save */
-    var saveBtn = e.target.closest('.pnl-mp__score-save');
-    if (saveBtn) {
-      var url = saveBtn.dataset.url;
-      var scoreA = body.querySelector('#mpScoreA');
-      var scoreB = body.querySelector('#mpScoreB');
-      if (!scoreA || !scoreB) return;
-      var fd = new FormData();
-      fd.append('score_a', scoreA.value);
-      fd.append('score_b', scoreB.value);
-      fetch(url, { method: 'POST', headers: { 'X-CSRFToken': csrfToken }, body: fd })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          if (data.ok) {
-            saveBtn.textContent = '✓ Saved';
-            setTimeout(function () { saveBtn.textContent = 'Save'; }, 1500);
-          }
-        });
-      return;
-    }
-
-    /* Status change */
-    var statusBtn = e.target.closest('.pnl-mp__status-btn');
-    if (statusBtn) {
-      var sUrl = statusBtn.dataset.url;
-      var newStatus = statusBtn.dataset.to;
-      var sd = new FormData();
-      sd.append('new_status', newStatus);
-      fetch(sUrl, { method: 'POST', headers: { 'X-CSRFToken': csrfToken }, body: sd })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          if (data.ok) {
-            /* Re-load panel to reflect new status */
-            var panelUrl = sUrl.replace('/status/', '/panel/');
-            loadMatchPanel(panelUrl);
-          }
-        });
-      return;
-    }
-  });
-})();
-
 /* ── Command Palette (Ctrl+K / Cmd+K) ──────────────── */
 
 (function () {
@@ -567,7 +465,7 @@
   if (backdrop) backdrop.addEventListener('click', close);
 
   function doSearch(q) {
-    fetch('/panel/cmd-search/?q=' + encodeURIComponent(q), {
+    fetch(input.dataset.url + '?q=' + encodeURIComponent(q), {
       headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
     .then(function (r) { return r.json(); })
@@ -586,13 +484,20 @@
       resultsList.innerHTML = '<li class="pnl-cmd-empty">No results found</li>';
       return;
     }
+    var escapeHTML = function (value) {
+      return String(value || '').replace(/[&<>'"]/g, function (char) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char];
+      });
+    };
     var html = '';
     results.forEach(function (r, i) {
-      var typeClass = 'pnl-cmd-type--' + r.type;
-      html += '<li class="pnl-cmd-item" data-idx="' + i + '" data-url="' + r.url + '">'
-        + '<i class="fas ' + r.icon + ' pnl-cmd-item__icon"></i>'
-        + '<span class="pnl-cmd-item__label">' + r.label + '</span>'
-        + '<span class="pnl-cmd-item__type ' + typeClass + '">' + r.type + '</span>'
+      var safeType = String(r.type || 'page').replace(/[^a-z0-9_-]/gi, '');
+      var safeIcon = String(r.icon || 'fa-link').replace(/[^a-z0-9_-]/gi, '');
+      var typeClass = 'pnl-cmd-type--' + safeType;
+      html += '<li class="pnl-cmd-item" data-idx="' + i + '" data-url="' + escapeHTML(r.url) + '">'
+        + '<i class="fas ' + safeIcon + ' pnl-cmd-item__icon"></i>'
+        + '<span class="pnl-cmd-item__label">' + escapeHTML(r.label) + '</span>'
+        + '<span class="pnl-cmd-item__type ' + typeClass + '">' + escapeHTML(safeType) + '</span>'
         + '</li>';
     });
     resultsList.innerHTML = html;

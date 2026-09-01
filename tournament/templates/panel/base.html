@@ -101,7 +101,8 @@
       <div class="pnl-cmd-input-wrap">
         <i class="fas fa-search pnl-cmd-icon"></i>
         <input type="text" class="pnl-cmd-input" id="cmdInput"
-               placeholder="Type a command or search… (teams, matches, pages)" autocomplete="off">
+               data-url="{% url 'panel:command_search' %}"
+               placeholder="Type a command or search… (teams, players, pages)" autocomplete="off">
         <kbd class="pnl-cmd-kbd">Esc</kbd>
       </div>
       <ul class="pnl-cmd-results" id="cmdResults"></ul>

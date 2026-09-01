@@ -11,7 +11,6 @@
       hero: {
         label: 'SAT 26.09.2026 • 09:00 • OUTDOOR COURT BY DORMITORY NO. 8',
         mobile_label: 'SAT 26.09 // ŁÓDŹ // 09:00',
-        sponsor_kicker: 'Match fuel partner',
         title: {
           intro_top: 'POCKET',
           intro_bottom: 'ACES',
@@ -21,7 +20,6 @@
         text: 'Registration is open for Pocket Aces Court Cup 3. Outdoor volleyball, 8 teams, first serve at 09:00 on Saturday, September 26, 2026. Lock your spot before registration closes.',
         mobile_fact1: 'Tournament Day',
         mobile_fact2: 'Team Limit',
-        mobile_fact3: 'Outdoor Court',
         price: { label: 'ENTRY' },
         counter: { label: 'SLOTS' },
         stats: {
@@ -325,7 +323,7 @@
       reg_next1:     'Next: Media',
       reg_captain:   'Captain Details',
       reg_fullname:  'Full Name',
-      reg_fullname_ph: 'e.g. Jan Kowalski',
+      reg_fullname_ph: 'e.g. James Smith',
       reg_phone:     'Phone Number',
       reg_phone_ph:  '+48 123 456 789',
       reg_email:     'Email Address',
@@ -387,7 +385,6 @@
       hero: {
         label: 'SOB 26.09.2026 • 09:00 • BOISKO PLENEROWE PRZY DS NR 8',
         mobile_label: 'SOB 26.09 // ŁÓDŹ // 09:00',
-        sponsor_kicker: 'Partner na mecz',
         title: {
           intro_top: 'POCKET',
           intro_bottom: 'ACES',
@@ -397,7 +394,6 @@
         text: 'Rejestracja na Pocket Aces Court Cup 3 jest otwarta. Gramy na zewnątrz, limit to 8 drużyn, pierwsze podanie 26 września 2026 o 09:00. Zapisz ekipę przed zamknięciem rejestracji.',
         mobile_fact1: 'Dzień Turnieju',
         mobile_fact2: 'Limit Drużyn',
-        mobile_fact3: 'Boisko Outdoor',
         price: { label: 'WPISOWE' },
         counter: { label: 'MIEJSCA' },
         stats: {
