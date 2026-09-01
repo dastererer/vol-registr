@@ -21,6 +21,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.templatetags.static import static as static_url
 from django.core.mail import send_mail
 from django.urls import reverse
+from django.utils import timezone
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_GET, require_POST
@@ -449,7 +450,12 @@ def _save_roster_profile(request, team):
 
 def index(request):
     """Landing page with live slot counter."""
-    from .constants import REGISTRATION_CLOSED, REGISTRATION_DEADLINE_ISO, FAN_VOTING_ENABLED
+    from .constants import (
+        FAN_VOTING_ENABLED,
+        PAYMENT_REFUND,
+        REGISTRATION_CLOSED,
+        REGISTRATION_DEADLINE_ISO,
+    )
     
     # Allow hiding voting via query param ?hide_voting=1
     hide_voting = request.GET.get('hide_voting') == '1'
@@ -459,7 +465,7 @@ def index(request):
 
     # Teams with confirmed vote count, sorted by votes DESC, then by name
     from django.db.models import Count, Q
-    teams = Team.objects.annotate(
+    teams = Team.objects.exclude(payment_status=PAYMENT_REFUND).annotate(
         confirmed_votes=Count('fan_votes', filter=Q(fan_votes__confirmed_at__isnull=False))
     ).order_by('-confirmed_votes', 'name')
     
@@ -467,9 +473,10 @@ def index(request):
     total_votes = sum(t.confirmed_votes for t in teams)
     max_votes = max((t.confirmed_votes for t in teams), default=1)
     
+    hero_photo = _page_media_url("main_photo")
     context = {
         "available_slots": available,
-        "registered_teams": MAX_TOURNAMENT_SLOTS - available,
+        "registered_teams": len(teams),
         "max_slots": MAX_TOURNAMENT_SLOTS,
         "teams": teams,
         "total_votes": total_votes,
@@ -477,7 +484,18 @@ def index(request):
         "registration_closed": REGISTRATION_CLOSED,
         "registration_deadline": REGISTRATION_DEADLINE_ISO,
         "voting_enabled": voting_enabled,
-        "hero_photo_url": _page_media_url("main_photo"),
+        "hero_photo_url": hero_photo,
+        "hero_slides": [
+            {
+                "url": hero_photo or static_url("assets/prev-tour/photo_2026-04-25_14-25-03.jpg"),
+            },
+            {
+                "url": static_url("assets/prev-tour/photo_2026-04-25_14-25-04.jpg"),
+            },
+            {
+                "url": static_url("assets/prev-tour/photo_2026-04-25_14-25-09.jpg"),
+            },
+        ],
     }
     return render(request, "tournament/index.html", context)
 
@@ -490,8 +508,19 @@ def index(request):
 
 def tournament_team(request, team_id):
     """Public team profile showing roster, logo, and entrance song."""
-    team = get_object_or_404(Team, id=team_id)
-    return render(request, "tournament/team_detail.html", {"team": team})
+    from .constants import FAN_VOTING_ENABLED
+
+    team = get_object_or_404(Team.objects.prefetch_related("players"), id=team_id)
+    confirmed_votes = team.fan_votes.filter(confirmed_at__isnull=False).count()
+    return render(
+        request,
+        "tournament/team_detail.html",
+        {
+            "team": team,
+            "confirmed_votes": confirmed_votes,
+            "voting_enabled": FAN_VOTING_ENABLED,
+        },
+    )
 
 
 def register(request):
@@ -557,9 +586,9 @@ def api_register_team(request):
             team.save(update_fields=["blik_number"])
 
             if lang == 'pl':
-                subject = "Pocket Aces Court cup 2 - Instrukcje platnosci"
+                subject = "Pocket Aces Court Cup 3 - Instrukcje platnosci"
                 message = (
-                    f"Dziekujemy za rejestracje druzyny {team.name} na Pocket Aces Court cup 2.\n\n"
+                    f"Dziekujemy za rejestracje druzyny {team.name} na Pocket Aces Court Cup 3.\n\n"
                     "Aby dokonczyc rejestracje, prosimy o oplate wpisowego 150 zl na ponizszy numer BLIK:\n"
                     f"BLIK: {blik}\n"
                     f"Tytuł: {team.name}\n\n"
@@ -568,12 +597,12 @@ def api_register_team(request):
                     "Pocket Aces Sports Club\n"
                 )
             else:
-                subject = "Pocket Aces Court cup 2 - Payment Instructions"
+                subject = "Pocket Aces Court Cup 3 - Payment Instructions"
                 message = (
-                    f"Thank you for registering {team.name} for Pocket Aces Court cup 2.\n\n"
+                    f"Thank you for registering {team.name} for Pocket Aces Court Cup 3.\n\n"
                     "To complete your registration, please send the 150 zl entry fee to the following BLIK number:\n"
                     f"BLIK: {blik}\n"
-                    f"Title: Pocket Aces Court cup 2 - {team.name}\n\n"
+                    f"Title: Pocket Aces Court Cup 3 - {team.name}\n\n"
                     "If you have any questions, reply to this email.\n\n"
                     "See you on the court!\n\n"
                     "Pocket Aces Sports Club\n"
@@ -671,7 +700,7 @@ def api_vote_team(request):
         confirm_url = request.build_absolute_uri(reverse('vote_confirm', args=[vote.token]))
         
         send_mail(
-            subject='Confirm your vote - Pocket Aces Court cup 2',
+            subject='Confirm your vote - Pocket Aces Court Cup 3',
             message=f'Click the link below to confirm your vote for {team.name}:\n\n{confirm_url}',
             from_email=settings.DEFAULT_FROM_EMAIL, 
             recipient_list=[email], 
@@ -766,24 +795,24 @@ def roster_update_view(request):
 
                     # Build email in the user's language
                     if ui_lang == "pl":
-                        email_subject = "Pocket Aces Court cup 2 - Dostep do profilu druzyny"
+                        email_subject = "Pocket Aces Court Cup 3 - Dostep do profilu druzyny"
                         email_body = (
                             f"Czesc {team.cap_name},\n\n"
                             f"Otworz ten link, aby zarzadzac profilem druzyny \"{team.name}\":\n"
                             f"{access_url}\n\n"
                             f"Jesli wolisz wpisac kod recznie, uzyj: {code}\n\n"
                             "Po zalogowaniu mozesz edytowac sklad, dane kapitana i logo.\n\n"
-                            "- Pocket Aces Court cup 2"
+                            "- Pocket Aces Court Cup 3"
                         )
                     else:
-                        email_subject = "Pocket Aces Court cup 2 - Team Profile Access"
+                        email_subject = "Pocket Aces Court Cup 3 - Team Profile Access"
                         email_body = (
                             f"Hi {team.cap_name},\n\n"
                             f"Open this link to manage team \"{team.name}\":\n"
                             f"{access_url}\n\n"
                             f"If you prefer the manual code flow, use: {code}\n\n"
                             "Once inside, you can edit the roster, captain details, and logo.\n\n"
-                            "- Pocket Aces Court cup 2"
+                            "- Pocket Aces Court Cup 3"
                         )
 
                     try:

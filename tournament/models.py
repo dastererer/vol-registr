@@ -3,6 +3,8 @@ from django.db import models
 
 from .constants import (
     EMAIL_MAX_LENGTH,
+    FREE_AGENT_NEW,
+    FREE_AGENT_STATUS_CHOICES,
     GROUP_NAME_MAX_LENGTH,
     LOGO_PATH_MAX_LENGTH,
     PAYMENT_ACCEPTED,
@@ -12,6 +14,7 @@ from .constants import (
     PHONE_MAX_LENGTH,
     POSITION_CHOICES,
     TABLE_AUDIT_ENTRIES,
+    TABLE_FREE_AGENT_APPLICATIONS,
     TABLE_PLAYERS,
     TABLE_TEAMS,
     TEAM_NAME_MAX_LENGTH,
@@ -164,6 +167,39 @@ class TeamFanVote(models.Model):
         return self.confirmed_at is not None
 
 
+# ── Public Free-Agent Requests ───────────────────────────
+
+class FreeAgentApplication(models.Model):
+    """A no-account request from a player to a registered team captain."""
+
+    first_name = models.CharField(max_length=PERSON_NAME_MAX_LENGTH)
+    last_name = models.CharField(max_length=PERSON_NAME_MAX_LENGTH)
+    email = models.EmailField(max_length=EMAIL_MAX_LENGTH)
+    team = models.ForeignKey(
+        Team,
+        on_delete=models.CASCADE,
+        related_name="free_agent_applications",
+    )
+    message = models.TextField(max_length=1200)
+    status = models.CharField(
+        max_length=20,
+        choices=FREE_AGENT_STATUS_CHOICES,
+        default=FREE_AGENT_NEW,
+        db_index=True,
+    )
+    email_sent = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        db_table = TABLE_FREE_AGENT_APPLICATIONS
+        ordering = ["-created_at"]
+        verbose_name = "Free-agent application"
+        verbose_name_plural = "Free-agent applications"
+
+    def __str__(self) -> str:
+        return f"{self.first_name} {self.last_name} -> {self.team.name}"
+
+
 # ── Audit ────────────────────────────────────────────────
 
 AUDIT_CATEGORY_TEAM = "team"
@@ -195,3 +231,4 @@ class AuditEntry(models.Model):
 
     def __str__(self) -> str:
         return f"[{self.timestamp:%Y-%m-%d %H:%M}] {self.action}"
+

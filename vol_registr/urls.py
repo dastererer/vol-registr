@@ -18,10 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from tournament import platform_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('panel/', include('tournament.admin_urls')),
+    path('login/', platform_views.legacy_profile_redirect, name='login'),
+    path('logout/', platform_views.legacy_home_redirect, name='logout'),
+    path('', include('tournament.platform_urls')),
     path('', include('tournament.urls')),
 ]
 

@@ -8,6 +8,17 @@
   const MOBILE_BP = 768;
   let swiperInstance = null;
 
+  function getRoot() {
+    return document.querySelector('.cards-swiper');
+  }
+
+  function enableNativeFallback() {
+    const root = getRoot();
+    if (!root) return;
+    root.classList.remove('cards-swiper--ready');
+    root.classList.add('cards-swiper--fallback');
+  }
+
   function shouldUseSwiper() {
     return window.innerWidth < MOBILE_BP;
   }
@@ -29,7 +40,16 @@
 
   function initSwiper() {
     if (swiperInstance) return;
-    swiperInstance = new Swiper('.cards-swiper', {
+    const root = getRoot();
+    if (!root) return;
+    if (typeof window.Swiper !== 'function') {
+      enableNativeFallback();
+      return;
+    }
+
+    root.classList.remove('cards-swiper--fallback');
+    root.classList.add('cards-swiper--ready');
+    swiperInstance = new window.Swiper(root, {
       effect: 'cards',
       grabCursor: true,
       speed: 500,
@@ -52,9 +72,12 @@
   }
 
   function destroySwiper() {
-    if (!swiperInstance) return;
-    swiperInstance.destroy(true, true);
-    swiperInstance = null;
+    const root = getRoot();
+    if (swiperInstance) {
+      swiperInstance.destroy(true, true);
+      swiperInstance = null;
+    }
+    if (root) root.classList.remove('cards-swiper--ready', 'cards-swiper--fallback');
 
     // Clean up residual inline styles left by Swiper
     var wrapper = document.querySelector('.cards-swiper .swiper-wrapper');

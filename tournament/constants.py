@@ -10,7 +10,19 @@ MAX_TOURNAMENT_SLOTS = 8
 
 # ── Registration Gate ───────────────────────────────────
 REGISTRATION_CLOSED = False
-REGISTRATION_DEADLINE_ISO = "2026-06-03T23:59:00+02:00"
+REGISTRATION_DEADLINE_ISO = "2026-09-20T23:59:00+02:00"
+
+# ── Public free-agent requests ───────────────────────────
+FREE_AGENT_NEW = "NEW"
+FREE_AGENT_CONTACTED = "CONTACTED"
+FREE_AGENT_CLOSED = "CLOSED"
+
+FREE_AGENT_STATUS_CHOICES = [
+    (FREE_AGENT_NEW, "New"),
+    (FREE_AGENT_CONTACTED, "Captain contacted"),
+    (FREE_AGENT_CLOSED, "Closed"),
+]
+
 
 # ── Payment Status ───────────────────────────────────────
 PAYMENT_WAITING = 0
@@ -42,6 +54,18 @@ PAYMENT_ACCOUNTS = [
     {"blik": "572 637 803", "capacity": 3},
     {"blik": "535 054 366", "capacity": 3},
 ]
+
+
+# ── Sponsor / Pizzeria Kultowa ───────────────────────────
+PIZZERIA_KULTOWA = {
+    "name": "Pizzeria Kultowa",
+    "tagline": "Kultowa pizza z dostawą na każdy mecz",
+    "accent_color": "#BF1A20",
+    "background_color": "#111111",
+    "text_color": "#FFFFFF",
+    "logo_url": "https://cs.cdn-upm.com/themes/b7746e1a-9a35-11ec-9695-525400080621/assets-20/logopizzeriakultowa3.webp?v=3",
+    "website": "https://www.pizzeriakultowa.pl/menu",
+}
 
 # ── Field Limits ─────────────────────────────────────────
 TEAM_NAME_MAX_LENGTH = 100
@@ -188,6 +212,7 @@ ROSTER_CODE_LENGTH = 6
 # ── DB Table Names ───────────────────────────────────────
 TABLE_TEAMS = "Teams"
 TABLE_PLAYERS = "Players"
+TABLE_FREE_AGENT_APPLICATIONS = "free_agent_applications"
 TABLE_MATCHES = "matches"
 TABLE_GAME_SETS = "game_sets"
 TABLE_PLAYER_MATCH_STATS = "player_match_stats"

@@ -2,7 +2,7 @@ from django.urls import path
 
 from .panel.auth_views import panel_login, panel_logout
 from .panel.checkin_views import checkin_search, checkin_toggle, checkin_view
-from .panel.dashboard_views import dashboard_view
+from .panel.dashboard_views import command_search, dashboard_view
 
 from .panel.team_views import (
     generate_roster_code,
@@ -32,13 +32,13 @@ from .panel.backup_views import (
     db_download_current,
     db_restore,
 )
-
 app_name = "panel"
 
 urlpatterns = [
     path("login/", panel_login, name="login"),
     path("logout/", panel_logout, name="logout"),
     path("", dashboard_view, name="dashboard"),
+    path("command-search/", command_search, name="command_search"),
     path("teams/", teams_list_view, name="teams"),
     path("teams/pipeline/", teams_pipeline_view, name="teams_pipeline"),
     path("teams/create/", team_create_view, name="team_create"),
@@ -58,7 +58,6 @@ urlpatterns = [
     path("players/<int:pk>/", player_detail_view, name="player_detail"),
     path("players/<int:pk>/edit/", player_edit_view, name="player_edit"),
     path("players/<int:pk>/delete/", player_delete_view, name="player_delete"),
-
     # ── DB Backup / Restore ──
     path("backup/", db_backup_view, name="db_backup"),
     path("backup/create/", db_backup_create, name="db_backup_create"),

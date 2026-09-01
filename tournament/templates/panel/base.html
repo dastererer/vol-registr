@@ -29,10 +29,6 @@
            class="pnl-nav-item{% if nav_section == 'dashboard' %} active{% endif %}">
           <i class="fas fa-tower-broadcast"></i><span>Control Room</span>
         </a>
-        <a href="{% url 'panel:audit' %}"
-           class="pnl-nav-item{% if nav_section == 'audit' %} active{% endif %}">
-          <i class="fas fa-clock-rotate-left"></i><span>Audit Log</span>
-        </a>
       </div>
 
       {# ── Teams & Registration ─────────────────── #}
@@ -52,38 +48,12 @@
         </a>
       </div>
 
-      {# ── Match Operations ─────────────────────── #}
+      {# ── Database ─────────────────────────────── #}
       <div class="pnl-nav-zone">
-        <span class="pnl-nav-zone__label">Match Operations</span>
-        <a href="{% url 'panel:schedule' %}?view=grid"
-           class="pnl-nav-item{% if nav_section == 'schedule' %} active{% endif %}">
-          <i class="fas fa-clock"></i><span>Schedule / Events</span>
-        </a>
-        <a href="{% url 'panel:schedule' %}?view=table"
-           class="pnl-nav-item{% if nav_section == 'matches' %} active{% endif %}">
-          <i class="fas fa-table-list"></i><span>Matches</span>
-        </a>
-      </div>
-
-      {# ── Stats & Rankings ─────────────────────── #}
-      <div class="pnl-nav-zone">
-        <span class="pnl-nav-zone__label">Stats &amp; Rankings</span>
-        <a href="{% url 'panel:stats' %}"
-           class="pnl-nav-item{% if nav_section == 'stats' %} active{% endif %}">
-          <i class="fas fa-chart-bar"></i><span>Statistics</span>
-        </a>
-        <a href="{% url 'panel:rankings' %}"
-           class="pnl-nav-item{% if nav_section == 'rankings' %} active{% endif %}">
-          <i class="fas fa-trophy"></i><span>Rankings</span>
-        </a>
-      </div>
-
-      {# ── Media & Publishing ───────────────────── #}
-      <div class="pnl-nav-zone">
-        <span class="pnl-nav-zone__label">Media &amp; Publishing</span>
-        <a href="{% url 'panel:gallery' %}"
-           class="pnl-nav-item{% if nav_section == 'gallery' %} active{% endif %}">
-          <i class="fas fa-images"></i><span>Gallery</span>
+        <span class="pnl-nav-zone__label">Database</span>
+        <a href="{% url 'panel:db_backup' %}"
+           class="pnl-nav-item{% if nav_section == 'backup' %} active{% endif %}">
+          <i class="fas fa-database"></i><span>Backups</span>
         </a>
       </div>
     </nav>
@@ -131,7 +101,8 @@
       <div class="pnl-cmd-input-wrap">
         <i class="fas fa-search pnl-cmd-icon"></i>
         <input type="text" class="pnl-cmd-input" id="cmdInput"
-               placeholder="Type a command or search… (teams, matches, pages)" autocomplete="off">
+               data-url="{% url 'panel:command_search' %}"
+               placeholder="Type a command or search… (teams, players, pages)" autocomplete="off">
         <kbd class="pnl-cmd-kbd">Esc</kbd>
       </div>
       <ul class="pnl-cmd-results" id="cmdResults"></ul>

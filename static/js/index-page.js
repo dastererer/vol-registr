@@ -5,16 +5,19 @@
  *              Depends on: config.js, utils.js, gsap + ScrollTrigger (CDN).
  */
 
-/* global gsap, ScrollTrigger, window, APP_CONFIG, AppUtils */
+/* global gsap, ScrollTrigger, window, APP_CONFIG */
 
 document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
     const CFG = window.APP_CONFIG;
     const isMobileView = window.matchMedia('(max-width: 768px)').matches;
+    const reducedMotion = CFG.REDUCED_MOTION === true;
 
     // ─── Hero Intro Timeline ────────────────────────
-    initHeroIntro(CFG.hero);
+    if (!reducedMotion && typeof gsap !== 'undefined') {
+        initHeroIntro(CFG.hero);
+    }
 
     // ─── Card Modal (desktop only) ────────────────────
     if (!isMobileView) {
@@ -28,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof ScrollTrigger !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger);
 
-        // Skip scroll animations on mobile
-        if (!isMobileView) {
+        // Skip scroll animations on mobile and for reduced motion
+        if (!isMobileView && !reducedMotion) {
             initCardsFlyIn(CFG.cards);
             initLocationScrollAnim(CFG.scroll);
             initEditorialSectionAnim(CFG.scroll);
@@ -48,92 +51,172 @@ document.addEventListener('DOMContentLoaded', () => {
  * @param {object} cfg - hero timings from APP_CONFIG.
  */
 function initHeroIntro(cfg) {
-    const tl = gsap.timeline();
+    const hero = document.querySelector('.hero--swiper');
+    if (!hero) return;
+
+    const background = hero.querySelector('.hero-bg-swiper');
+    const scrim = hero.querySelector('.hero-bg-scrim');
+    const sweep = hero.querySelector('.hero-motion-sweep');
+    const sponsorIntro = hero.querySelector('.hero-sponsor-intro');
+    const sponsorOrbit = hero.querySelector('.hero-sponsor-intro__orbit');
+    const sponsorIntroItems = gsap.utils.toArray(hero.querySelectorAll(
+        '.hero-sponsor-intro__kicker, .hero-sponsor-intro__logo, .hero-sponsor-intro__slogan'
+    ));
+    const partner = hero.querySelector('.hero-partner');
+    const label = hero.querySelector('.hero__label-wrap');
     const introStage = document.querySelector('.hero-title__stage--intro');
     const finalStage = document.querySelector('.hero-title__stage--final');
     const introLines = document.querySelectorAll('.hero-title__stage--intro .hero-title__line');
     const finalLines = document.querySelectorAll('.hero-title__stage--final .hero-title__line');
+    const text = hero.querySelector('.hero-text');
+    const mobileFacts = window.matchMedia('(max-width: 767px)').matches;
+    const factsPanel = hero.querySelector(mobileFacts ? '.hero-mobile-facts' : '.hero-stats-row');
+    const factItems = mobileFacts
+        ? gsap.utils.toArray('.hero-mobile-fact')
+        : gsap.utils.toArray('.hero-stats-row > *');
+    const buttons = gsap.utils.toArray('.hero-btn-container > *');
 
-    window.setTimeout(() => {
-        if (introStage) {
-            introStage.style.opacity = '0';
-            introStage.style.transform = 'translateX(-12%)';
-            introStage.style.animation = 'none';
-        }
-
-        introLines.forEach((line) => {
-            line.style.animation = 'none';
-        });
-
-        if (finalStage) {
-            finalStage.style.opacity = '1';
-            finalStage.style.transform = 'translateX(0)';
-            finalStage.style.animation = 'none';
-        }
-
-        finalLines.forEach((line) => {
-            line.style.opacity = '1';
-            line.style.transform = 'translateX(0)';
-            line.style.animation = 'none';
-        });
-    }, 3400);
-
-    // Logo (legacy templates may still provide one)
-    const heroLogo = document.querySelector('.hero-logo');
-    if (heroLogo) {
-        tl.to(heroLogo, {
-            y: 0, opacity: 1,
-            duration: cfg.logo.duration,
-            ease: cfg.logo.ease,
-        });
-    }
-
-    // Date / location label
-    tl.to('.hero-label', {
-        y: 0, opacity: 1,
-        duration: cfg.label.duration,
-        ease: cfg.label.ease,
-    }, '+=0.35');
-
-    // Subtitle, price, counter, CTA
-    tl.to(['.hero-text', '.hero-price', '.hero-counter', '.hero-btn-container'], {
-        y: 0, opacity: 1,
-        duration: cfg.text.duration,
-        stagger: cfg.text.stagger,
-        ease: cfg.text.ease,
-    }, '-=0.8');
-
-    // Player image
-    animateHeroPlayer(tl, cfg.player);
-
-    // Scroll indicator
-    tl.from('.scroll-indicator', {
-        opacity: 0, y: -20,
-        duration: cfg.scroll.duration,
-        delay: cfg.scroll.delay,
+    [introStage, finalStage].forEach((stage) => {
+        if (stage) stage.style.animation = 'none';
     });
-}
 
-/**
- * Animate the hero player image (slide on desktop, fade on mobile).
- * @param {gsap.core.Timeline} tl
- * @param {object} cfg - player timing config.
- */
-function animateHeroPlayer(tl, cfg) {
-    if (AppUtils.isMobile()) {
-        gsap.set('.hero-player', { x: 0 });
-        tl.to('.hero-player', {
-            opacity: cfg.mobileOpacity,
-            duration: cfg.duration,
-            ease: cfg.ease,
-        }, '-=1.5');
-    } else {
-        tl.to('.hero-player', {
-            x: 0, opacity: 1,
-            duration: cfg.duration,
-            ease: cfg.ease,
-        }, '-=1.5');
-    }
+    hero.classList.add('hero--motion-running');
+    gsap.set(background, { opacity: 0.35, scale: 1.08, transformOrigin: 'center center' });
+    gsap.set(scrim, { opacity: 0 });
+    gsap.set(sweep, { opacity: 0, xPercent: 0 });
+    gsap.set(sponsorIntro, { autoAlpha: 1, clipPath: 'inset(0 100% 0 0)' });
+    gsap.set(sponsorOrbit, { opacity: 0, scale: 0.55, rotation: -18 });
+    gsap.set(sponsorIntroItems, { opacity: 0, y: 28 });
+    gsap.set(partner, { opacity: 0, y: 24, scale: 0.94 });
+    gsap.set(label, { opacity: 0, x: -26, clipPath: 'inset(0 100% 0 0)' });
+    gsap.set(introStage, { opacity: 1, xPercent: 0, clipPath: 'none' });
+    gsap.set(finalStage, { opacity: 0, xPercent: 0, clipPath: 'none' });
+    gsap.set(introLines, { yPercent: 115, skewY: 3 });
+    gsap.set(finalLines, { yPercent: 115, skewY: 3 });
+    gsap.set(text, { opacity: 0, y: 24 });
+    gsap.set(factsPanel, { opacity: 0, clipPath: 'inset(0 100% 0 0)' });
+    gsap.set(factItems, { opacity: 0, y: 20 });
+    gsap.set(buttons, { opacity: 0, y: 24 });
+
+    const sponsorExitAt = cfg.sponsor.enterDuration + cfg.sponsor.itemDuration + cfg.sponsor.hold;
+    const tournamentStart = sponsorExitAt + (cfg.sponsor.exitDuration * 0.58);
+
+    const tl = gsap.timeline({
+        defaults: { ease: 'power4.out' },
+        onComplete: () => {
+            gsap.set(introStage, { opacity: 0 });
+            gsap.set(finalStage, { opacity: 1 });
+            hero.classList.remove('hero--motion-running');
+            hero.classList.add('hero--motion-complete');
+        },
+    });
+
+    tl.to(background, {
+        opacity: 1,
+        scale: 1,
+        duration: cfg.background.duration,
+        ease: cfg.background.ease,
+    }, 0)
+        .to(scrim, { opacity: 1, duration: cfg.background.duration * 0.7 }, 0)
+        .to(sponsorIntro, {
+            clipPath: 'inset(0 0% 0 0)',
+            duration: cfg.sponsor.enterDuration,
+            ease: 'power4.inOut',
+        }, 0)
+        .to(sponsorOrbit, {
+            opacity: 0.28,
+            scale: 1,
+            rotation: 0,
+            duration: cfg.sponsor.itemDuration * 1.5,
+            ease: 'power3.out',
+        }, 0.1)
+        .to(sponsorIntroItems, {
+            opacity: 1,
+            y: 0,
+            duration: cfg.sponsor.itemDuration,
+            stagger: 0.08,
+            ease: 'power4.out',
+        }, 0.16)
+        .to(sponsorIntro, {
+            clipPath: 'inset(0 0 0 100%)',
+            duration: cfg.sponsor.exitDuration,
+            ease: 'power4.inOut',
+        }, sponsorExitAt)
+        .set(sponsorIntro, { autoAlpha: 0 }, sponsorExitAt + cfg.sponsor.exitDuration)
+        .to(sweep, {
+            xPercent: 400,
+            opacity: 0.78,
+            duration: cfg.sweep.duration * 0.72,
+            ease: 'power2.in',
+        }, tournamentStart - 0.12)
+        .to(sweep, {
+            xPercent: 470,
+            opacity: 0,
+            duration: cfg.sweep.duration * 0.28,
+            ease: 'power2.out',
+        })
+        .to(label, {
+            opacity: 1,
+            x: 0,
+            clipPath: 'inset(0 0% 0 0)',
+            duration: cfg.label.duration,
+            ease: cfg.label.ease,
+        }, tournamentStart)
+        .to(introLines, {
+            yPercent: 0,
+            skewY: 0,
+            duration: cfg.title.duration,
+            stagger: cfg.title.stagger,
+            ease: cfg.title.ease,
+        }, tournamentStart + 0.12)
+        .to(introLines, {
+            yPercent: -115,
+            skewY: -2,
+            duration: cfg.title.exitDuration,
+            stagger: cfg.title.exitStagger,
+            ease: 'power3.in',
+        }, tournamentStart + 1)
+        .set(finalStage, { opacity: 1 }, tournamentStart + 1.1)
+        .to(finalLines, {
+            yPercent: 0,
+            skewY: 0,
+            duration: cfg.title.duration,
+            stagger: cfg.title.stagger,
+            ease: cfg.title.ease,
+        }, tournamentStart + 1.14)
+        .to(text, {
+            opacity: 1,
+            y: 0,
+            duration: cfg.text.duration,
+            ease: cfg.text.ease,
+        }, tournamentStart + 1.52)
+        .to(factsPanel, {
+            opacity: 1,
+            clipPath: 'inset(0 0% 0 0)',
+            duration: cfg.facts.duration,
+            ease: cfg.facts.ease,
+        }, tournamentStart + 1.58)
+        .to(factItems, {
+            opacity: 1,
+            y: 0,
+            duration: cfg.facts.duration,
+            stagger: cfg.facts.stagger,
+            ease: cfg.facts.ease,
+        }, tournamentStart + 1.68)
+        .to(partner, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: cfg.partner.duration,
+            ease: cfg.partner.ease,
+        }, tournamentStart + 1.82)
+        .to(buttons, {
+            opacity: 1,
+            y: 0,
+            duration: cfg.buttons.duration,
+            stagger: cfg.buttons.stagger,
+            ease: cfg.buttons.ease,
+        }, tournamentStart + 1.98);
 }
 
 
@@ -277,14 +360,6 @@ function initEditorialSectionAnim(cfg) {
         stagger: 0.08,
     });
 
-    gsap.from(['.venue-hero', '.venue-card'], {
-        scrollTrigger: { trigger: '.section--arena', start: item.start },
-        y: item.y,
-        opacity: 0,
-        scale: 0.97,
-        duration: item.duration,
-        stagger: 0.1,
-    });
 }
 
 /**
@@ -314,7 +389,11 @@ function initTimelineScrollAnim(cfg) {
 function initCardModal() {
     const overlay  = document.getElementById('cardModalOverlay');
     const modalBox = document.getElementById('cardModalCard');
-    if (!overlay || !modalBox) return;
+    const modalBody = document.getElementById('cardModalBody');
+    const closeButton = document.getElementById('cardModalClose');
+    if (!overlay || !modalBox || !modalBody || !closeButton) return;
+
+    let lastTrigger = null;
 
     // Click on any card wrapper → open modal
     document.querySelectorAll('.flip-card-wrapper').forEach(wrapper => {
@@ -325,28 +404,44 @@ function initCardModal() {
 
             // Clone front face into modal
             const clone = front.cloneNode(true);
-            modalBox.innerHTML = '';
-            modalBox.appendChild(clone);
+            clone.classList.add('card-modal__front');
+            clone.removeAttribute('style');
+            clone.querySelectorAll('[style]').forEach((node) => node.removeAttribute('style'));
+            clone.querySelectorAll('[id]').forEach((node) => node.removeAttribute('id'));
+
+            const title = clone.querySelector('.card-front__title');
+            if (title) title.id = 'cardModalTitle';
+
+            modalBody.replaceChildren(clone);
+            lastTrigger = wrapper.querySelector('.flip-card__open') || wrapper;
 
             overlay.classList.add('active');
+            overlay.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
+            window.requestAnimationFrame(() => closeButton.focus());
         });
     });
 
-    // Close on overlay click
-    overlay.addEventListener('click', () => closeCardModal(overlay));
+    closeButton.addEventListener('click', () => closeCardModal(overlay, lastTrigger));
+
+    // Close only when the dimmed backdrop itself is clicked.
+    overlay.addEventListener('click', (event) => {
+        if (event.target === overlay) closeCardModal(overlay, lastTrigger);
+    });
 
     // Close on Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && overlay.classList.contains('active')) {
-            closeCardModal(overlay);
+            closeCardModal(overlay, lastTrigger);
         }
     });
 }
 
-function closeCardModal(overlay) {
+function closeCardModal(overlay, lastTrigger = null) {
     overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    if (lastTrigger && typeof lastTrigger.focus === 'function') lastTrigger.focus();
 }
 
 // ═══════════════════════════════════════════════════════

@@ -1,110 +1,68 @@
-{% extends "panel/base.html" %}
+{% extends 'panel/base.html' %}
 
 {% block content %}
 <div class="pnl-cr">
-
-  {# ── Alert rail ────────────────────────────────────── #}
   {% if alerts %}
   <div class="pnl-cr-alerts">
-    {% for a in alerts %}
-    <a href="{{ a.url }}" class="pnl-cr-alert pnl-cr-alert--{{ a.level }}">
-      <i class="{{ a.icon }}"></i>
-      <span>{{ a.text }}</span>
+    {% for alert in alerts %}
+    <a href="{{ alert.url }}" class="pnl-cr-alert pnl-cr-alert--{{ alert.level }}">
+      <i class="{{ alert.icon }}"></i>
+      <span>{{ alert.text }}</span>
       <i class="fas fa-arrow-right pnl-cr-alert__arrow"></i>
     </a>
     {% endfor %}
   </div>
   {% endif %}
 
-  {# ── KPI strip ────────────────────────────────────── #}
   <div class="pnl-kpi-grid">
-    <div class="pnl-kpi">
+    <a href="{% url 'panel:teams' %}" class="pnl-kpi pnl-kpi--link">
       <div class="pnl-kpi__icon"><i class="fas fa-users"></i></div>
       <div class="pnl-kpi__body">
         <span class="pnl-kpi__value pnl-mono">{{ teams_total }}</span>
         <span class="pnl-kpi__label">Teams</span>
       </div>
-    </div>
-    <div class="pnl-kpi">
-      <div class="pnl-kpi__icon"><i class="fas fa-running"></i></div>
+    </a>
+    <a href="{% url 'panel:players' %}" class="pnl-kpi pnl-kpi--link">
+      <div class="pnl-kpi__icon"><i class="fas fa-user"></i></div>
       <div class="pnl-kpi__body">
         <span class="pnl-kpi__value pnl-mono">{{ players_total }}</span>
         <span class="pnl-kpi__label">Players</span>
       </div>
-    </div>
-    <div class="pnl-kpi">
-      <div class="pnl-kpi__icon"><i class="fas fa-volleyball-ball"></i></div>
+    </a>
+    <a href="{% url 'panel:teams' %}?status=AWAITING_PAYMENT" class="pnl-kpi pnl-kpi--link">
+      <div class="pnl-kpi__icon"><i class="fas fa-credit-card"></i></div>
       <div class="pnl-kpi__body">
-        <span class="pnl-kpi__value pnl-mono">{{ matches_finished }} / {{ matches_total }}</span>
-        <span class="pnl-kpi__label">Matches Played</span>
+        <span class="pnl-kpi__value pnl-mono">{{ awaiting_payment }}</span>
+        <span class="pnl-kpi__label">Awaiting payment</span>
       </div>
-    </div>
-    <div class="pnl-kpi">
-      <div class="pnl-kpi__icon"><i class="fas fa-calendar-alt"></i></div>
-      <div class="pnl-kpi__body">
-        <span class="pnl-kpi__value pnl-mono">{{ matches_remaining }}</span>
-        <span class="pnl-kpi__label">Remaining</span>
-      </div>
-    </div>
-    <div class="pnl-kpi">
+    </a>
+    <a href="{% url 'panel:checkin' %}" class="pnl-kpi pnl-kpi--link">
       <div class="pnl-kpi__icon"><i class="fas fa-clipboard-check"></i></div>
       <div class="pnl-kpi__body">
         <span class="pnl-kpi__value pnl-mono">{{ checkin_count }} / {{ checkin_of }}</span>
         <span class="pnl-kpi__label">Check-ins</span>
       </div>
-    </div>
-    <div class="pnl-kpi">
-      <div class="pnl-kpi__icon"><i class="fas fa-images"></i></div>
-      <div class="pnl-kpi__body">
-        <span class="pnl-kpi__value pnl-mono">{{ gallery_count }}</span>
-        <span class="pnl-kpi__label">Media Items</span>
-      </div>
-    </div>
+    </a>
   </div>
 
-  {# ── Live widgets strip ───────────────────────────── #}
-  <div class="pnl-kpi-grid" style="margin-bottom:16px;">
-    <div class="pnl-kpi" style="border-left:3px solid var(--pnl-blue,#3b82f6);">
-      <div class="pnl-kpi__icon"><i class="fas fa-calendar-day"></i></div>
-      <div class="pnl-kpi__body">
-        <span class="pnl-kpi__value pnl-mono">{{ matches_today }}</span>
-        <span class="pnl-kpi__label">Matches Today</span>
-      </div>
-    </div>
-    <div class="pnl-kpi" style="border-left:3px solid {% if matches_live %}var(--pnl-red,#ef4444){% else %}var(--pnl-gray-600,#4b5563){% endif %};">
-      <div class="pnl-kpi__icon"><i class="fas fa-broadcast-tower" {% if matches_live %}style="color:var(--pnl-red,#ef4444);animation:pulse 1.5s infinite;"{% endif %}></i></div>
-      <div class="pnl-kpi__body">
-        <span class="pnl-kpi__value pnl-mono">{{ matches_live }}</span>
-        <span class="pnl-kpi__label">LIVE Now</span>
-      </div>
-    </div>
-    <div class="pnl-kpi" style="border-left:3px solid var(--pnl-green,#22c55e);">
-      <div class="pnl-kpi__icon"><i class="fas fa-forward"></i></div>
-      <div class="pnl-kpi__body">
-        {% if next_match %}
-        <span class="pnl-kpi__value pnl-mono" style="font-size:.85rem;">{{ next_match.start_time|date:"H:i" }}</span>
-        <span class="pnl-kpi__label">Next: M{{ next_match.match_number }} · {{ next_match.display_name_a }} vs {{ next_match.display_name_b }}</span>
-        {% else %}
-        <span class="pnl-kpi__value pnl-mono">—</span>
-        <span class="pnl-kpi__label">No upcoming match</span>
-        {% endif %}
-      </div>
-    </div>
-  </div>
+  <nav class="pnl-cr-actions" aria-label="Panel shortcuts">
+    <a href="{% url 'panel:team_create' %}" class="pnl-btn pnl-btn--primary"><i class="fas fa-plus"></i> Create team</a>
+    <a href="{% url 'panel:teams_pipeline' %}" class="pnl-btn"><i class="fas fa-columns"></i> Registration pipeline</a>
+    <a href="{% url 'panel:player_create' %}" class="pnl-btn"><i class="fas fa-user-plus"></i> Add player</a>
+    <a href="{% url 'panel:checkin' %}" class="pnl-btn"><i class="fas fa-clipboard-check"></i> Open check-in</a>
+    <a href="{% url 'panel:db_backup' %}" class="pnl-btn"><i class="fas fa-database"></i> Backups</a>
+  </nav>
 
-  {# ── Three-column operational layout ──────────────── #}
   <div class="pnl-cr-grid">
-
-    {# ── Left: Queue column ──────────────────────────── #}
     <section class="pnl-cr-col pnl-cr-col--queue">
       <h3 class="pnl-cr-col__title"><i class="fas fa-list-check"></i> Action Queue</h3>
       {% if queues %}
-        {% for q in queues %}
-        <a href="{{ q.url }}" class="pnl-cr-queue pnl-cr-queue--{{ q.urgency }}">
-          <div class="pnl-cr-queue__icon"><i class="{{ q.icon }}"></i></div>
+        {% for item in queues %}
+        <a href="{{ item.url }}" class="pnl-cr-queue pnl-cr-queue--{{ item.urgency }}">
+          <div class="pnl-cr-queue__icon"><i class="{{ item.icon }}"></i></div>
           <div class="pnl-cr-queue__body">
-            <span class="pnl-cr-queue__title">{{ q.title }}</span>
-            <span class="pnl-cr-queue__detail">{{ q.detail }}</span>
+            <span class="pnl-cr-queue__title">{{ item.title }}</span>
+            <span class="pnl-cr-queue__detail">{{ item.detail }}</span>
           </div>
           <i class="fas fa-chevron-right pnl-cr-queue__arrow"></i>
         </a>
@@ -117,39 +75,27 @@
       {% endif %}
     </section>
 
-    {# ── Center: Live timeline ───────────────────────── #}
-    <section class="pnl-cr-col pnl-cr-col--timeline">
-      <h3 class="pnl-cr-col__title"><i class="fas fa-clock"></i> Next 2 Hours</h3>
-      {% if timeline_matches %}
-        <div class="pnl-cr-tl">
-          {% for m in timeline_matches %}
-          <div class="pnl-cr-tl__item">
-            <div class="pnl-cr-tl__time pnl-mono">{{ m.start_time|date:"H:i" }}</div>
-            <div class="pnl-cr-tl__dot"></div>
-            <div class="pnl-cr-tl__card">
-              <span class="pnl-cr-tl__match">M{{ m.match_number }}</span>
-              <span class="pnl-cr-tl__teams">{{ m.team_a|default:"TBD" }} vs {{ m.team_b|default:"TBD" }}</span>
-              <span class="pnl-cr-tl__court pnl-mono">{{ m.court }}</span>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      {% else %}
-        <div class="pnl-cr-empty">
-          <i class="fas fa-calendar-check"></i>
-          <span>No matches in the next 2 hours</span>
-        </div>
-      {% endif %}
+    <section class="pnl-cr-col pnl-cr-col--pipeline">
+      <h3 class="pnl-cr-col__title"><i class="fas fa-route"></i> Registration Workflow</h3>
+      <div class="pnl-cr-statuses">
+        {% for status in status_summary %}
+        <a href="{{ status.url }}" class="pnl-cr-status">
+          <span class="pnl-cr-status__label">{{ status.label }}</span>
+          <strong class="pnl-mono">{{ status.count }}</strong>
+          <span class="pnl-cr-status__track" aria-hidden="true">
+            <span class="pnl-cr-status__fill pnl-cr-status__fill--{{ status.color }}" style="width: {{ status.pct }}%"></span>
+          </span>
+          <span class="pnl-cr-status__pct pnl-mono">{{ status.pct }}%</span>
+        </a>
+        {% endfor %}
+      </div>
     </section>
 
-    {# ── Right: Intelligence column ──────────────────── #}
-    <section class="pnl-cr-col pnl-cr-col--intel">
-      <h3 class="pnl-cr-col__title"><i class="fas fa-chart-line"></i> Intelligence</h3>
-
-      {# Check-in progress #}
+    <section class="pnl-cr-col pnl-cr-col--recent">
+      <h3 class="pnl-cr-col__title"><i class="fas fa-clock-rotate-left"></i> Recent Teams</h3>
       <div class="pnl-cr-stat">
         <div class="pnl-cr-stat__header">
-          <span>Check-in Progress</span>
+          <span>Check-in progress</span>
           <span class="pnl-mono">{{ checkin_pct }}%</span>
         </div>
         <div class="pnl-cr-progress">
@@ -158,42 +104,22 @@
         <span class="pnl-cr-stat__sub">{{ checkin_count }} of {{ checkin_of }} approved teams</span>
       </div>
 
-      {# Stats completion #}
-      <div class="pnl-cr-stat">
-        <div class="pnl-cr-stat__header">
-          <span>Stats Completion</span>
-          <span class="pnl-mono">{{ stats_pct }}%</span>
-        </div>
-        <div class="pnl-cr-progress">
-          <div class="pnl-cr-progress__fill pnl-cr-progress__fill--accent" style="width: {{ stats_pct }}%"></div>
-        </div>
-        <span class="pnl-cr-stat__sub">{{ stats_done }} of {{ stats_total }} finished matches</span>
-      </div>
-
-      {# Recent registrations #}
       <div class="pnl-cr-recent">
-        <h4 class="pnl-cr-recent__title">Recent Teams</h4>
-        {% for t in recent_teams %}
-        <div class="pnl-cr-recent__row">
-          <span class="pnl-cr-recent__name">{{ t.name }}</span>
-          <span class="pnl-badge pnl-badge--{% if t.status == 'APPROVED' %}green{% elif t.status == 'PAID' %}blue{% elif t.status == 'AWAITING_PAYMENT' %}yellow{% else %}gray{% endif %}">
-            {{ t.get_status_display }}
+        {% for team in recent_teams %}
+        <a href="{% url 'panel:team_detail' pk=team.pk %}" class="pnl-cr-recent__row">
+          <span class="pnl-cr-recent__name">{{ team.name }}</span>
+          <span class="pnl-badge pnl-badge--{% if team.status == 'APPROVED' %}green{% elif team.status == 'PAID' %}blue{% elif team.status == 'AWAITING_PAYMENT' %}yellow{% else %}gray{% endif %}">
+            {{ team.get_status_display }}
           </span>
+        </a>
+        {% empty %}
+        <div class="pnl-cr-empty">
+          <i class="fas fa-users"></i>
+          <span>No teams registered yet</span>
         </div>
         {% endfor %}
       </div>
-
-      {# CSV export buttons #}
-      <div style="margin-top:20px;border-top:1px solid var(--pnl-gray-700,#374151);padding-top:16px;">
-        <h4 class="pnl-cr-recent__title"><i class="fas fa-file-csv"></i> Export Data</h4>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <a href="{% url 'panel:export_standings' %}" class="pnl-btn pnl-btn--sm"><i class="fas fa-download"></i> Standings CSV</a>
-          <a href="{% url 'panel:export_player_stats' %}" class="pnl-btn pnl-btn--sm"><i class="fas fa-download"></i> Player Stats CSV</a>
-          <a href="{% url 'panel:export_results' %}" class="pnl-btn pnl-btn--sm"><i class="fas fa-download"></i> Match Results CSV</a>
-        </div>
-      </div>
     </section>
-
   </div>
 </div>
 {% endblock %}

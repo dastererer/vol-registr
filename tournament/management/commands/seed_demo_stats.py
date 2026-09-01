@@ -48,7 +48,7 @@ DEMO_MATCH_STATS = [
             (8, "Daria", "Yasenovska", "OH", {"serve_attempts": 8, "aces": 2, "serve_errors": 1, "kills": 13, "attack_errors": 4, "pass_errors": 2, "blocks": 2, "assists": 0, "setting_errors": 0}),
             (11, "Ivan", "Bilovets", "OPP", {"serve_attempts": 7, "aces": 1, "serve_errors": 2, "kills": 10, "attack_errors": 4, "pass_errors": 0, "blocks": 3, "assists": 0, "setting_errors": 0}),
             (5, "Ihor", "Kornienko", "MB", {"serve_attempts": 6, "aces": 1, "serve_errors": 1, "kills": 6, "attack_errors": 2, "pass_errors": 0, "blocks": 4, "assists": 0, "setting_errors": 0}),
-            (2, "Maksym", "Kotsiubailo", "S", {"serve_attempts": 7, "aces": 1, "serve_errors": 1, "kills": 1, "attack_errors": 0, "pass_errors": 0, "blocks": 1, "assists": 19, "setting_errors": 2}),
+            (2, "James", "Smith", "S", {"serve_attempts": 7, "aces": 1, "serve_errors": 1, "kills": 1, "attack_errors": 0, "pass_errors": 0, "blocks": 1, "assists": 19, "setting_errors": 2}),
             (14, "Dima", "Vinohradow", "L", {"serve_attempts": 0, "aces": 0, "serve_errors": 0, "kills": 0, "attack_errors": 0, "pass_errors": 2, "blocks": 0, "assists": 0, "setting_errors": 0}),
             (7, "Marta", "Sydor", "OH", {"serve_attempts": 6, "aces": 1, "serve_errors": 2, "kills": 5, "attack_errors": 2, "pass_errors": 2, "blocks": 0, "assists": 0, "setting_errors": 0}),
         ],

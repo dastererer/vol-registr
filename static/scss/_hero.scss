@@ -289,21 +289,6 @@
   will-change: transform;
 }
 
-// ── Scroll Indicator ────────────────────────────────
-.scroll-indicator {
-  position: absolute;
-  bottom: 2.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: bounce 1s infinite;
-  opacity: 0.5;
-  color: $color-white;
-
-  svg { width: 2.75rem; height: 2.75rem; }
-
-  @include mobile-only { display: none; }
-}
-
 // ── Mobile Hero Overrides ───────────────────────────
 @include mobile-only {
   .hero {

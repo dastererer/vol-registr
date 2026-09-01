@@ -12,17 +12,26 @@ window.APP_CONFIG = Object.freeze({
     /* ── Breakpoints ──────────────────────────────── */
     MOBILE_BREAKPOINT: 768,
 
+    /* ── Accessibility ────────────────────────────── */
+    /** True when the user requests reduced motion. Decorative
+        animations must be skipped; functional transitions
+        complete instantly (see GSAP timeScale guard below). */
+    REDUCED_MOTION: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+
     /* ── API Routes ───────────────────────────────── */
     API_REGISTER_URL: '/api/register/',
 
     /* ── Hero Section Timings ─────────────────────── */
     hero: {
-        logo:       { duration: 0.4, ease: 'power4.out' },
-        title:      { duration: 0.7, stagger: 0.12, ease: 'power4.out' },
-        label:      { duration: 0.4, ease: 'power4.out' },
-        text:       { duration: 0.4, stagger: 0.08, ease: 'power4.out' },
-        player:     { duration: 0.8, ease: 'power4.out', mobileOpacity: 0.3 },
-        scroll:     { duration: 0.4, delay: 0.08 },
+        background: { duration: 1.15, ease: 'power3.out' },
+        sweep:      { duration: 1.25 },
+        sponsor:    { enterDuration: 0.5, itemDuration: 0.52, hold: 0.42, exitDuration: 0.62 },
+        title:      { duration: 0.72, stagger: 0.1, exitDuration: 0.5, exitStagger: 0.06, ease: 'power4.out' },
+        label:      { duration: 0.55, ease: 'power4.out' },
+        text:       { duration: 0.55, ease: 'power3.out' },
+        facts:      { duration: 0.5, stagger: 0.08, ease: 'power3.out' },
+        buttons:    { duration: 0.55, stagger: 0.1, ease: 'back.out(1.35)' },
+        partner:    { duration: 0.62, ease: 'back.out(1.2)' },
     },
 
     /* ── Flip Cards ───────────────────────────────── */
@@ -68,3 +77,14 @@ window.APP_CONFIG = Object.freeze({
         celebrationSpin: 720,
     },
 });
+
+/* ── Reduced Motion Guard ─────────────────────────
+   Honour prefers-reduced-motion for every GSAP-driven
+   animation site-wide: run the global timeline ~1000x
+   faster so tweens complete instantly while callbacks
+   and control flow stay intact. CSS animations and
+   transitions are already killed via the
+   `@media (prefers-reduced-motion: reduce)` block. */
+if (window.APP_CONFIG.REDUCED_MOTION && window.gsap) {
+    window.gsap.globalTimeline.timeScale(1000);
+}

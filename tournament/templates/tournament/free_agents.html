@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Free Agents — Pocket Aces Court Cup 3{% endblock %}
+
+{% block content %}
+<section class="free-agent-page">
+  <div class="free-agent-page__ghost" aria-hidden="true">TRANSFER</div>
+  <div class="container free-agent-page__inner">
+    {% if submitted %}
+    <div class="free-agent-success" role="status" data-aos="zoom-in">
+      <canvas
+        class="motion-canvas"
+        width="160"
+        height="160"
+        data-lottie-src="{% static 'assets/motion/success.json' %}"
+        data-lottie-loop="false"
+      ></canvas>
+      <div>
+        <span class="section-kicker">// REQUEST SAVED</span>
+        <h2 data-i18n="free.success_title">Your message is in.</h2>
+        {% if delivery_deferred %}
+        <p data-i18n="free.success_deferred">
+          We saved the request, but email delivery is temporarily delayed. The organizer can still see it in the control panel.
+        </p>
+        {% else %}
+        <p data-i18n="free.success_copy">The captain received your contact details and can reply directly to your email.</p>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="free-agent-layout">
+      <header class="free-agent-hero" data-aos="fade-up">
+        <div>
+          <p class="section-kicker" data-i18n="free.kicker">// FIND YOUR SIX</p>
+          <h1 class="free-agent-hero__title" data-i18n="free.title">Need a team?</h1>
+          <p class="free-agent-hero__lead" data-i18n="free.lead">
+            Pick a registered team, introduce yourself and your message goes straight
+            to its captain. No login required.
+          </p>
+        </div>
+      </header>
+
+      <aside class="free-agent-steps" data-aos="fade-right">
+        <p class="section-kicker" data-i18n="free.how_kicker">// HOW IT WORKS</p>
+        <ol>
+          <li><span>01</span><div><strong data-i18n="free.step1_title">Choose a team</strong><p data-i18n="free.step1_copy">Only teams already registered for Court Cup 3 appear here.</p></div></li>
+          <li><span>02</span><div><strong data-i18n="free.step2_title">Send one useful message</strong><p data-i18n="free.step2_copy">Add your position, experience and availability.</p></div></li>
+          <li><span>03</span><div><strong data-i18n="free.step3_title">Captain replies</strong><p data-i18n="free.step3_copy">Your email is shared only with that team captain.</p></div></li>
+        </ol>
+      </aside>
+
+      <div class="free-agent-form-card" data-aos="fade-left">
+        <div class="free-agent-form-card__head">
+          <span>APPLICATION / 01</span>
+          <strong data-i18n="free.form_title">Talk to a captain</strong>
+        </div>
+        <form method="post" class="free-agent-form" novalidate>
+          {% csrf_token %}
+          <div class="free-agent-form__honeypot" aria-hidden="true">
+            <label for="id_website">Website</label>
+            <input id="id_website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          {% if form.non_field_errors %}
+          <div class="free-agent-form__errors" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          <div class="free-agent-form__row">
+            <div class="free-agent-field">
+              <label for="{{ form.first_name.id_for_label }}" data-i18n="free.first_name">First name</label>
+              {{ form.first_name }}
+              {{ form.first_name.errors }}
+            </div>
+            <div class="free-agent-field">
+              <label for="{{ form.last_name.id_for_label }}" data-i18n="free.last_name">Last name</label>
+              {{ form.last_name }}
+              {{ form.last_name.errors }}
+            </div>
+          </div>
+
+          <div class="free-agent-field">
+            <label for="{{ form.email.id_for_label }}" data-i18n="free.email">Email</label>
+            {{ form.email }}
+            {{ form.email.errors }}
+          </div>
+
+          <div class="free-agent-field">
+            <label for="{{ form.team.id_for_label }}" data-i18n="free.team">Team</label>
+            {{ form.team }}
+            {{ form.team.errors }}
+          </div>
+
+          <div class="free-agent-field">
+            <label for="{{ form.message.id_for_label }}" data-i18n="free.message">Message to the captain</label>
+            {{ form.message }}
+            {{ form.message.errors }}
+            <span class="free-agent-field__hint" data-i18n="free.message_hint">Position · experience · availability</span>
+          </div>
+
+          <label class="free-agent-consent" for="{{ form.privacy.id_for_label }}">
+            {{ form.privacy }}
+            <span data-i18n="free.privacy">I agree that my contact details can be sent to the selected team captain.</span>
+          </label>
+          {{ form.privacy.errors }}
+
+          <button class="btn btn-cta free-agent-submit" type="submit">
+            <span data-i18n="free.submit">Send to captain</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

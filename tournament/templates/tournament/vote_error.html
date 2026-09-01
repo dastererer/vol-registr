@@ -1,62 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Vote Error | Pocket Aces Court Cup 2{% endblock %}
-{% block extra_head %}
-<style>
-  .vote-result-container {
-    display: grid;
-    min-height: calc(100svh - var(--nav-h));
-    padding: var(--section-y) var(--gutter);
-    place-items: center;
-  }
-
-  .vote-result-card {
-    background: var(--ink-2);
-    border: 2px solid var(--paper);
-    clip-path: var(--card-clip);
-    max-width: 42rem;
-    padding: clamp(1.75rem, 5vw, 4rem);
-    position: relative;
-    text-align: left;
-    width: 100%;
-  }
-
-  .vote-result-kicker {
-    color: var(--volt);
-    font: 700 var(--fs-mono-sm)/1 var(--font-mono);
-    letter-spacing: 0.14em;
-    margin: 0 0 1rem;
-    text-transform: uppercase;
-  }
-
-  .vote-result-icon-error {
-    color: var(--danger);
-    font-size: clamp(2.5rem, 7vw, 4rem);
-    margin-bottom: 1.25rem;
-  }
-
-  .vote-result-title {
-    color: var(--paper);
-    font: italic 800 var(--fs-display-lg)/0.88 var(--font-display);
-    margin: 0 0 1.25rem;
-    text-transform: uppercase;
-  }
-
-  .vote-result-text {
-    color: var(--muted);
-    font: 400 var(--fs-body)/1.65 var(--font-body);
-    margin: 0 0 2rem;
-  }
-</style>
-{% endblock %}
+{% block title %}Vote Error | Pocket Aces Court Cup 3{% endblock %}
 {% block content %}
-<section class="vote-result-container">
-  <div class="vote-result-card" data-reveal>
-    <p class="vote-result-kicker">// Vote status</p>
-    <i class="fas fa-exclamation-triangle vote-result-icon-error" aria-hidden="true"></i>
-    <h1 class="vote-result-title">Verification Failed</h1>
-    <p class="vote-result-text">{{ error }}</p>
-    <a href="{% url 'index' %}" class="btn btn-outline vote-result-btn">Back to Homepage</a>
-  </div>
+<section class="event-result event-result--error">
+  <div class="event-result__ghost" aria-hidden="true">REPLAY</div>
+  <article class="event-result__card" data-aos="zoom-in">
+    <canvas
+      class="motion-canvas event-result__motion"
+      width="160"
+      height="160"
+      data-lottie-src="{% static 'assets/motion/error.json' %}"
+      data-lottie-loop="false"
+    ></canvas>
+    <div>
+      <p class="section-kicker">// VOTE NOT COUNTED</p>
+      <h1>Check the link.</h1>
+      <p>{{ error }}</p>
+      <a href="{% url 'index' %}#registeredTeamsModal" class="btn btn-outline">Choose a team</a>
+    </div>
+  </article>
 </section>
 {% endblock %}
