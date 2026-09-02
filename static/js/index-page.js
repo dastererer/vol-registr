@@ -15,8 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const reducedMotion = CFG.REDUCED_MOTION === true;
 
     // ─── Hero Intro Timeline ────────────────────────
-    if (!reducedMotion && typeof gsap !== 'undefined') {
-        initHeroIntro(CFG.hero);
+    if (!reducedMotion) {
+        if (typeof gsap !== 'undefined') {
+            initHeroIntro(CFG.hero);
+        } else {
+            initHeroIntroFallback();
+        }
     }
 
     // ─── Card Modal (desktop only) ────────────────────
@@ -40,6 +44,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+/**
+ * Dependency-free Hero intro used when the GSAP CDN is unavailable.
+ * CSS owns the timeline so a content blocker or flaky mobile network cannot
+ * leave the opening scene permanently hidden.
+ */
+function initHeroIntroFallback() {
+    const hero = document.querySelector('.hero--swiper');
+    if (!hero) return;
+
+    hero.classList.add('hero--native-intro', 'hero--motion-running');
+    window.setTimeout(() => {
+        hero.classList.remove('hero--motion-running');
+        hero.classList.add('hero--motion-complete');
+    }, 5200);
+}
 
 
 // ═══════════════════════════════════════════════════════

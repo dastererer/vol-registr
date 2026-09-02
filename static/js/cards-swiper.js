@@ -17,10 +17,11 @@
     if (!root) return;
     root.classList.remove('cards-swiper--ready');
     root.classList.add('cards-swiper--fallback');
+    clearResidualStyles();
   }
 
   function shouldUseSwiper() {
-    return window.innerWidth < MOBILE_BP;
+    return window.innerWidth <= MOBILE_BP;
   }
 
   function syncSlideVisibility(swiper) {
@@ -38,6 +39,26 @@
     });
   }
 
+  function clearResidualStyles() {
+    const root = getRoot();
+    if (root) {
+      Array.from(root.classList).forEach(function (className) {
+        if (className.indexOf('swiper-') === 0 && className !== 'swiper') {
+          root.classList.remove(className);
+        }
+      });
+    }
+    const wrapper = document.querySelector('.cards-swiper .swiper-wrapper');
+    if (wrapper) wrapper.removeAttribute('style');
+    const slides = document.querySelectorAll('.cards-swiper .swiper-slide');
+    slides.forEach(function (slide) {
+      slide.removeAttribute('style');
+      Array.from(slide.classList).forEach(function (className) {
+        if (className.indexOf('swiper-slide-') === 0) slide.classList.remove(className);
+      });
+    });
+  }
+
   function initSwiper() {
     if (swiperInstance) return;
     const root = getRoot();
@@ -47,28 +68,35 @@
       return;
     }
 
-    root.classList.remove('cards-swiper--fallback');
-    root.classList.add('cards-swiper--ready');
-    swiperInstance = new window.Swiper(root, {
-      effect: 'cards',
-      grabCursor: true,
-      speed: 500,
-      cardsEffect: {
-        perSlideOffset: 8,
-        perSlideRotate: 3,
-        rotate: true,
-        slideShadows: false,
-      },
-      pagination: {
-        el: '.cards-pagination',
-        clickable: true,
-      },
-      on: {
-        init: syncSlideVisibility,
-        slideChange: syncSlideVisibility,
-        resize: syncSlideVisibility,
-      },
-    });
+    try {
+      swiperInstance = new window.Swiper(root, {
+        effect: 'cards',
+        grabCursor: true,
+        speed: 500,
+        cardsEffect: {
+          perSlideOffset: 8,
+          perSlideRotate: 3,
+          rotate: true,
+          slideShadows: false,
+        },
+        pagination: {
+          el: '.cards-pagination',
+          clickable: true,
+        },
+        on: {
+          init: syncSlideVisibility,
+          slideChange: syncSlideVisibility,
+          resize: syncSlideVisibility,
+        },
+      });
+      root.classList.remove('cards-swiper--fallback');
+      root.classList.add('cards-swiper--ready');
+      syncSlideVisibility(swiperInstance);
+    } catch (error) {
+      swiperInstance = null;
+      enableNativeFallback();
+      console.warn('Cards carousel switched to native scrolling.', error);
+    }
   }
 
   function destroySwiper() {
@@ -79,11 +107,7 @@
     }
     if (root) root.classList.remove('cards-swiper--ready', 'cards-swiper--fallback');
 
-    // Clean up residual inline styles left by Swiper
-    var wrapper = document.querySelector('.cards-swiper .swiper-wrapper');
-    if (wrapper) wrapper.removeAttribute('style');
-    var slides = document.querySelectorAll('.cards-swiper .swiper-slide');
-    slides.forEach(function (s) { s.removeAttribute('style'); });
+    clearResidualStyles();
   }
 
   function handleResize() {
@@ -94,8 +118,12 @@
     }
   }
 
-  // Init on load
-  document.addEventListener('DOMContentLoaded', handleResize);
+  // Init whether the script runs before or after DOMContentLoaded (Safari/BFCache safe).
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', handleResize, { once: true });
+  } else {
+    handleResize();
+  }
   window.addEventListener('pageshow', handleResize);
 
   // Re-check on resize (debounced)

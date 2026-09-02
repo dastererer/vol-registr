@@ -2930,10 +2930,32 @@ main > article li {
     overflow-y: hidden;
     padding: 0.3rem var(--gutter) 1.2rem;
     margin-inline: calc(-1 * var(--gutter));
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
     scroll-padding-inline: var(--gutter);
     scroll-snap-type: x mandatory;
     scrollbar-color: var(--volt) transparent;
     scrollbar-width: thin;
+    touch-action: pan-x pan-y;
+  }
+
+  .cards-swiper--ready {
+    overflow: hidden;
+    touch-action: pan-y;
+  }
+
+  .cards-swiper--ready .swiper-wrapper {
+    position: relative;
+    display: flex;
+    width: 100%;
+    box-sizing: content-box;
+    gap: 0;
+    transition-property: transform;
+  }
+
+  .cards-swiper--ready .swiper-slide {
+    position: relative;
+    flex-shrink: 0;
   }
 
   .cards-swiper--fallback .swiper-wrapper {
@@ -3219,7 +3241,13 @@ main > article li {
     display: none;
   }
 
-  .reg-form-col,
+  .reg-form-col {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    clip-path: none;
+  }
+
   .reg-layout__access {
     padding: 1.25rem;
   }
@@ -3677,6 +3705,103 @@ main > article li {
 .hero-sponsor-intro__slogan {
   color: var(--paper);
   font-size: clamp(0.64rem, 1.25vw, 0.9rem);
+}
+
+/* Local Hero timeline: used when the optional GSAP CDN is unavailable. */
+.hero--native-intro .hero-sponsor-intro {
+  animation: hero-native-sponsor 3.4s var(--ease-hard) both;
+}
+
+.hero--native-intro .hero-sponsor-intro__frame {
+  animation: hero-native-sponsor-content 2.65s var(--ease-hard) both;
+}
+
+.hero--native-intro .hero-title__stage--intro {
+  animation: hero-native-title-intro 5.2s var(--ease-hard) both;
+}
+
+.hero--native-intro .hero-title__stage--final {
+  animation: hero-native-title-final 5.2s var(--ease-hard) both;
+}
+
+@keyframes hero-native-sponsor {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  13%,
+  68% {
+    clip-path: inset(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  88%,
+  100% {
+    clip-path: inset(0 0 0 100%);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes hero-native-sponsor-content {
+  0%,
+  12% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.96);
+  }
+
+  34%,
+  82% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-12px) scale(1);
+  }
+}
+
+@keyframes hero-native-title-intro {
+  0%,
+  59% {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  69%,
+  79% {
+    clip-path: inset(0);
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  88%,
+  100% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+    transform: translateX(-12%);
+  }
+}
+
+@keyframes hero-native-title-final {
+  0%,
+  81% {
+    clip-path: inset(0 0 0 100%);
+    opacity: 0;
+    transform: translateX(12%);
+  }
+
+  94%,
+  100% {
+    clip-path: inset(0);
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .hero--swiper .hero-content {
@@ -4653,7 +4778,7 @@ main > article li {
 
 @media (max-width: 640px) {
   :root {
-    --fs-display-xl: clamp(5.9rem, 27.5vw, 7.4rem);
+    --fs-display-xl: clamp(8rem, 38.5vw, 10.25rem);
   }
 
   .hero__label-wrap {

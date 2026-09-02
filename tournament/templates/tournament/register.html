@@ -936,8 +936,21 @@
   }
 
   @media (max-width: 680px) {
-    .reg-layout {
-      width: min(calc(100% - 2rem), var(--container));
+    main.reg-layout {
+      gap: 1.25rem;
+      width: min(calc(100% - 1rem), var(--container));
+    }
+
+    .reg-brand__hero,
+    .reg-form {
+      padding: 1.25rem;
+      clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+    }
+
+    .reg-brand__desc,
+    .reg-logo-upload__copy,
+    .reg-panel__note {
+      line-height: 1.55;
     }
 
     .reg-brand__panel {
